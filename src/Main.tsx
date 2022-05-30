@@ -7,6 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { transpileModule } from "typescript";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
 import ShowUsers from "./ShowUsers/ShowUsers";
@@ -15,7 +16,7 @@ export interface iUser {
   displayName: string, 
   photoURL: string,
   uid: string,
-  headgear: [{
+  headgear:[{
     name: string,
     description: string,
     available: boolean,
@@ -32,8 +33,18 @@ export interface iGear {
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
-  const [usersList, setUsersList] = useState<iUser[]>();
-  const [user, setUser] = useState<iUser>();
+  const [usersList, setUsersList] = useState<iUser[]>([]);
+  const [user, setUser] = useState<iUser>({
+    displayName: "", 
+    photoURL: "",
+    uid: "",
+    headgear:[{
+      name: "",
+      description: "",
+      available: false,
+      ready: false,
+    }]
+  });
 
   useEffect(() => {
     async function setData() {
@@ -78,7 +89,7 @@ export default function Main() {
         try {
           const querySnapshot = await getDocs(collection(db, "users"));
           let listTemp: iUser[] = [];
-          let tempdata: any = {};
+          let tempdata: iUser = {} as iUser;
           querySnapshot.forEach((doc) => {
             tempdata = doc.data() as iUser;
             console.log(tempdata);
@@ -118,10 +129,19 @@ export default function Main() {
     console.log(user);
   }, [user, usersList]);
 
+  function handleClick(){
+    let temp:iUser = {...user}
+    temp.displayName = "new"
+    temp.headgear[0].name = "new"
+    setUser(temp)
+  }
+
+
   return (
     <>
       <div className="bg-gray-700 pt-[60px] min-h-full text-white">
         {user && <ShowUsers user={user} users={usersList} />}
+        <div className="" onClick={handleClick}> change</div>
       </div>
     </>
   );
