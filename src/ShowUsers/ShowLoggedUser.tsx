@@ -1,9 +1,10 @@
 import { DocumentData } from "firebase/firestore";
 import { useEffect } from "react";
+import { iUser } from "../Main";
 import ItemsListComponent from "./ItemsListComponent";
 
 export default function ShowLoggedUser(props: {
-  user: DocumentData | undefined;
+  user: iUser |undefined;
 }) {
   useEffect(() => {
     console.log(props.user);

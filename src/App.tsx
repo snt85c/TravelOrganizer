@@ -4,7 +4,7 @@ import "./App.css";
 import Navbar from "./Navbar";
 import Main from "./Main";
 
-function App() {
+const App: React.FC =() =>{
   return (
     <UserAuthContextProvider>
         <Navbar />
