@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
+import LoginPrompt from "./LoginPropt";
 import ShowUsers from "./ShowUsers/ShowUsers";
 
 export interface iUser {
@@ -19,6 +20,7 @@ export interface iUser {
   topgear: iGear[];
   bottomgear: iGear[];
   footgear: iGear[];
+  extra: iGear[]
 }
 
 export interface iGear {
@@ -39,6 +41,8 @@ export default function Main() {
     topgear: [],
     bottomgear: [],
     footgear: [],
+    extra: []
+
   });
 
   useEffect(() => {
@@ -53,7 +57,7 @@ export default function Main() {
               photoURL: loggedUser.photoURL,
               uid: loggedUser.uid,
             },
-            { merge: true }
+            { merge: true}
           );
         } catch (err) {
           console.log(err, "in setData()");
@@ -106,14 +110,12 @@ export default function Main() {
     updateData();
   }, [user]);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user, usersList]);
 
   return (
     <>
       <div className="bg-gray-700 pt-[60px] min-h-full text-white">
-        {user && <ShowUsers user={user} setUser={setUser} users={usersList} />}
+        {user && <ShowUsers user={user} setUser={setUser} users={usersList} loggedUser={loggedUser} />}
+        {!loggedUser && <LoginPrompt/>}
       </div>
     </>
   );

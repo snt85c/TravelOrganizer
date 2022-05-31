@@ -20,19 +20,19 @@ export default function GoogleLoginButton() {
     <>
       {!user && (
         <div
-          className="flex justify-center items-center cursor-pointer text-white"
+          className="flex text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold]"
           onClick={(e) => handleGoogleSignIn(e)}
         >
-          login
+          LOGIN
         </div>
       )}
       {user && (
         <>
           <div
-            className="flex justify-center items-center cursor-pointer text-white"
+            className="flex text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold]"
             onClick={() => logout()}
           >
-            logout
+            LOGOUT
           </div>
         </>
       )}

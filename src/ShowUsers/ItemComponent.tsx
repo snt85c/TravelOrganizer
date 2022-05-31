@@ -1,5 +1,5 @@
 import { userInfo } from "os";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { iGear, iUser } from "../Main";
 
 export default function ItemComponent(props: {
@@ -18,23 +18,25 @@ export default function ItemComponent(props: {
   let temp: iUser | undefined = props.user;
 
   switch (props.type) {
-
     case "headgear":
       currentArray = temp.headgear;
       break;
     case "topgear":
       currentArray = temp.topgear;
       break;
-      case "bottomgear":
+    case "bottomgear":
       currentArray = temp.bottomgear;
       break;
-      case "footgear":
+    case "footgear":
       currentArray = temp.footgear;
+      break;
+    case "extra":
+      currentArray = temp.extra;
       break;
   }
 
   const changeReady = () => {
-  let temp: iUser | undefined = props.user;
+    let temp: iUser | undefined = props.user;
     temp = { ...props.user };
     currentArray[props.index].ready = !props.currentArray[props.index].ready;
     if (currentArray[props.index].ready) {
@@ -48,6 +50,9 @@ export default function ItemComponent(props: {
     temp = { ...props.user };
     currentArray[props.index].available =
       !props.currentArray[props.index].available;
+    if (!currentArray[props.index].available) {
+      currentArray[props.index].ready = false;
+    }
     props.setUser(temp);
   };
 
@@ -75,48 +80,74 @@ export default function ItemComponent(props: {
 
   return (
     <>
-      <div className="flex p-2 gap-2 odd:bg-gray-800 bg-gray-900">
-        {!isEditName && (
-          <div onClick={() => setIsEditName(!isEditName)}>
-            {props.item?.name}
+      <div className="flex flex-row justify-between p-2 gap-2 odd:bg-gray-800 bg-gray-900">
+        <div className="flex flex-row gap-2">
+          <div
+            className="flex flex-row"
+            onClick={() => setIsEditName(!isEditName)}
+          >
+            <div className="text-gray-600">nome:</div>
+            <div className="text-white ">
+              {props.item?.name ? props.item?.name : "empty"}
+            </div>
           </div>
-        )}
-        {isEditName && (
-          <>
-            <input
-              className="text-black"
-              value={change}
-              onChange={(e) => setChange(e.target.value)}
-            ></input>
-            <button onClick={setNameChange}>set</button>
-          </>
-        )}
-        {!isEditDescr && (
-          <div onClick={() => setIsEditDescr(!isEditDescr)}>
-            {props.item?.description}
+          {isEditName && (
+            <>
+              <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded bg-amber-500">
+                <input
+                  className="text-white rounded bg-gray-600"
+                  value={change}
+                  onChange={(e) => setChange(e.target.value)}
+                  key="editor1"
+                ></input>
+                <div className="">
+                  <button onClick={setNameChange}>set</button>
+                  <button onClick={() => setIsEditName(!isEditName)}>X</button>
+                </div>
+              </div>
+            </>
+          )}
+          <div
+            className="flex flex-row"
+            onClick={() => setIsEditDescr(!isEditDescr)}
+          >
+            <div className="text-gray-600">descrizione:</div>
+            <div className="text-white">
+              {props.item?.description ? props.item?.description : "empty"}
+            </div>
           </div>
-        )}
-        {isEditDescr && (
-          <>
-            <input
-              className="text-black"
-              value={change}
-              onChange={(e) => setChange(e.target.value)}
-            ></input>
-            <button onClick={setDescrChange}>set</button>
-          </>
-        )}
-        <div
-          className="min-h-[5px] min-w-[25px] rounded-full"
-          style={{ backgroundColor: props.item?.available ? "green" : "red" }}
-          onClick={changeAvailable}
-        ></div>
-        <div
-          className="min-h-[5px] min-w-[25px] rounded-full"
-          style={{ backgroundColor: props.item?.ready ? "green" : "red" }}
-          onClick={changeReady}
-        ></div>
-        <button onClick={handleDelete}>delete</button>
+          {isEditDescr && (
+            <>
+              <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded bg-gradient-to-r from-amber-500 to-amber-700">
+                <input
+                  className="text-white rounded bg-gray-600"
+                  value={change}
+                  onChange={(e) => setChange(e.target.value)}
+                ></input>
+                <div className="flex gap-2">
+                  <button onClick={setDescrChange}>set</button>
+                  <button onClick={() => setIsEditDescr(!isEditDescr)}>
+                    X
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex flex-row gap-1">
+          <div
+            className="min-h-[5px] min-w-[25px] rounded-full cursor-pointer"
+            style={{ backgroundColor: props.item?.available ? "green" : "red" }}
+            onClick={changeAvailable}
+          ></div>
+          <div
+            className="min-h-[5px] min-w-[25px] rounded-full cursor-pointer"
+            style={{ backgroundColor: props.item?.ready ? "green" : "red" }}
+            onClick={changeReady}
+          ></div>
+          <button onClick={handleDelete}>X</button>
+        </div>
       </div>
     </>
   );

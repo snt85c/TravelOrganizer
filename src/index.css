@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'homeworld-bold';
+  src: url('./font/MicrogrammaBold.ttf'); /* IE9 Compat Modes */
+  src: url('./font/MicrogrammaBold.ttf') format('embedded-opentype'), /* IE6-IE8 */
+       url('./font/MicrogrammaBold.ttf') format('ttf'), /* Super Modern Browsers */
+       url('./font/MicrogrammaBold.ttf') format('ttf'), /* Pretty Modern Browsers */
+       url('./font/MicrogrammaBold.ttf')  format('ttf'), /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'homeworld-norm';
+  src: url('./font/Microgramma.ttf'); /* IE9 Compat Modes */
+  src: url('./font/Microgramma.ttf') format('embedded-opentype'), /* IE6-IE8 */
+       url('./font/Microgramma.ttf') format('ttf'), /* Super Modern Browsers */
+       url('./font/Microgramma.ttf') format('ttf'), /* Pretty Modern Browsers */
+       url('./font/Microgramma.ttf')  format('ttf'), /* Safari, Android, iOS */
+}
+
 html,body, #root{
   height:100%
 }
@@ -15,7 +33,3 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}

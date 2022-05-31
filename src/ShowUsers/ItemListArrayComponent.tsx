@@ -13,16 +13,34 @@ export default function ItemListArrayComponent(props: {
   let currentArray: iGear[] = [];
   switch (props.type) {
     case "headgear":
+      if (!props.user.headgear) {
+        props.user.headgear = [];
+      }
       currentArray = props.user.headgear;
       break;
     case "topgear":
+      if (!props.user.topgear) {
+        props.user.topgear = [];
+      }
       currentArray = props.user.topgear;
       break;
     case "bottomgear":
+      if (!props.user.bottomgear) {
+        props.user.bottomgear = [];
+      }
       currentArray = props.user.bottomgear;
       break;
     case "footgear":
+      if (!props.user.footgear) {
+        props.user.footgear = [];
+      }
       currentArray = props.user.footgear;
+      break;
+    case "extra":
+      if(!props.user.extra){
+        props.user.extra = []
+      }
+      currentArray = props.user.extra;
       break;
   }
 
@@ -31,17 +49,17 @@ export default function ItemListArrayComponent(props: {
   };
 
   const list = currentArray?.map((item: iGear, i: number) => {
-      return (
-        <ItemComponent
-          user={props.user}
-          setUser={props.setUser}
-          key={i}
-          index={i}
-          item={item}
-          currentArray={currentArray}
-          type={props.type}
-        />
-      );
+    return (
+      <ItemComponent
+        user={props.user}
+        setUser={props.setUser}
+        key={i}
+        index={i}
+        item={item}
+        currentArray={currentArray}
+        type={props.type}
+      />
+    );
   });
 
   return (

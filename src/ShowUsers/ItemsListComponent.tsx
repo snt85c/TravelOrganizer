@@ -14,6 +14,7 @@ export default function ItemsListComponent(props: {
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"topgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"bottomgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"footgear"} />
+    <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"extra"} />
     </div>
     </>
   );
