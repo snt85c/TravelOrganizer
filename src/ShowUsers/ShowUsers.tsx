@@ -1,11 +1,15 @@
-import { DocumentData } from "firebase/firestore";
 import { iUser } from "../Main";
 import ShowLoggedUser from "./ShowLoggedUser";
-import ShowUsersList from "./ShowUsersList";
 
-export default function ShowUsers(props:{user:iUser | undefined, users:iUser[] | undefined}){
-    return(<>
-    <ShowLoggedUser user={props.user} />
-    {/* <ShowUsersList users={props.users} /> */}
-    </>)
+export default function ShowUsers(props: {
+  user: iUser 
+  setUser: React.Dispatch<React.SetStateAction<iUser>>;
+  users: iUser[] | undefined;
+}) {
+  return (
+    <>
+      <ShowLoggedUser user={props.user} setUser={props.setUser} />
+      {/* <ShowUsersList users={props.users} /> */}
+    </>
+  );
 }

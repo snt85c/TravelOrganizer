@@ -1,14 +1,11 @@
-import { DocumentData } from "firebase/firestore";
 import { useEffect } from "react";
 import { iUser } from "../Main";
 import ItemsListComponent from "./ItemsListComponent";
 
 export default function ShowLoggedUser(props: {
-  user: iUser |undefined;
+  user: iUser 
+  setUser: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
-  useEffect(() => {
-    console.log(props.user);
-  }, [props.user]);
   return (
     <>
       <div className="flex justify-end">
@@ -20,7 +17,7 @@ export default function ShowLoggedUser(props: {
           <div>{props.user?.displayName}</div>
         </div>
       </div>
-      <ItemsListComponent user={props.user}/>
+      <ItemsListComponent user={props.user} setUser={props.setUser}/>
     </>
   );
 }

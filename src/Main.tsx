@@ -7,43 +7,38 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { transpileModule } from "typescript";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
 import ShowUsers from "./ShowUsers/ShowUsers";
 
 export interface iUser {
-  displayName: string, 
-  photoURL: string,
-  uid: string,
-  headgear:[{
-    name: string,
-    description: string,
-    available: boolean,
-    ready: boolean,
-  }]
+  displayName: string;
+  photoURL: string;
+  uid: string;
+  headgear: iGear[];
+  topgear: iGear[];
+  bottomgear: iGear[];
+  footgear: iGear[];
 }
 
 export interface iGear {
-  name: string,
-  description: string,
-  available: boolean,
-  ready: boolean,
+  name: string;
+  description: string;
+  available: boolean;
+  ready: boolean;
 }
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
   const [usersList, setUsersList] = useState<iUser[]>([]);
   const [user, setUser] = useState<iUser>({
-    displayName: "", 
+    displayName: "",
     photoURL: "",
     uid: "",
-    headgear:[{
-      name: "",
-      description: "",
-      available: false,
-      ready: false,
-    }]
+    headgear: [],
+    topgear: [],
+    bottomgear: [],
+    footgear: [],
   });
 
   useEffect(() => {
@@ -57,20 +52,6 @@ export default function Main() {
               displayName: loggedUser.displayName.split(" ")[0],
               photoURL: loggedUser.photoURL,
               uid: loggedUser.uid,
-              headgear: [
-                {
-                  name: "name",
-                  description: "descr",
-                  available: true,
-                  ready: true,
-                },
-                {
-                  name: "name2",
-                  description: "descr2",
-                  available: true,
-                  ready: true,
-                },
-              ],
             },
             { merge: true }
           );
@@ -129,19 +110,10 @@ export default function Main() {
     console.log(user);
   }, [user, usersList]);
 
-  function handleClick(){
-    let temp:iUser = {...user}
-    temp.displayName = "new"
-    temp.headgear[0].name = "new"
-    setUser(temp)
-  }
-
-
   return (
     <>
       <div className="bg-gray-700 pt-[60px] min-h-full text-white">
-        {user && <ShowUsers user={user} users={usersList} />}
-        <div className="" onClick={handleClick}> change</div>
+        {user && <ShowUsers user={user} setUser={setUser} users={usersList} />}
       </div>
     </>
   );
