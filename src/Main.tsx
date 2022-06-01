@@ -20,7 +20,7 @@ export interface iUser {
   topgear: iGear[];
   bottomgear: iGear[];
   footgear: iGear[];
-  extra: iGear[]
+  extra: iGear[];
 }
 
 export interface iGear {
@@ -41,13 +41,12 @@ export default function Main() {
     topgear: [],
     bottomgear: [],
     footgear: [],
-    extra: []
-
+    extra: [],
   });
 
   useEffect(() => {
     async function setData() {
-      //first time a new user logs in, tries to create a new document given the uid
+      //first time a new user logs in, tries to create a new document given the uid, otherwise merge whatever is stored on firebase with the user information provided
       if (loggedUser) {
         try {
           await setDoc(
@@ -57,10 +56,10 @@ export default function Main() {
               photoURL: loggedUser.photoURL,
               uid: loggedUser.uid,
             },
-            { merge: true}
+            { merge: true }
           );
         } catch (err) {
-          console.log(err, "in setData()");
+          console.log(err);
         }
       }
     }
@@ -69,25 +68,23 @@ export default function Main() {
 
   useEffect(() => {
     async function getData() {
-      //when the user is logged in, get the users from firestore and sort them
-      if (loggedUser) {
-        try {
-          const querySnapshot = await getDocs(collection(db, "users"));
-          let listTemp: iUser[] = [];
-          let tempdata: iUser = {} as iUser;
-          querySnapshot.forEach((doc) => {
-            tempdata = doc.data() as iUser;
-            console.log(tempdata);
-            if (tempdata.uid !== loggedUser.uid) {
-              listTemp.push(tempdata);
-            } else {
-              setUser(tempdata);
-            }
-          });
-          setUsersList(listTemp);
-        } catch (err) {
-          console.log(err, "in getData()");
-        }
+      //at start get the users from firestore, if the user has logged in, sort them into loggeduser and users, otherwise put them all on users to be visualized in readonly mode
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let listTemp: iUser[] = [];
+        let tempdata: iUser = {} as iUser;
+        querySnapshot.forEach((doc) => {
+          tempdata = doc.data() as iUser;
+          console.log(tempdata);
+          if (!loggedUser || tempdata.uid !== loggedUser.uid) {
+            listTemp.push(tempdata);
+          } else {
+            setUser(tempdata);
+          }
+        });
+        setUsersList(listTemp);
+      } catch (err) {
+        console.log(err);
       }
     }
     getData();
@@ -95,7 +92,7 @@ export default function Main() {
 
   useEffect(() => {
     async function updateData() {
-      //when current user is modified, push to firestore
+      //when logged user is modified, push to firestore
       if (loggedUser) {
         try {
           await updateDoc(
@@ -110,12 +107,16 @@ export default function Main() {
     updateData();
   }, [user]);
 
-
   return (
     <>
       <div className="bg-gray-700 pt-[60px] min-h-full text-white">
-        {user && <ShowUsers user={user} setUser={setUser} users={usersList} loggedUser={loggedUser} />}
-        {!loggedUser && <LoginPrompt/>}
+        <ShowUsers
+          user={user}
+          setUser={setUser}
+          users={usersList}
+          loggedUser={loggedUser}
+        />
+        {!loggedUser && <LoginPrompt />}
       </div>
     </>
   );

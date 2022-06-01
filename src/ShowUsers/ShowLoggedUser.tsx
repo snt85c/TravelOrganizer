@@ -9,7 +9,7 @@ export default function ShowLoggedUser(props: {
 }) {
   return (
     <>
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between -mt-10">
         <div className="flex relative flex-col p-4 items-center">
           <img
             className="rounded-full border border-white w-14 h-14 "

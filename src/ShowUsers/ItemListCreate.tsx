@@ -107,10 +107,10 @@ export default function ItemListCreate(props: {
           </div>
         <div className="flex flex-row gap-1">
           <button onClick={() => createButton(props.type)}>
-            <FaPlusCircle />
+            <FaPlusCircle className="w-7 h-7"/>
           </button>
           <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
-            <FaTimesCircle />
+            <FaTimesCircle className="w-7 h-7" />
           </button>
         </div>
       </div>

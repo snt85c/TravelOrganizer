@@ -33,7 +33,7 @@ export default function ShowUsers(props: {
   const otherUsersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex w-full md:w-1/3 m-2 justify-center bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
+        className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
@@ -44,23 +44,23 @@ export default function ShowUsers(props: {
   });
   return (
     <>
-      <div className="flex flex-row justify-between mx-2">
+      <div className=" flex flex-row justify-between mx-2">
         <button
-          className="flex mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex z-20 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={handleShowOther}
         >
-          mostra altri utenti{!showOther ? <FaChevronDown /> : <FaChevronUp />}
+          mostra utenti{!showOther ? <FaChevronDown /> : <FaChevronUp />}
         </button>
         <button 
-          className="flex mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex mt-2 rounded shadow-xl px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           style={{ display: otherUser ? "flex" : "none" }}
           onClick={handleBackToProfile}
         >
-          torna al tuo profilo
+          indietro
         </button>
       </div>
       {showOther && (
-        <div className="flex items-center md:justify-start justify-center font-[homeworld-norm] mx-2">
+        <div className="absolute top-auto z-20 rounded shadow-lg flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm]">
           {otherUsersList}
         </div>
       )}

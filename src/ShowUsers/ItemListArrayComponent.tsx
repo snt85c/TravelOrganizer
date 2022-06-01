@@ -85,8 +85,8 @@ export default function ItemListArrayComponent(props: {
           </>
         )}
         {!isAddClicked && (
-          <button className="flex justify-center p-2" onClick={handleAddButton}>
-            <FaPlusCircle />
+          <button className="flex gap-1 justify-start items-center text-[0.7rem] px-2 my-1 w-14 bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300" onClick={handleAddButton}>
+            <FaPlusCircle />crea
           </button>
         )}
       </div>
