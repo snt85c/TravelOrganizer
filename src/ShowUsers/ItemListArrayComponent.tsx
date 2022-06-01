@@ -3,8 +3,7 @@ import { iGear, iUser } from "../Main";
 import ItemComponent from "./ItemComponent";
 import ItemListCreate from "./ItemListCreate";
 import ItemListHeader from "./ItemListHeader";
-import {FaPlusCircle } from "react-icons/fa";
-
+import { FaPlusCircle } from "react-icons/fa";
 
 export default function ItemListArrayComponent(props: {
   user: iUser;
@@ -39,8 +38,8 @@ export default function ItemListArrayComponent(props: {
       currentArray = props.user.footgear;
       break;
     case "extra":
-      if(!props.user.extra){
-        props.user.extra = []
+      if (!props.user.extra) {
+        props.user.extra = [];
       }
       currentArray = props.user.extra;
       break;
@@ -68,6 +67,11 @@ export default function ItemListArrayComponent(props: {
     <>
       <div className="">
         <ItemListHeader currentArray={currentArray} type={props.type} />
+        {list.length !== 0 && (
+          <div className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700">
+            disponibile | nello zaino | rimuovi{" "}
+          </div>
+        )}
         <div>{list}</div>
         {isAddClicked && (
           <>
@@ -80,7 +84,11 @@ export default function ItemListArrayComponent(props: {
             />
           </>
         )}
-        {!isAddClicked && <button className="flex justify-center p-2" onClick={handleAddButton}><FaPlusCircle/></button>}
+        {!isAddClicked && (
+          <button className="flex justify-center p-2" onClick={handleAddButton}>
+            <FaPlusCircle />
+          </button>
+        )}
       </div>
     </>
   );

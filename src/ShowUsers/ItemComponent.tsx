@@ -16,7 +16,7 @@ export default function ItemComponent(props: {
   setUser: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
-  const [isEditDescr, setIsEditDescr] = useState<boolean>(false);
+  // const [isEditDescr, setIsEditDescr] = useState<boolean>(false);
   const [change, setChange] = useState<string>("");
 
   let currentArray: iGear[];
@@ -69,13 +69,13 @@ export default function ItemComponent(props: {
     setIsEditName(!isEditName);
   };
 
-  const setDescrChange = () => {
-    let temp: iUser | undefined = props.user;
-    temp = { ...props.user };
-    currentArray[props.index].description = change;
-    props.setUser(temp);
-    setIsEditDescr(!isEditDescr);
-  };
+  // const setDescrChange = () => {
+  //   let temp: iUser | undefined = props.user;
+  //   temp = { ...props.user };
+  //   currentArray[props.index].description = change;
+  //   props.setUser(temp);
+  //   setIsEditDescr(!isEditDescr);
+  // };
 
   const handleDelete = () => {
     let temp: iUser = { ...props.user };
@@ -96,7 +96,7 @@ export default function ItemComponent(props: {
               {props.item?.name ? props.item?.name : "empty"}
             </div>
           </div>
-         
+
           {/* <div
             className="flex flex-col "
             onClick={() => setIsEditDescr(!isEditDescr)}
@@ -113,7 +113,7 @@ export default function ItemComponent(props: {
               <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
                 <input
                   className="text-white rounded-xl px-2 bg-gray-600"
-                  value={change}
+                  defaultValue={props.item.name}
                   onChange={(e) => setChange(e.target.value)}
                 ></input>
                 <div className="flex px-2 gap-2">
@@ -121,13 +121,13 @@ export default function ItemComponent(props: {
                     <FaTimesCircle />
                   </button>
                   <button onClick={setNameChange}>
-                    <FaPlusCircle className="w-7 h-7"/>
+                    <FaPlusCircle className="w-7 h-7" />
                   </button>
                 </div>
               </div>
             </>
           )}
-          {isEditDescr && (
+          {/* {isEditDescr && (
             <>
               <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
                 <input
@@ -145,7 +145,7 @@ export default function ItemComponent(props: {
                 </div>
               </div>
             </>
-          )}
+          )} */}
         </div>
 
         <div className="flex flex-row items-center gap-1">
@@ -153,14 +153,27 @@ export default function ItemComponent(props: {
             className="cursor-pointer"
             style={{ color: props.item?.available ? "green" : "red" }}
             onClick={changeAvailable}
-          >{props.item.available? <FaCheckCircle className="w-7 h-7" />:<FaExclamationCircle className="w-7 h-7"/>}</div>
+          >
+            {props.item.available ? (
+              <FaCheckCircle className="w-7 h-7" />
+            ) : (
+              <FaExclamationCircle className="w-7 h-7" />
+            )}
+          </div>
           <div
             className="cursor-pointer"
             style={{ color: props.item?.ready ? "green" : "red" }}
             onClick={changeReady}
-          > {props.item.ready? <FaCheckCircle className="w-7 h-7" />:<FaExclamationCircle className="w-7 h-7" />}</div>
+          >
+            {" "}
+            {props.item.ready ? (
+              <FaCheckCircle className="w-7 h-7" />
+            ) : (
+              <FaExclamationCircle className="w-7 h-7" />
+            )}
+          </div>
           <button onClick={handleDelete}>
-            <FaTimesCircle className="w-7 h-7"/>
+            <FaTimesCircle className="w-7 h-7" />
           </button>
         </div>
       </div>

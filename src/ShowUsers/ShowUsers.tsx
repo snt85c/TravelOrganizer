@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { iUser } from "../Main";
-import OtherItemsListComponent from "./OtherUsersComponent/OtherItemsListComponent";
+import ShowOtherUser from "./OtherUsersComponent/ShowOtherUser";
 import ShowLoggedUser from "./ShowLoggedUser";
-import ShowUsersList from "./ShowUsersList";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function ShowUsers(props: {
   user: iUser;
@@ -20,6 +20,7 @@ export default function ShowUsers(props: {
 
   const handleClickSelection = (user: iUser) => {
     setOtherUser(user);
+    setShowOther(false);
     setShowSelectedOther(true);
   };
 
@@ -32,27 +33,40 @@ export default function ShowUsers(props: {
   const otherUsersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex justify-center items-center"
+        className="flex w-full md:w-1/3 m-2 justify-center bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
         {user.displayName.toUpperCase()}
-        <img src={user.photoURL} />
+        <img src={user.photoURL} className="w-10 h-10 rounded-full" />
       </div>
     );
   });
   return (
     <>
-      <button onClick={handleShowOther}>mostra altri utenti</button>
+      <div className="flex flex-row justify-between mx-2">
+        <button
+          className="flex mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          onClick={handleShowOther}
+        >
+          mostra altri utenti{!showOther ? <FaChevronDown /> : <FaChevronUp />}
+        </button>
+        <button 
+          className="flex mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          style={{ display: otherUser ? "flex" : "none" }}
+          onClick={handleBackToProfile}
+        >
+          torna al tuo profilo
+        </button>
+      </div>
       {showOther && (
-        <div className="flex border items-center justify-center m-2 -p-2 font-[homeworld-norm] ">
+        <div className="flex items-center md:justify-start justify-center font-[homeworld-norm] mx-2">
           {otherUsersList}
         </div>
       )}
       {otherUser && (
         <>
-          <button onClick={handleBackToProfile}>torna al tuo profilo</button>
-          <OtherItemsListComponent user={otherUser} />
+          <ShowOtherUser user={otherUser} />
         </>
       )}
       {props.loggedUser && !showSelectedOther && (

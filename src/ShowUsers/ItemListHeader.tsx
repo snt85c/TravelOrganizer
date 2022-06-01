@@ -66,7 +66,7 @@ export default function ItemListHeader(props: {
 
   return (
     <>
-      <div className="flex  flex-col justify-center p-2 gap-2 bg-gradient-to-r from-slate-900 to-slade-700">
+      <div className="flex  flex-col justify-center p-2 pb-0 gap-2 bg-gradient-to-r from-slate-900 to-slade-700">
         <div className="flex font-[homeworld-bold] text-lg -my-2 text-amber-500">
           {headername}
         </div>

@@ -1,7 +1,8 @@
 import { iUser } from "../../Main";
+import Stats from "../Stats";
 import OtherItemListArrayComponent from "./OtherListArrayComponent";
 
-export default function OtherItemsListComponent(props: {
+export default function ShowOtherUser(props: {
   user: iUser;
 }) {
   
@@ -9,6 +10,9 @@ export default function OtherItemsListComponent(props: {
   return (
     <>
     <div className="p-2">
+      <div className="flex justify-center items-center font-[homeworld-norm]">{props.user.displayName.toUpperCase()}</div>
+      <Stats user={props.user} />
+      <div className="text-gray-300 text-[0.70rem]"><span className="text-amber-500">readonly:</span> non è possibilie modificare le informazioni di altri utenti</div>
     <OtherItemListArrayComponent user={props.user} type={"headgear"} />
     <OtherItemListArrayComponent user={props.user} type={"topgear"} />
     <OtherItemListArrayComponent user={props.user} type={"bottomgear"} />

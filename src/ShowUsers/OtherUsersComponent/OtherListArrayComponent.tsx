@@ -58,6 +58,11 @@ export default function ItemListArrayComponent(props: {
     <>
       <div className="">
         <ItemListHeader currentArray={currentArray} type={props.type} />
+        {list.length !== 0 && (
+          <div className="flex justify-end text-gray-500 text-[0.60rem] px-2 bg-gradient-to-r from-slate-900 to-slade-700">
+            disponibile | nello zaino {" "}
+          </div>
+        )}
         <div>{list}</div>      
       </div>
     </>
