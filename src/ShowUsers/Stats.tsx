@@ -115,7 +115,7 @@ export default function Stats(props: { user: iUser }) {
   }, [props.user]);
 
   let notAvList = stats.notAvailableList.map((item, i) => {
-    return <div key={i}>{item}</div>;
+    return <div className="text-amber-500 "key={i}>{item}</div>;
   });
 
   let notReList = stats.notReadyList.map((item, i) => {
@@ -147,7 +147,6 @@ export default function Stats(props: { user: iUser }) {
           )}
            {notAvList.length !== 0 && (
             <>
-              <div>lista della spesa: </div>
               <div>{notAvList}</div>
             </>
           )}
