@@ -117,11 +117,11 @@ export default function ItemComponent(props: {
                   onChange={(e) => setChange(e.target.value)}
                 ></input>
                 <div className="flex px-2 gap-2">
-                  <button onClick={setNameChange}>
-                    <FaPlusCircle />
-                  </button>
                   <button onClick={() => setIsEditName(!isEditName)}>
                     <FaTimesCircle />
+                  </button>
+                  <button onClick={setNameChange}>
+                    <FaPlusCircle className="w-7 h-7"/>
                   </button>
                 </div>
               </div>
@@ -153,14 +153,14 @@ export default function ItemComponent(props: {
             className="cursor-pointer"
             style={{ color: props.item?.available ? "green" : "red" }}
             onClick={changeAvailable}
-          >{props.item.available? <FaCheckCircle />:<FaExclamationCircle />}</div>
+          >{props.item.available? <FaCheckCircle className="w-7 h-7" />:<FaExclamationCircle className="w-7 h-7"/>}</div>
           <div
             className="cursor-pointer"
             style={{ color: props.item?.ready ? "green" : "red" }}
             onClick={changeReady}
-          > {props.item.ready? <FaCheckCircle />:<FaExclamationCircle />}</div>
+          > {props.item.ready? <FaCheckCircle className="w-7 h-7" />:<FaExclamationCircle className="w-7 h-7" />}</div>
           <button onClick={handleDelete}>
-            <FaTimesCircle />
+            <FaTimesCircle className="w-7 h-7"/>
           </button>
         </div>
       </div>

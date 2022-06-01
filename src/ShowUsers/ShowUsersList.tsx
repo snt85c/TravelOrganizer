@@ -1,9 +1,10 @@
 import { iUser } from "../Main";
 import ItemsListComponent from "./ItemsListComponent";
+import OtherItemsListComponent from "./OtherUsersComponent/OtherItemsListComponent";
 
-export default function ShowUsersList(props:{users: iUser[] | undefined;}){
+export default function ShowUsersList(props:{user: iUser;}){
 
-    return(<></>)
+    return(<>
+    <OtherItemsListComponent user={props.user} />
+    </>)
 }
-
-//<ItemsListComponent user={props.user} setUser={props.setUser}/>

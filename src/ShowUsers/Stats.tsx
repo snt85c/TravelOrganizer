@@ -55,7 +55,7 @@ export default function Stats(props: { user: iUser }) {
   }, [props.user]);
   return (
     <>
-      <div className="flex flex-col w-1/2 p-2 mx-2 my-1 border border-gray-500">
+      <div className="flex flex-col p-2 mx-2 my-1 border border-gray-500">
         <div className="font-extrabold font-[homeworld-norm] text-sm">RIEPILOGO</div>
         <div className="font-xs">
           <div>disponibile:{stats.AvTrue}</div>

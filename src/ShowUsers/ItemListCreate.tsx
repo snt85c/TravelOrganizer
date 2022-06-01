@@ -75,7 +75,7 @@ export default function ItemListCreate(props: {
       <div className="flex flex-row p-2 gap-2 justify-between items-center">
         <div className="flex flex-row gap-1 items-center">
           <input
-            className="text-black w-1/2 md:w-1/4"
+            className="text-black min-w-[50%] md:w-[1/4]"
             placeholder="name"
             value={tempItem.name}
             onChange={(e) => {
@@ -94,14 +94,14 @@ export default function ItemListCreate(props: {
               style={{ color: tempItem.available ? "green" : "red" }}
               onClick={ToggleAvailable}
             >
-              {tempItem.available ? <FaCheckCircle /> : <FaExclamationCircle />}
+              {tempItem.available ? <FaCheckCircle className="w-7 h-7" /> : <FaExclamationCircle className="w-7 h-7" />}
             </div>
             <div
-              className="min-h-[5px] min-w-[25px] rounded-full"
+              // className="min-h-[5px] min-w-[25px] rounded-full"
               style={{ color: tempItem.ready ? "green" : "red" }}
               onClick={ToggleReady}
             >
-              {tempItem.ready ? <FaCheckCircle /> : <FaExclamationCircle />}
+              {tempItem.ready ? <FaCheckCircle className="w-7 h-7" /> : <FaExclamationCircle className="w-7 h-7"/>}
             </div>
           </div>
           </div>
