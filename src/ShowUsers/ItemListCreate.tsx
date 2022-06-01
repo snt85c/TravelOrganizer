@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { iGear, iUser } from "../Main";
+import {
+  FaTimesCircle,
+  FaPlusCircle,
+  FaCheckCircle,
+  FaExclamationCircle,
+} from "react-icons/fa";
 
 export default function ItemListCreate(props: {
   user: iUser;
@@ -33,7 +39,7 @@ export default function ItemListCreate(props: {
         break;
       case "extra":
         temp.extra?.push(tempItem);
-        break
+        break;
     }
     props.setUser(temp);
     props.setIsAddClicked(!props.isAddClicked);
@@ -61,37 +67,52 @@ export default function ItemListCreate(props: {
   const changeDescr = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     let temp: iGear = { ...tempItem };
-    temp.description = e.target.value !== "" ? e.target.value : "empty";
+    temp.description = e.target.value;
     setTempItem(temp);
   };
   return (
     <>
-      <div className="flex p-2 gap-2">
-        <input
-          className="text-black"
-          placeholder="name"
-          value={tempItem.name}
-          onChange={(e) => {
-            changeName(e);
-          }}
-        ></input>
-        <input
-          className="text-black"
-          placeholder="descr"
-          onChange={(e) => changeDescr(e)}
-          value={tempItem.description}
-        ></input>
-        <div
-          className="min-h-[5px] min-w-[25px] rounded-full"
-          style={{ backgroundColor: tempItem.available ? "green" : "red" }}
-          onClick={ToggleAvailable}
-        ></div>
-        <div
-          className="min-h-[5px] min-w-[25px] rounded-full"
-          style={{ backgroundColor: tempItem.ready ? "green" : "red" }}
-          onClick={ToggleReady}
-        ></div>
-        <button onClick={() => createButton(props.type)}>create</button>
+      <div className="flex flex-row p-2 gap-2 justify-between items-center">
+        <div className="flex flex-row gap-1 items-center">
+          <input
+            className="text-black w-1/2 md:w-1/4"
+            placeholder="name"
+            value={tempItem.name}
+            onChange={(e) => {
+              changeName(e);
+            }}
+          ></input>
+          {/* <input
+            className="text-black w-1/2 md:w-1/4"
+            placeholder="descr"
+            onChange={(e) => changeDescr(e)}
+            value={tempItem.description}
+          ></input> */}
+          <div className="flex flex-row gap-1">
+            <div
+              // className="min-h-[5px] min-w-[25px] rounded-full"
+              style={{ color: tempItem.available ? "green" : "red" }}
+              onClick={ToggleAvailable}
+            >
+              {tempItem.available ? <FaCheckCircle /> : <FaExclamationCircle />}
+            </div>
+            <div
+              className="min-h-[5px] min-w-[25px] rounded-full"
+              style={{ color: tempItem.ready ? "green" : "red" }}
+              onClick={ToggleReady}
+            >
+              {tempItem.ready ? <FaCheckCircle /> : <FaExclamationCircle />}
+            </div>
+          </div>
+          </div>
+        <div className="flex flex-row gap-1">
+          <button onClick={() => createButton(props.type)}>
+            <FaPlusCircle />
+          </button>
+          <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
+            <FaTimesCircle />
+          </button>
+        </div>
       </div>
     </>
   );

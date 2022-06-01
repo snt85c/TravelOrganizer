@@ -44,7 +44,7 @@ export default function ItemListHeader(props: {
     });
     setNumberAvailable(
       tempAvNumber === props.currentArray?.length
-        ? "tutti gli oggetti sono pronti ad essere mezzi nello zaino"
+        ? "tutti gli oggetti sono pronti ad essere messi nello zaino"
         : tempAvNumber + " oggetti pronti per lo zaino"
     );
     setNumberReady(
@@ -66,8 +66,8 @@ export default function ItemListHeader(props: {
 
   return (
     <>
-      <div className="flex flex-col items-center p-2 gap-2 bg-slate-900">
-        <div className="font-[homeworld-norm] font-extrabold text-lg -my-2">
+      <div className="flex  flex-col justify-center p-2 gap-2 bg-slate-900">
+        <div className="flex font-[homeworld-bold] text-lg -my-2 text-amber-500">
           {headername}
         </div>
         <div>

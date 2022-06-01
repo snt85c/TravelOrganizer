@@ -13,10 +13,10 @@ export default function ShowLoggedUser(props: {
         <Stats user={props.user} />
         <div className="flex relative flex-col p-4 items-center">
           <img
-            className="rounded-full border border-white w-20 h-20 "
+            className="rounded-full border border-white w-14 h-14 "
             src={props.user?.photoURL}
           />
-          <div className="font-[homeworld-norm]">
+          <div className="font-[homeworld-norm] text-xs" >
             {props.user?.displayName.toUpperCase()}
           </div>
         </div>

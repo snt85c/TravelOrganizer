@@ -3,6 +3,8 @@ import { iGear, iUser } from "../Main";
 import ItemComponent from "./ItemComponent";
 import ItemListCreate from "./ItemListCreate";
 import ItemListHeader from "./ItemListHeader";
+import {FaPlusCircle } from "react-icons/fa";
+
 
 export default function ItemListArrayComponent(props: {
   user: iUser;
@@ -78,7 +80,7 @@ export default function ItemListArrayComponent(props: {
             />
           </>
         )}
-        {!isAddClicked && <button onClick={handleAddButton}>add</button>}
+        {!isAddClicked && <button className="flex justify-center p-2" onClick={handleAddButton}><FaPlusCircle/></button>}
       </div>
     </>
   );
