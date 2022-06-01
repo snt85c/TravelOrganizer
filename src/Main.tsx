@@ -116,7 +116,7 @@ export default function Main() {
           users={usersList}
           loggedUser={loggedUser}
         />
-        {!loggedUser && <LoginPrompt />}
+        {/* {!loggedUser && loggedUser !== null && <LoginPrompt />} */}
       </div>
     </>
   );
