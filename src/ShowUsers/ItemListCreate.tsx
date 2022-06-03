@@ -59,7 +59,7 @@ export default function ItemListCreate(props: {
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     let temp: iGear = { ...tempItem };
-    temp.name = e.target.value !== "" ? e.target.value : "empty";
+    temp.name = e.target.value;
     setTempItem(temp);
   };
 
