@@ -22,6 +22,8 @@ export default function NavButton(props: {
     } else {
       navigate("/user");
     }
+    setShowOther(false);
+
   };
 
   let usersList = props.users?.map((user, i) => {
