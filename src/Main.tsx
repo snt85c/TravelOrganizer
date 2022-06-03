@@ -10,7 +10,6 @@ import { FaGithub } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
-import LoginPrompt from "./LoginPropt";
 import ShowUsers from "./ShowUsers/ShowUsers";
 
 export interface iUser {
@@ -26,7 +25,6 @@ export interface iUser {
 
 export interface iGear {
   name: string;
-  description: string;
   available: boolean;
   ready: boolean;
 }
@@ -116,7 +114,6 @@ export default function Main() {
           users={usersList}
           loggedUser={loggedUser}
         />
-        {/* {!loggedUser && loggedUser !== null && <LoginPrompt />} */}
         <div className="absolute flex justify-between items-center h-5 px-5 text-[0.8rem] text-gray-400 bg-gray-800 min-w-full bottom-0 z-20">
           <div>Snt85c</div>
           <a

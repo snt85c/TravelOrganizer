@@ -16,7 +16,6 @@ export default function ItemListCreate(props: {
 }) {
   const [tempItem, setTempItem] = useState<iGear>({
     name: "",
-    description: "",
     available: false,
     ready: false,
   });
@@ -64,12 +63,6 @@ export default function ItemListCreate(props: {
     setTempItem(temp);
   };
 
-  const changeDescr = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    let temp: iGear = { ...tempItem };
-    temp.description = e.target.value;
-    setTempItem(temp);
-  };
   return (
     <>
       <div className="flex flex-row p-2 gap-2 justify-between items-center">
@@ -82,22 +75,14 @@ export default function ItemListCreate(props: {
               changeName(e);
             }}
           ></input>
-          {/* <input
-            className="text-black w-1/2 md:w-1/4"
-            placeholder="descr"
-            onChange={(e) => changeDescr(e)}
-            value={tempItem.description}
-          ></input> */}
           <div className="flex flex-row gap-1">
             <div
-              // className="min-h-[5px] min-w-[25px] rounded-full"
               style={{ color: tempItem.available ? "green" : "red" }}
               onClick={ToggleAvailable}
             >
               {tempItem.available ? <FaCheckCircle className="w-7 h-7" /> : <FaExclamationCircle className="w-7 h-7" />}
             </div>
             <div
-              // className="min-h-[5px] min-w-[25px] rounded-full"
               style={{ color: tempItem.ready ? "green" : "red" }}
               onClick={ToggleReady}
             >
