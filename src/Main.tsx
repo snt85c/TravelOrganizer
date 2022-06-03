@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import ShowLoggedUser from "./ShowUsers/ShowLoggedUser";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -57,6 +57,33 @@ export default function Main() {
     extra: [],
   });
 
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    async function fetchData() {
+      //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let listTemp: iUser[] = [];
+        let tempdata: iUser = {} as iUser;
+        querySnapshot.forEach((doc) => {
+          tempdata = doc.data() as iUser;
+          if ( tempdata.uid === loggedUser?.uid) {
+            setUser(tempdata);
+            navigate("/user")
+          } 
+          listTemp.push(tempdata);
+        });
+        setUsersList(listTemp);
+        console.log("fetch")
+
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, [loggedUser]);
+
   useEffect(() => {
     async function setData() {
       //first time a new user logs in, tries to create a new document given the uid, otherwise merge whatever is stored on firebase with the user information provided
@@ -71,34 +98,13 @@ export default function Main() {
             },
             { merge: true }
           );
+          console.log("set")
         } catch (err) {
           console.log(err);
         }
       }
     }
     setData();
-  }, [loggedUser]);
-
-  useEffect(() => {
-    async function getData() {
-      //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        let listTemp: iUser[] = [];
-        let tempdata: iUser = {} as iUser;
-        querySnapshot.forEach((doc) => {
-          tempdata = doc.data() as iUser;
-          if (loggedUser !== null && tempdata.uid === loggedUser?.uid) {
-            setUser(tempdata);
-          } 
-          listTemp.push(tempdata);
-        });
-        setUsersList(listTemp);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getData();
   }, [loggedUser]);
 
   useEffect(() => {
@@ -109,7 +115,8 @@ export default function Main() {
           await updateDoc(
             doc(db, "users", loggedUser.uid),
             user as DocumentData
-          );
+            );
+            console.log("update")
         } catch (err) {
           console.log(err);
         }
@@ -117,6 +124,7 @@ export default function Main() {
     }
     updateData();
   }, [user]);
+
 
 
   return (

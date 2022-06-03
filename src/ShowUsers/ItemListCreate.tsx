@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -80,19 +80,27 @@ export default function ItemListCreate(props: {
               style={{ color: tempItem.available ? "green" : "red" }}
               onClick={ToggleAvailable}
             >
-              {tempItem.available ? <FaCheckCircle className="w-7 h-7" /> : <FaExclamationCircle className="w-7 h-7" />}
+              {tempItem.available ? (
+                <FaCheckCircle className="w-7 h-7" />
+              ) : (
+                <FaExclamationCircle className="w-7 h-7" />
+              )}
             </div>
             <div
               style={{ color: tempItem.ready ? "green" : "red" }}
               onClick={ToggleReady}
             >
-              {tempItem.ready ? <FaCheckCircle className="w-7 h-7" /> : <FaExclamationCircle className="w-7 h-7"/>}
+              {tempItem.ready ? (
+                <FaCheckCircle className="w-7 h-7" />
+              ) : (
+                <FaExclamationCircle className="w-7 h-7" />
+              )}
             </div>
           </div>
-          </div>
+        </div>
         <div className="flex flex-row gap-1">
           <button onClick={() => createButton(props.type)}>
-            <FaPlusCircle className="w-7 h-7"/>
+            <FaPlusCircle className="w-7 h-7" />
           </button>
           <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
             <FaTimesCircle className="w-7 h-7" />
