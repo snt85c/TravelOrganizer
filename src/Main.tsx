@@ -68,24 +68,23 @@ export default function Main() {
 
   useEffect(() => {
     async function getData() {
-      //at start get the users from firestore, if the user has logged in, sort them into loggeduser and users, otherwise put them all on users to be visualized in readonly mode
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        let listTemp: iUser[] = [];
-        let tempdata: iUser = {} as iUser;
-        querySnapshot.forEach((doc) => {
-          tempdata = doc.data() as iUser;
-          console.log(tempdata);
-          if (!loggedUser || tempdata.uid !== loggedUser.uid) {
-            listTemp.push(tempdata);
-          } else {
-            setUser(tempdata);
-          }
-        });
-        setUsersList(listTemp);
-      } catch (err) {
-        console.log(err);
-      }
+      //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
+        try {
+          const querySnapshot = await getDocs(collection(db, "users"));
+          let listTemp: iUser[] = [];
+          let tempdata: iUser = {} as iUser;
+          querySnapshot.forEach((doc) => {
+            tempdata = doc.data() as iUser;
+            if (loggedUser !== null && tempdata.uid === loggedUser?.uid) {
+              setUser(tempdata);
+            } else{
+              listTemp.push(tempdata);
+            }
+          });
+          setUsersList(listTemp);
+        } catch (err) {
+          console.log(err);
+        }
     }
     getData();
   }, [loggedUser]);

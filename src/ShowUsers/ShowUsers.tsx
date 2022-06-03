@@ -24,13 +24,20 @@ export default function ShowUsers(props: {
     setShowSelectedOther(true);
   };
 
+  const handleClickSelectionUser = (user: iUser) => {
+    props.setUser(user);
+    setOtherUser(undefined);
+    setShowOther(false);
+    setShowSelectedOther(false);
+  };
+
   const handleBackToProfile = () => {
     setShowSelectedOther(false);
     setShowOther(false);
     setOtherUser(undefined);
   };
 
-  const otherUsersList = props.users?.map((user, i) => {
+  let usersList = props.users?.map((user, i) => {
     return (
       <div
         className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
@@ -42,6 +49,20 @@ export default function ShowUsers(props: {
       </div>
     );
   });
+  //after creating a list of users, if someone has logged in, take that user and push it in the list with a different click handler
+  if (props.loggedUser) {
+    usersList?.push(
+      <div
+        key={props.user.uid}
+        className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
+        onClick={() => handleClickSelectionUser(props.user)}
+      >
+        {props.user.displayName.toUpperCase()}
+        <img src={props.user.photoURL} className="w-10 h-10 rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className=" flex flex-row justify-between mx-2">
@@ -51,7 +72,7 @@ export default function ShowUsers(props: {
         >
           mostra utenti{!showOther ? <FaChevronDown /> : <FaChevronUp />}
         </button>
-        <button 
+        <button
           className="flex mt-2 rounded shadow-xl px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           style={{ display: otherUser ? "flex" : "none" }}
           onClick={handleBackToProfile}
@@ -59,16 +80,19 @@ export default function ShowUsers(props: {
           indietro
         </button>
       </div>
+      {/* if i click a button, show all the users */}
       {showOther && (
         <div className="absolute top-auto z-20 rounded shadow-lg flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm]">
-          {otherUsersList}
+          {usersList}
         </div>
       )}
+      {/* if i click on an offline user, otherUser is set to true and it will show it */}
       {otherUser && (
         <>
           <ShowOtherUser user={otherUser} />
         </>
       )}
+      {/* if im logged in and we are not showing anyone else, show logged in user */}
       {props.loggedUser && !showSelectedOther && (
         <ShowLoggedUser user={props.user} setUser={props.setUser} />
       )}
