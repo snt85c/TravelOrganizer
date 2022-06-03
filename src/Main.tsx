@@ -6,6 +6,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { FaGithub } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
@@ -108,7 +109,7 @@ export default function Main() {
 
   return (
     <>
-      <div className="bg-gray-700 pt-[60px] min-h-full text-white">
+      <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
         <ShowUsers
           user={user}
           setUser={setUser}
@@ -116,6 +117,13 @@ export default function Main() {
           loggedUser={loggedUser}
         />
         {/* {!loggedUser && loggedUser !== null && <LoginPrompt />} */}
+        <div className="absolute flex justify-between items-center h-5 px-5 text-[0.8rem] text-gray-400 bg-gray-800 min-w-full bottom-0 z-20">
+          <div>Snt85c</div>
+          <a
+          href="https://github.com/snt85c">
+            <FaGithub />
+          </a>
+        </div>
       </div>
     </>
   );
