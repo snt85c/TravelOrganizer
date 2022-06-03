@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "./UserAuth";
 // import GoogleButton from "react-google-button";
 
 export default function GoogleLoginButton() {
   const { googleSignIn, logout, user } = useUserAuth();
+  const navigate = useNavigate();
 
   const handleGoogleSignIn = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -11,9 +13,15 @@ export default function GoogleLoginButton() {
     e.preventDefault();
     try {
       await googleSignIn();
+      navigate("/user");
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleGoogleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
@@ -30,7 +38,7 @@ export default function GoogleLoginButton() {
         <>
           <div
             className="flex text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold] hover:text-amber-500 duration-300"
-            onClick={() => logout()}
+            onClick={handleGoogleLogout}
           >
             LOGOUT
           </div>

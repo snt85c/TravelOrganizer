@@ -6,11 +6,16 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { FaGithub } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
-import ShowUsers from "./ShowUsers/ShowUsers";
+import { Routes, Route } from "react-router-dom";
+import ShowLoggedUser from "./ShowUsers/ShowLoggedUser";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import NavButton from "./ShowUsers/NavButtons";
+import ShowOtherUser from "./ShowUsers/OtherUsersComponent/ShowOtherUser";
+
 
 export interface iUser {
   displayName: string;
@@ -31,7 +36,16 @@ export interface iGear {
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
+  const [otherUser, setOtherUser] = useState<iUser>({ displayName: "",
+  photoURL: "",
+  uid: "",
+  headgear: [],
+  topgear: [],
+  bottomgear: [],
+  footgear: [],
+  extra: [],});
   const [usersList, setUsersList] = useState<iUser[]>([]);
+
   const [user, setUser] = useState<iUser>({
     displayName: "",
     photoURL: "",
@@ -68,22 +82,21 @@ export default function Main() {
   useEffect(() => {
     async function getData() {
       //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
-        try {
-          const querySnapshot = await getDocs(collection(db, "users"));
-          let listTemp: iUser[] = [];
-          let tempdata: iUser = {} as iUser;
-          querySnapshot.forEach((doc) => {
-            tempdata = doc.data() as iUser;
-            if (loggedUser !== null && tempdata.uid === loggedUser?.uid) {
-              setUser(tempdata);
-            } else{
-              listTemp.push(tempdata);
-            }
-          });
-          setUsersList(listTemp);
-        } catch (err) {
-          console.log(err);
-        }
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let listTemp: iUser[] = [];
+        let tempdata: iUser = {} as iUser;
+        querySnapshot.forEach((doc) => {
+          tempdata = doc.data() as iUser;
+          if (loggedUser !== null && tempdata.uid === loggedUser?.uid) {
+            setUser(tempdata);
+          } 
+          listTemp.push(tempdata);
+        });
+        setUsersList(listTemp);
+      } catch (err) {
+        console.log(err);
+      }
     }
     getData();
   }, [loggedUser]);
@@ -105,22 +118,23 @@ export default function Main() {
     updateData();
   }, [user]);
 
+
   return (
     <>
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
-        <ShowUsers
-          user={user}
-          setUser={setUser}
-          users={usersList}
-          loggedUser={loggedUser}
-        />
-        <div className="absolute flex justify-between items-center h-5 px-5 text-[0.8rem] text-gray-400 bg-gray-800 min-w-full bottom-0 z-20">
-          <div>Snt85c</div>
-          <a
-          href="https://github.com/snt85c">
-            <FaGithub />
-          </a>
-        </div>
+        <Navbar />
+        <NavButton user={user} users={usersList} loggedUser={loggedUser} setOtherUser={setOtherUser}/>
+        <Routes>
+          <Route
+            path="/"
+          />
+          <Route
+            path="/user"
+            element={<ShowLoggedUser user={user} setUser={setUser} />}
+          />
+          <Route path= "/other" element={<ShowOtherUser user={otherUser} />}/>
+        </Routes>
+        <Footer />
       </div>
     </>
   );

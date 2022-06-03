@@ -1,16 +1,16 @@
-
 import { UserAuthContextProvider } from "./LoginComponents/UserAuth";
 import "./App.css";
-import Navbar from "./Navbar";
 import Main from "./Main";
+import { HashRouter } from "react-router-dom";
 
-const App: React.FC =() =>{
+const App: React.FC = () => {
   return (
-    <UserAuthContextProvider>
-        <Navbar />
+    <HashRouter>
+      <UserAuthContextProvider>
         <Main />
-     </UserAuthContextProvider>
+      </UserAuthContextProvider>
+    </HashRouter>
   );
-}
+};
 
 export default App;
