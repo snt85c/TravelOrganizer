@@ -68,9 +68,13 @@ export default function ItemListArrayComponent(props: {
       <div className="">
         <ItemListHeader currentArray={currentArray} type={props.type} />
         {list.length !== 0 && (
-          <div className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700">
-            disponibile | nello zaino | rimuovi{" "}
-          </div>
+          <>
+            <div
+              className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700"
+            >
+              disponibile | nello zaino | rimuovi{" "}
+            </div>
+          </>
         )}
         <div>{list}</div>
         {isAddClicked && (
@@ -85,8 +89,12 @@ export default function ItemListArrayComponent(props: {
           </>
         )}
         {!isAddClicked && (
-          <button className="flex gap-1 justify-start items-center text-[0.7rem] px-2 my-1 w-20 bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300" onClick={handleAddButton}>
-            <FaPlusCircle />aggiungi
+          <button
+            className="flex gap-1 justify-start items-center text-[0.7rem] px-2 mb-5 my-1 w-20 bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300"
+            onClick={handleAddButton}
+          >
+            <FaPlusCircle />
+            aggiungi
           </button>
         )}
       </div>

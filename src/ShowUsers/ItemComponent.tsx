@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {  useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -16,7 +16,6 @@ export default function ItemComponent(props: {
   setUser: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
-  // const [isEditDescr, setIsEditDescr] = useState<boolean>(false);
   const [change, setChange] = useState<string>("");
 
   let currentArray: iGear[];
@@ -69,14 +68,6 @@ export default function ItemComponent(props: {
     setIsEditName(!isEditName);
   };
 
-  // const setDescrChange = () => {
-  //   let temp: iUser | undefined = props.user;
-  //   temp = { ...props.user };
-  //   currentArray[props.index].description = change;
-  //   props.setUser(temp);
-  //   setIsEditDescr(!isEditDescr);
-  // };
-
   const handleDelete = () => {
     let temp: iUser = { ...props.user };
     currentArray.splice(props.index, 1);
@@ -96,18 +87,6 @@ export default function ItemComponent(props: {
               {props.item?.name ? props.item?.name : "empty"}
             </div>
           </div>
-
-          {/* <div
-            className="flex flex-col "
-            onClick={() => setIsEditDescr(!isEditDescr)}
-          >
-            <div className="text-gray-600 text-[0.7rem] -my-1">
-              descrizione:
-            </div>
-            <div className="text-white">
-              {props.item?.description ? props.item?.description : "empty"}
-            </div>
-          </div> */}
           {isEditName && (
             <>
               <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
@@ -127,25 +106,6 @@ export default function ItemComponent(props: {
               </div>
             </>
           )}
-          {/* {isEditDescr && (
-            <>
-              <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
-                <input
-                  className="text-white rounded bg-gray-600"
-                  value={change}
-                  onChange={(e) => setChange(e.target.value)}
-                ></input>
-                <div className="flex px-2 gap-2">
-                  <button onClick={setDescrChange}>
-                    <FaPlusCircle />
-                  </button>
-                  <button onClick={() => setIsEditDescr(!isEditDescr)}>
-                    <FaTimesCircle />
-                  </button>
-                </div>
-              </div>
-            </>
-          )} */}
         </div>
 
         <div className="flex flex-row items-center gap-1">

@@ -9,7 +9,7 @@ export default function ShowOtherUser(props: {
 
   return (
     <>
-    <div className="p-2">
+    <div className="mx-2 md:mx-20">
       <div className="flex justify-center items-center font-[homeworld-norm]">{props.user.displayName.toUpperCase()}</div>
       <Stats user={props.user} />
       <div className="text-gray-300 text-[0.70rem]"><span className="text-amber-500">readonly:</span> non è possibilie modificare le informazioni di altri utenti</div>

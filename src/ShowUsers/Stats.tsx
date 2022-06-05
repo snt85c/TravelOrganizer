@@ -124,7 +124,7 @@ export default function Stats(props: { user: iUser }) {
 
   return (
     <>
-      <div className="flex flex-col p-2 mx-2 my-1 border border-gray-500">
+      <div className="flex flex-col my-1 border border-gray-500">
         <div className="font-extrabold font-[homeworld-norm] text-sm">
           RIEPILOGO
         </div>

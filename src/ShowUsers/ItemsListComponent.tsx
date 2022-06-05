@@ -9,13 +9,11 @@ export default function ItemsListComponent(props: {
 
   return (
     <>
-    <div className="p-2">
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"headgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"topgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"bottomgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"footgear"} />
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"extra"} />
-    </div>
     </>
   );
 }

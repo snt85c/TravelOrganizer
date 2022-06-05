@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { iUser } from "../Main";
 
@@ -23,9 +23,11 @@ export default function NavButton(props: {
       navigate("/user");
     }
     setShowOther(false);
-
   };
 
+ 
+
+  
   let usersList = props.users?.map((user, i) => {
     return (
       <div
@@ -41,7 +43,7 @@ export default function NavButton(props: {
 
   return (
     <>
-      <div className=" flex flex-row justify-between mx-2">
+      <div className=" flex flex-row justify-between mx-2 md:mx-20">
         <button
           className="flex z-20 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={handleShowOther}
@@ -50,7 +52,7 @@ export default function NavButton(props: {
         </button>
       </div>
       {showOther && (
-        <div className="absolute top-auto z-20 rounded shadow-lg flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm]">
+        <div className="absolute top-auto md:left-[4.5rem] z-20 rounded shadow-lg flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm]">
           {usersList}
         </div>
       )}
