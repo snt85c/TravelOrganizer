@@ -7,9 +7,9 @@ import {
   FaExclamationCircle,
 } from "react-icons/fa";
 
-export default function ItemListCreate(props: {
+export default function ItemCreate(props: {
   user: iUser;
-  setUser: React.Dispatch<React.SetStateAction<iUser>>;
+  setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
   isAddClicked: boolean;
   setIsAddClicked: React.Dispatch<React.SetStateAction<boolean>>;
   type: string;
@@ -40,14 +40,14 @@ export default function ItemListCreate(props: {
         temp.extra?.push(tempItem);
         break;
     }
-    props.setUser(temp);
+    props.setUser && props.setUser(temp);
     props.setIsAddClicked(!props.isAddClicked);
   };
 
   const ToggleReady = () => {
-    let temp: iGear = { ...tempItem };
-    temp.ready = !tempItem.ready;
-    setTempItem(temp);
+      let temp: iGear = { ...tempItem };
+      temp.ready = !tempItem.ready;
+      setTempItem(temp);
   };
 
   const ToggleAvailable = () => {

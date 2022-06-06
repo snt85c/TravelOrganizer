@@ -6,15 +6,14 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { createContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import ShowLoggedUser from "./ShowUsers/ShowLoggedUser";
+import ShowUser from "./ShowUsers/ShowUser";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import NavButton from "./ShowUsers/NavButtons";
-import ShowOtherUser from "./ShowUsers/OtherUsersComponent/ShowOtherUser";
 import { lang, LangContext } from "./LangContextProvider";
 
 export interface iUser {
@@ -62,8 +61,8 @@ export default function Main() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchDataFromFirestore() {
-      //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
+    async function setAndFetchDataFromFirestore() {
+      //immediately set an user with the data provided from the login, otherwise merge the data. afterthis it will get all the data from firestore, creating a list for all the users and settng the logged user
       if (loggedUser) {
         try {
           await setDoc(
@@ -96,7 +95,7 @@ export default function Main() {
         console.log(err);
       }
     }
-    fetchDataFromFirestore(); 
+    setAndFetchDataFromFirestore(); 
   }, [loggedUser]);
 
   useEffect(() => {
@@ -150,9 +149,9 @@ export default function Main() {
             <Route path="/" />
             <Route
               path="/user"
-              element={<ShowLoggedUser user={user} setUser={setUser} />}
+              element={<ShowUser user={user} setUser={setUser} />}
             />
-            <Route path="/other" element={<ShowOtherUser user={otherUser} />} />
+            <Route path="/other" element={<ShowUser user={otherUser} />} />
           </Routes>
         </LangContext.Provider>
         <Footer />

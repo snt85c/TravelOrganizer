@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import { iUser } from "../Main";
-import ItemsListComponent from "./ItemsListComponent";
+import UserElementsList from "./UserElementsList";
 import Stats from "./Stats";
 
-export default function ShowLoggedUser(props: {
+export default function ShowUser(props: {
   user: iUser;
-  setUser: React.Dispatch<React.SetStateAction<iUser>>;
+  setUser?: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   return (
     <>
@@ -20,7 +19,7 @@ export default function ShowLoggedUser(props: {
           </div>
         </div>
         <Stats user={props.user} />
-        <ItemsListComponent user={props.user} setUser={props.setUser} />
+        <UserElementsList user={props.user} setUser={props.setUser} />
       </div>
     </>
   );

@@ -1,18 +1,18 @@
 import { useContext, useState } from "react";
 import { iGear, iUser } from "../Main";
-import ItemComponent from "./ItemComponent";
-import ItemListCreate from "./ItemListCreate";
+import Item from "./Item";
+import ItemCreate from "./ItemCreate";
 import ItemListHeader from "./ItemListHeader";
 import { FaPlusCircle } from "react-icons/fa";
 import { LangContext } from "../LangContextProvider";
 
-export default function ItemListArrayComponent(props: {
+export default function UserItemsList(props: {
   user: iUser;
-  setUser: React.Dispatch<React.SetStateAction<iUser>>;
+  setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
   type: string;
 }) {
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
-  const lang = useContext(LangContext)
+  const lang = useContext(LangContext);
 
   let currentArray: iGear[] = [];
   switch (props.type) {
@@ -54,9 +54,9 @@ export default function ItemListArrayComponent(props: {
 
   const list = currentArray?.map((item: iGear, i: number) => {
     return (
-      <ItemComponent
+      <Item
         user={props.user}
-        setUser={props.setUser}
+        setUser={props.setUser && props.setUser}
         key={i}
         index={i}
         item={item}
@@ -72,17 +72,17 @@ export default function ItemListArrayComponent(props: {
         <ItemListHeader currentArray={currentArray} type={props.type} />
         {list.length !== 0 && (
           <>
-            <div
-              className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700"
-            >
-              {lang.itemListArrayComponent.toggledescr}
+            <div className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700">
+              {props.setUser
+                ? lang.itemListArrayComponent.toggledescr
+                : lang.itemListArrayComponent.toggledescrDISABLED}
             </div>
           </>
         )}
         <div>{list}</div>
         {isAddClicked && (
           <>
-            <ItemListCreate
+            <ItemCreate
               isAddClicked={isAddClicked}
               setIsAddClicked={setIsAddClicked}
               user={props.user}
@@ -91,7 +91,7 @@ export default function ItemListArrayComponent(props: {
             />
           </>
         )}
-        {!isAddClicked && (
+        {!isAddClicked && props.setUser && (
           <button
             className="flex gap-1 justify-start items-center text-[0.7rem] px-2 mb-5 my-1  bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300"
             onClick={handleAddButton}

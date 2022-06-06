@@ -27,11 +27,16 @@ export const lang = {
     },
     itemListArrayComponent:{
         add:"add",
-        toggledescr:"available | packed | remove"
+        toggledescr:"available | packed | remove",
+        toggledescrDISABLED:"available | packed "
+
     },
     itemComponent:{
         name:"item"
-    }
+    },
+    itemListComponent:{
+        readonlyMessage:" it's not possible to modify other user's info"
+    },
     
 
     },
@@ -64,11 +69,15 @@ export const lang = {
         },
         itemListArrayComponent:{
             add:"aggiungi",
-            toggledescr:"disponibile | nello zaino | rimuovi"
+            toggledescr:"disponibile | nello zaino | rimuovi",
+            toggledescrDISABLED:"disponibile | nello zaino"
         },
         itemComponent:{
             name:"nome"
-        }
+        },
+        itemListComponent:{
+            readonlyMessage:" non è possibile modificare le informazioni di altri utenti"
+        },
     },
   };
 

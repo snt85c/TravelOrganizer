@@ -1,4 +1,4 @@
-import {  useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -8,18 +8,17 @@ import {
 } from "react-icons/fa";
 import { LangContext } from "../LangContextProvider";
 
-export default function ItemComponent(props: {
+export default function Item(props: {
   index: number;
   type: string;
   currentArray: iGear[];
   item: iGear;
   user: iUser;
-  setUser: React.Dispatch<React.SetStateAction<iUser>>;
+  setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
   const [change, setChange] = useState<string>("");
-  const lang = useContext(LangContext)
-
+  const lang = useContext(LangContext);
 
   let currentArray: iGear[];
   let temp: iUser | undefined = props.user;
@@ -49,7 +48,7 @@ export default function ItemComponent(props: {
     if (currentArray[props.index].ready) {
       currentArray[props.index].available = true;
     }
-    props.setUser(temp);
+    props.setUser && props.setUser(temp);
   };
 
   const changeAvailable = () => {
@@ -60,21 +59,21 @@ export default function ItemComponent(props: {
     if (!currentArray[props.index].available) {
       currentArray[props.index].ready = false;
     }
-    props.setUser(temp);
+    props.setUser && props.setUser(temp);
   };
 
   const setNameChange = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
     currentArray[props.index].name = change;
-    props.setUser(temp);
+    props.setUser && props.setUser(temp);
     setIsEditName(!isEditName);
   };
 
   const handleDelete = () => {
     let temp: iUser = { ...props.user };
     currentArray.splice(props.index, 1);
-    props.setUser(temp);
+    props.setUser && props.setUser(temp);
   };
 
   return (
@@ -85,12 +84,14 @@ export default function ItemComponent(props: {
             className="flex flex-col"
             onClick={() => setIsEditName(!isEditName)}
           >
-            <div className="text-gray-600 text-[0.7rem] -my-1">{lang.itemComponent.name}:</div>
+            <div className="text-gray-600 text-[0.7rem] -my-1">
+              {lang.itemComponent.name}:
+            </div>
             <div className="text-white ">
               {props.item?.name ? props.item?.name : "empty"}
             </div>
           </div>
-          {isEditName && (
+          {isEditName && props.setUser && (
             <>
               <div className="absolute top-auto left-auto z-20 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
                 <input
@@ -135,9 +136,11 @@ export default function ItemComponent(props: {
               <FaExclamationCircle className="w-7 h-7" />
             )}
           </div>
-          <button onClick={handleDelete}>
-            <FaTimesCircle className="w-7 h-7" />
-          </button>
+          {props.setUser && (
+            <button onClick={handleDelete}>
+              <FaTimesCircle className="w-7 h-7" />
+            </button>
+          )}
         </div>
       </div>
     </>
