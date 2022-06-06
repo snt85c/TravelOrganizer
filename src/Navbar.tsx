@@ -15,11 +15,11 @@ export default function Navbar(props: { toggle: () => void }) {
           height="40px"
           onClick={() => navigate("/")}
         />
-        <div className="flex flex-row gap-2 ">
-          <GoogleLoginButton />
-          <div className="flex flex-col">
-            <input type="checkbox" className="toggle" onClick={props.toggle} />
-            <div className="flex text-[0.7rem] -mt-[3px] justify-center items-center">lang</div>
+        <GoogleLoginButton />
+        <div className="flex flex-col">
+          <input type="checkbox" className="toggle" onClick={props.toggle} />
+          <div className="flex text-[0.7rem] -mt-[3px] justify-center items-center">
+            lang
           </div>
         </div>
       </div>
