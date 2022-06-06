@@ -64,6 +64,21 @@ export default function Main() {
   useEffect(() => {
     async function fetchDataFromFirestore() {
       //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
+      if (loggedUser) {
+        try {
+          await setDoc(
+            doc(db, "users", loggedUser.uid),
+            {
+              displayName: loggedUser.displayName.split(" ")[0],
+              photoURL: loggedUser.photoURL,
+              uid: loggedUser.uid,
+            },
+            { merge: true}
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      }
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
         let listTemp: iUser[] = [];
@@ -81,29 +96,7 @@ export default function Main() {
         console.log(err);
       }
     }
-    fetchDataFromFirestore();
-  }, [loggedUser]);
-
-  useEffect(() => {
-    async function setDataInFirestore() {
-      //first time a new user logs in, tries to create a new document given the uid, otherwise merge whatever is stored on firebase with the user information provided
-      if (loggedUser) {
-        try {
-          await setDoc(
-            doc(db, "users", loggedUser.uid),
-            {
-              displayName: loggedUser.displayName.split(" ")[0],
-              photoURL: loggedUser.photoURL,
-              uid: loggedUser.uid,
-            },
-            { merge: true }
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
-    setDataInFirestore();
+    fetchDataFromFirestore(); 
   }, [loggedUser]);
 
   useEffect(() => {
