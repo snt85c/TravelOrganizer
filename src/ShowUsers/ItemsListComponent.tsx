@@ -6,7 +6,6 @@ export default function ItemsListComponent(props: {
   setUser: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   
-
   return (
     <>
     <ItemListArrayComponent user={props.user} setUser={props.setUser} type={"headgear"} />

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { LangContext } from "../LangContextProvider";
 import { iUser } from "../Main";
 
 interface iStats {
@@ -21,6 +22,9 @@ export default function Stats(props: { user: iUser }) {
     notAvailableList: [],
     notReadyList: [],
   });
+
+  const lang = useContext(LangContext)
+
 
   useEffect(() => {
     let tempavtrue: number = 0;
@@ -126,21 +130,21 @@ export default function Stats(props: { user: iUser }) {
     <>
       <div className="flex flex-col my-1 border border-gray-500">
         <div className="font-extrabold font-[homeworld-norm] text-sm">
-          RIEPILOGO
+          {lang.stats.statsHeader}
         </div>
         <div className="font-xs">
           {stats.AvTrue !== stats.ReTrue && (
-            <div>disponibile: {stats.AvTrue}</div>
+            <div>{lang.stats.statsAvailable} {stats.AvTrue}</div>
           )}
-          {stats.AvTrue !== stats.ReTrue ? (
-            <div> nello zaino: {stats.ReTrue}</div>
+          {stats.AvTrue !== stats.ReTrue  ? (
+            <div> {lang.stats.statsPacked}{stats.ReTrue}</div>
           ) : (
-            <div> tutti gli elementi disponibili sono nello zaino</div>
+            <div> {lang.stats.statsAllPacked}</div>
           )}
           {stats.AvFalse !== 0 && (
             <div>
               {" "}
-              da prendere:{" "}
+              {lang.stats.statsToCollect}{" "}
               <span className="text-amber-500">{stats.AvFalse}</span>
             </div>
             
@@ -151,7 +155,7 @@ export default function Stats(props: { user: iUser }) {
             </>
           )}
           {stats.ReFalse !== 0 && (
-            <div> da mettere nello zaino: {stats.ReFalse}</div>
+            <div> {lang.stats.statsToPack} {stats.ReFalse}</div>
           )}
          
         </div>

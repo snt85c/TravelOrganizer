@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LangContext } from "../LangContextProvider";
 import { iUser } from "../Main";
 
 export default function NavButton(props: {
@@ -10,6 +11,8 @@ export default function NavButton(props: {
 }) {
   const [showOther, setShowOther] = useState<boolean>(false);
   const navigate = useNavigate();
+  const lang = useContext(LangContext)
+
 
   const handleShowOther = () => {
     setShowOther(!showOther);
@@ -25,9 +28,6 @@ export default function NavButton(props: {
     setShowOther(false);
   };
 
- 
-
-  
   let usersList = props.users?.map((user, i) => {
     return (
       <div
@@ -48,7 +48,7 @@ export default function NavButton(props: {
           className="flex z-20 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={handleShowOther}
         >
-          mostra utenti
+          {lang.button.showOtherButton}
         </button>
       </div>
       {showOther && (

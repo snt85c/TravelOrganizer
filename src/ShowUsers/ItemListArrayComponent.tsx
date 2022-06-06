@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { iGear, iUser } from "../Main";
 import ItemComponent from "./ItemComponent";
 import ItemListCreate from "./ItemListCreate";
 import ItemListHeader from "./ItemListHeader";
 import { FaPlusCircle } from "react-icons/fa";
+import { LangContext } from "../LangContextProvider";
 
 export default function ItemListArrayComponent(props: {
   user: iUser;
@@ -11,6 +12,8 @@ export default function ItemListArrayComponent(props: {
   type: string;
 }) {
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
+  const lang = useContext(LangContext)
+
   let currentArray: iGear[] = [];
   switch (props.type) {
     case "headgear":
@@ -72,7 +75,7 @@ export default function ItemListArrayComponent(props: {
             <div
               className="flex justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700"
             >
-              disponibile | nello zaino | rimuovi{" "}
+              {lang.itemListArrayComponent.toggledescr}
             </div>
           </>
         )}
@@ -90,11 +93,11 @@ export default function ItemListArrayComponent(props: {
         )}
         {!isAddClicked && (
           <button
-            className="flex gap-1 justify-start items-center text-[0.7rem] px-2 mb-5 my-1 w-20 bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300"
+            className="flex gap-1 justify-start items-center text-[0.7rem] px-2 mb-5 my-1  bg-gray-500 hover:bg-amber-500 rounded-2xl duration-300"
             onClick={handleAddButton}
           >
             <FaPlusCircle />
-            aggiungi
+            {lang.itemListArrayComponent.add}
           </button>
         )}
       </div>

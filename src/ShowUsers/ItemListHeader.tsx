@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { LangContext } from "../LangContextProvider";
 import { iGear } from "../Main";
 
 export default function ItemListHeader(props: {
@@ -7,24 +8,26 @@ export default function ItemListHeader(props: {
 }) {
   const [numberAvailable, setNumberAvailable] = useState<number | string>();
   const [numberReady, setNumberReady] = useState<number | string>();
+  const lang = useContext(LangContext)
+
 
   let headername: string = "";
 
   switch (props.type) {
     case "headgear":
-      headername = "TESTA";
+      headername = lang.header.headerHead;
       break;
     case "topgear":
-      headername = "TORSO";
+      headername = lang.header.headerTorso;
       break;
     case "bottomgear":
-      headername = "GAMBE";
+      headername = lang.header.headerLegs;
       break;
     case "footgear":
-      headername = "PIEDI";
+      headername = lang.header.headerFeet;
       break;
     case "extra":
-      headername = "EXTRA";
+      headername = lang.header.headerExtra;
       break;
   }
 
@@ -44,13 +47,13 @@ export default function ItemListHeader(props: {
     });
     setNumberAvailable(
       tempAvNumber === props.currentArray?.length
-        ? "tutti gli oggetti sono pronti ad essere messi nello zaino"
-        : tempAvNumber + " oggetti pronti per lo zaino"
+        ? lang.header.setNumAllAvailable
+        : tempAvNumber + lang.header.setNumAvailable
     );
     setNumberReady(
       tempReNumber === props.currentArray?.length
-        ? "tutti gli oggetti di questa categoria sono nello zaino"
-        : tempReNumber + " oggetti nello zaino"
+        ? lang.header.setNumAllReady
+        : tempReNumber + lang.header.setNumReady
     );
     if (
       tempReNumber === props.currentArray?.length &&
@@ -60,7 +63,7 @@ export default function ItemListHeader(props: {
     }
     if (props.currentArray?.length === 0) {
       setNumberAvailable("");
-      setNumberReady("aggiungi degli elementi");
+      setNumberReady(lang.header.emptyBag);
     }
   });
 

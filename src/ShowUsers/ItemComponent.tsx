@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useContext, useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -6,6 +6,7 @@ import {
   FaCheckCircle,
   FaExclamationCircle,
 } from "react-icons/fa";
+import { LangContext } from "../LangContextProvider";
 
 export default function ItemComponent(props: {
   index: number;
@@ -17,6 +18,8 @@ export default function ItemComponent(props: {
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
   const [change, setChange] = useState<string>("");
+  const lang = useContext(LangContext)
+
 
   let currentArray: iGear[];
   let temp: iUser | undefined = props.user;
@@ -82,7 +85,7 @@ export default function ItemComponent(props: {
             className="flex flex-col"
             onClick={() => setIsEditName(!isEditName)}
           >
-            <div className="text-gray-600 text-[0.7rem] -my-1">nome:</div>
+            <div className="text-gray-600 text-[0.7rem] -my-1">{lang.itemComponent.name}:</div>
             <div className="text-white ">
               {props.item?.name ? props.item?.name : "empty"}
             </div>

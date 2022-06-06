@@ -6,7 +6,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import NavButton from "./ShowUsers/NavButtons";
 import ShowOtherUser from "./ShowUsers/OtherUsersComponent/ShowOtherUser";
-
+import { lang, LangContext } from "./LangContextProvider";
 
 export interface iUser {
   displayName: string;
@@ -36,14 +36,16 @@ export interface iGear {
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
-  const [otherUser, setOtherUser] = useState<iUser>({ displayName: "",
-  photoURL: "",
-  uid: "",
-  headgear: [],
-  topgear: [],
-  bottomgear: [],
-  footgear: [],
-  extra: [],});
+  const [otherUser, setOtherUser] = useState<iUser>({
+    displayName: "",
+    photoURL: "",
+    uid: "",
+    headgear: [],
+    topgear: [],
+    bottomgear: [],
+    footgear: [],
+    extra: [],
+  });
   const [usersList, setUsersList] = useState<iUser[]>([]);
 
   const [user, setUser] = useState<iUser>({
@@ -57,10 +59,10 @@ export default function Main() {
     extra: [],
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchDataFromFirestore() {
       //get the users from firestore and sort them by logged user and other users. if logged, separate the current users from the others, otherwise put everything in an userslist
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
@@ -68,24 +70,22 @@ export default function Main() {
         let tempdata: iUser = {} as iUser;
         querySnapshot.forEach((doc) => {
           tempdata = doc.data() as iUser;
-          if ( tempdata.uid === loggedUser?.uid) {
+          if (tempdata.uid === loggedUser?.uid) {
             setUser(tempdata);
-            navigate("/user")
-          } 
+            navigate("/user");
+          }
           listTemp.push(tempdata);
         });
         setUsersList(listTemp);
-        console.log("fetch")
-
       } catch (err) {
         console.log(err);
       }
     }
-    fetchData();
+    fetchDataFromFirestore();
   }, [loggedUser]);
 
   useEffect(() => {
-    async function setData() {
+    async function setDataInFirestore() {
       //first time a new user logs in, tries to create a new document given the uid, otherwise merge whatever is stored on firebase with the user information provided
       if (loggedUser) {
         try {
@@ -98,50 +98,70 @@ export default function Main() {
             },
             { merge: true }
           );
-          console.log("set")
         } catch (err) {
           console.log(err);
         }
       }
     }
-    setData();
+    setDataInFirestore();
   }, [loggedUser]);
 
   useEffect(() => {
-    async function updateData() {
+    async function updateDataInFirestore() {
       //when logged user is modified, push to firestore
       if (loggedUser) {
         try {
           await updateDoc(
             doc(db, "users", loggedUser.uid),
             user as DocumentData
-            );
-            console.log("update")
+          );
         } catch (err) {
           console.log(err);
         }
       }
     }
-    updateData();
+    updateDataInFirestore();
   }, [user]);
+  const [language, setLanguage] = useState<string>("en");
 
+  const HandleLang = () => {
+    let temp: any;
+    switch (language) {
+      case "en":
+        temp = lang.en;
+        break;
+      case "it":
+        temp = lang.it;
+        break;
+    }
 
+    return temp;
+  };
+
+  const HandleLangToggle = () => {
+    setLanguage(language === "en"? "it": "en")
+  }
 
   return (
     <>
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
-        <Navbar />
-        <NavButton user={user} users={usersList} loggedUser={loggedUser} setOtherUser={setOtherUser}/>
-        <Routes>
-          <Route
-            path="/"
+        <Navbar toggle={HandleLangToggle}/>
+        <LangContext.Provider value={HandleLang()}>
+          <NavButton
+            user={user}
+            users={usersList}
+            loggedUser={loggedUser}
+            setOtherUser={setOtherUser}
           />
-          <Route
-            path="/user"
-            element={<ShowLoggedUser user={user} setUser={setUser} />}
-          />
-          <Route path= "/other" element={<ShowOtherUser user={otherUser} />}/>
-        </Routes>
+          <Routes>
+            <Route path="/" />
+            <Route
+              path="/user"
+              element={<ShowLoggedUser user={user} setUser={setUser} />}
+            />
+            <Route path="/other" element={<ShowOtherUser user={otherUser} />} />
+          </Routes>
+        </LangContext.Provider>
         <Footer />
       </div>
     </>
