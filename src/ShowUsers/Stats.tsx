@@ -62,8 +62,6 @@ export default function Stats(props: { user: iUser }) {
         temprefalse++;
         tempNotRe.push(item.name);
       }
-      item.available ? tempavtrue++ : tempavfalse++;
-      item.ready ? tempretrue++ : temprefalse++;
     });
     props.user.bottomgear.forEach((item) => {
       if (item.available) {
@@ -155,7 +153,7 @@ export default function Stats(props: { user: iUser }) {
             </>
           )}
           {stats.ReFalse !== 0 && (
-            <div> {lang.stats.statsToPack} {stats.ReFalse}</div>
+            <div> {lang.stats.statsToPack} {stats.ReFalse}<span className="text-amber-500">{notReList}</span></div>
           )}
          
         </div>
