@@ -31,6 +31,7 @@ export interface iGear {
   name: string;
   available: boolean;
   ready: boolean;
+  highlighted:boolean;
 }
 
 export default function Main() {
