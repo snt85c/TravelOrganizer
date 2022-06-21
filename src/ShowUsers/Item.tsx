@@ -35,6 +35,8 @@ export default function Item(props: {
 
   const MAX_SWIPE_ALLOWED: number = 150;
   const SWIPE_TRIGGER: number = 100;
+  const SWIPE_CHANGE_COLOR:number = 50;
+  const OPACITY_SPREAD:number = 100
 
   let currentArray: iGear[];
   let temp: iUser | undefined = props.user;
@@ -65,11 +67,11 @@ export default function Item(props: {
       }
       if (e.dir === "Right") {
         setDeltaLx(deltaX);
-        setOpacityLx(deltaX / 100);
+        setOpacityLx(deltaX / OPACITY_SPREAD);
         setSwipeColor("red");
       } else {
         setDeltaRx(Math.abs(deltaX));
-        setOpacityRx(Math.abs(deltaX) / 100);
+        setOpacityRx(Math.abs(deltaX) / OPACITY_SPREAD);
         setSwipeColor("rgb(245 158 11)");
       }
     },
@@ -139,7 +141,7 @@ export default function Item(props: {
   const setNameChange = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
-    currentArray[props.index].name = change;
+    currentArray[props.index].name = change?change:currentArray[props.index].name;
     props.setUser && props.setUser(temp);
     setIsEditName(!isEditName);
   };
@@ -153,6 +155,13 @@ export default function Item(props: {
   return (
     <>
       <div className="flex">
+     <div
+        //delete div
+          style={{ opacity: opacityLx, width: deltaLx, backgroundColor: "red" }}
+          className="flex  items-center justify-center rounded-l-xl"
+        >
+          {lang.swipeComponent.deleteLx}
+        </div>
         {isEditName && props.setUser && (
           // edit overlay
           <>
@@ -173,24 +182,18 @@ export default function Item(props: {
             </div>
           </>
         )}
-        <div
-        //delete div
-          style={{ opacity: opacityLx, width: deltaLx, backgroundColor: "red" }}
-          className="flex items-center justify-center rounded-l-xl"
-        >
-          {lang.swipeComponent.deleteLx}
-        </div>
+       
 
 
         <div
         //main div
           {...swipeActions}
-          className="flex flex-row shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
+          className="flex flex-row w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
           style={{
             transform: `translateX(${deltaX}px)`,
             backgroundColor:
               //if the value of deltaX is below a certain amount, use the color of the swipe direction (red or purple), if i go over the limit, set the color to the bgColor(highlighted in purple when swiping left)
-              deltaX && (deltaX >= 80 || deltaX <= -80)
+              deltaX && (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
                 : props.currentArray[props.index].highlighted?"rgb(245 158 11)":"",
           }}
