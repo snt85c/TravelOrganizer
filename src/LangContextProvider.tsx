@@ -1,5 +1,7 @@
 import { createContext } from "react";
 
+//create an object with all the reference words to use in two different languages (it and eng)
+
 export const lang = {
     en: {header:{
         headerHead: "HEAD",

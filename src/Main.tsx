@@ -85,6 +85,7 @@ export default function Main() {
         querySnapshot.forEach((doc) => {
           tempdata = doc.data() as iUser;
           if (tempdata.uid === loggedUser?.uid) {
+            //when logged, set the user and navigate to the page
             setUser(tempdata);
             navigate("/user");
           }
@@ -117,6 +118,7 @@ export default function Main() {
   const [language, setLanguage] = useState<string>("en");
 
   const HandleLang = () => {
+    //for LangContext.Provider sets the value to return from the toggle in a way that can be interpreted by it
     let temp: any;
     switch (language) {
       case "en":
