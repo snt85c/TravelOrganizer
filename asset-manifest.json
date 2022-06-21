@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/TravelOrganizer/static/css/main.1874ac38.css",
-    "main.js": "/TravelOrganizer/static/js/main.3bba73d9.js",
+    "main.css": "/TravelOrganizer/static/css/main.e64fcdd4.css",
+    "main.js": "/TravelOrganizer/static/js/main.fa7f5d40.js",
     "static/media/Microgramma.ttf": "/TravelOrganizer/static/media/Microgramma.8edd5b4050fba80f5412.ttf",
     "static/media/MicrogrammaBold.ttf": "/TravelOrganizer/static/media/MicrogrammaBold.6cf657b61f3c5ebca6d9.ttf",
     "static/media/whiteShell.png": "/TravelOrganizer/static/media/whiteShell.b139d6005959dac2c071.png",
     "index.html": "/TravelOrganizer/index.html",
-    "main.1874ac38.css.map": "/TravelOrganizer/static/css/main.1874ac38.css.map",
-    "main.3bba73d9.js.map": "/TravelOrganizer/static/js/main.3bba73d9.js.map"
+    "main.e64fcdd4.css.map": "/TravelOrganizer/static/css/main.e64fcdd4.css.map",
+    "main.fa7f5d40.js.map": "/TravelOrganizer/static/js/main.fa7f5d40.js.map"
   },
   "entrypoints": [
-    "static/css/main.1874ac38.css",
-    "static/js/main.3bba73d9.js"
+    "static/css/main.e64fcdd4.css",
+    "static/js/main.fa7f5d40.js"
   ]
 }
