@@ -39,6 +39,9 @@ export const lang = {
     itemListComponent:{
         readonlyMessage:" it's not possible to modify other user's info"
     },
+    swipeComponent:{
+        delete:"delete?"
+    }
     
 
     },
@@ -80,6 +83,9 @@ export const lang = {
         itemListComponent:{
             readonlyMessage:" non è possibile modificare le informazioni di altri utenti"
         },
+        swipeComponent:{
+            delete:"elimina?"
+        }
     },
   };
 
