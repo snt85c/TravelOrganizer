@@ -60,6 +60,7 @@ export default function Main() {
   });
 
   const navigate = useNavigate();
+  const [language, setLanguage] = useState<string>("en");
 
   useEffect(() => {
     async function setAndFetchDataFromFirestore() {
@@ -116,7 +117,6 @@ export default function Main() {
     }
     updateDataInFirestore();
   }, [user]);
-  const [language, setLanguage] = useState<string>("en");
 
   const HandleLang = () => {
     //for LangContext.Provider sets the value to return from the toggle in a way that can be interpreted by it
@@ -129,7 +129,6 @@ export default function Main() {
         temp = lang.it;
         break;
     }
-
     return temp;
   };
 

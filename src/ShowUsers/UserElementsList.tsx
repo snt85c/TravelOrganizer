@@ -10,6 +10,7 @@ export default function UserElementsList(props: {
   const lang = useContext(LangContext);
   const SWIPE_INSTRUCTION_LX = lang.swipeComponent.swipeInstructionLx;
   const SWIPE_INSTRUCTION_RX = lang.swipeComponent.swipeInstructionRx;
+  const MD_HIGHLIGHT_INSTRUCTION = lang.itemListComponent.highlightInstruction
 
   return (
     <>
@@ -22,6 +23,9 @@ export default function UserElementsList(props: {
       <div className="flex justify-between px-2 md:hidden select-none">
         <span>{SWIPE_INSTRUCTION_LX}</span>
         <span>{SWIPE_INSTRUCTION_RX}</span>
+      </div>
+      <div className="md:flex justify-center items-center px-2 hidden select-none">
+        <span>{MD_HIGHLIGHT_INSTRUCTION}</span>
       </div>
       <UserItemsList
         user={props.user}

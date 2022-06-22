@@ -208,6 +208,7 @@ export default function Item(props: {
         <div
           //main div
           {...swipeActions}
+          onDoubleClick={changeHighlight}
           className="flex flex-row shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
           style={{
             transform: `translateX(${deltaX}px)`,
