@@ -126,7 +126,7 @@ export default function Stats(props: { user: iUser }) {
 
   return (
     <>
-      <div className="flex flex-col my-1 p-1 border border-gray-500">
+      <div className="flex flex-col my-1 p-1 w-full ">
         <div className="font-extrabold font-[homeworld-norm] text-sm">
           {lang.stats.statsHeader}
         </div>

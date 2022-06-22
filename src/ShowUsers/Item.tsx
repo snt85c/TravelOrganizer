@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -9,6 +9,7 @@ import {
 import { LangContext } from "../LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
+import { IconType } from "react-icons";
 
 export default function Item(props: {
   index: number;
@@ -163,6 +164,66 @@ export default function Item(props: {
     props.setUser && props.setUser(temp);
   };
 
+  useEffect(() => {
+    if (!currentArray[props.index].status) {
+      //to update the old data to the new format
+      let temp: iUser | undefined = props.user;
+      temp = { ...props.user };
+      currentArray[props.index].status = currentArray[props.index].available
+        ? currentArray[props.index].ready
+          ? "ready"
+          : "available"
+        : "unavailable";
+      props.setUser && props.setUser(temp);
+    }
+  }, []);
+
+  function ToggleButton() {
+    const buttonToggle = () => {
+      let temp: iUser | undefined = props.user;
+      temp = { ...props.user };
+      if (currentArray[props.index].status === "unavailable") {
+        currentArray[props.index].status = "available";
+      } else if (currentArray[props.index].status === "available") {
+        currentArray[props.index].status = "ready";
+      } else if (currentArray[props.index].status === "ready") {
+        currentArray[props.index].status = "unavailable";
+      }
+      props.setUser && props.setUser(temp);
+    };
+
+    return (
+      <>
+        <div
+          onClick={buttonToggle}
+          className="flex flex-col cursor-pointer select-none w-12"
+        >
+          {props.currentArray[props.index].status === "unavailable" && (
+            <div className="flex justify-center items-center text-red-600">
+              {" "}
+              <FaExclamationCircle className="w-7 h-7" />
+            </div>
+          )}
+          {props.currentArray[props.index].status === "available" && (
+            <div className="flex justify-center items-center  text-amber-700">
+              {" "}
+              <FaExclamationCircle className="w-7 h-7" />
+            </div>
+          )}
+          {props.currentArray[props.index].status === "ready" && (
+            <div className="flex justify-center items-center  text-green-600">
+              {" "}
+              <FaCheckCircle className="w-7 h-7 " />
+            </div>
+          )}
+          <div className="text-[0.7rem] select-none flex justify-center items-center">
+            {props.currentArray[props.index].status}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       {isEditName && props.setUser && (
@@ -185,21 +246,26 @@ export default function Item(props: {
           </div>
         </>
       )}
-      <div className="flex rounded-l-md rounded-r-md" style={{ backgroundColor:
-              //cntainer for all the divs
-              deltaX &&
-              (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
-                ? swipeColor
-                : props.currentArray[props.index].highlighted
-                ? "rgb(245 158 11)"
-                : "",}}>
+      <div
+        className="flex rounded-l-md rounded-r-md"
+        style={{
+          backgroundColor:
+            //container for all the divs
+            deltaX &&
+            (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+              ? swipeColor
+              : props.currentArray[props.index].highlighted
+              ? "rgb(245 158 11)"
+              : "",
+        }}
+      >
         <div
           //delete div
           style={{
             opacity: opacityLx,
             width: deltaLx,
             display: deltaLx ? "block" : "none",
-            textAlign:"right"
+            textAlign: "right",
           }}
           className="absolute z-10 left-2 flex py-2 items-center justify-center  duration-300"
         >
@@ -213,7 +279,6 @@ export default function Item(props: {
           style={{
             transform: `translateX(${deltaX}px)`,
             backgroundColor:
-              //if the value of deltaX is below a certain amount, use the color of the swipe direction (red or purple), if i go over the limit, set the color to the bgColor(highlighted in purple when swiping left)
               deltaX &&
               (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
@@ -239,7 +304,8 @@ export default function Item(props: {
           <div
             /* right buttons overlay */ className="flex flex-row items-center gap-1"
           >
-            <div
+            <ToggleButton />
+            {/* <div
               className="cursor-pointer"
               style={{ color: props.item?.available ? "green" : "red" }}
               onClick={changeButtonAvailable}
@@ -261,7 +327,8 @@ export default function Item(props: {
               ) : (
                 <FaExclamationCircle className="w-7 h-7" />
               )}
-            </div>
+            </div> */}
+
             {props.setUser && (
               <button onClick={handleDelete}>
                 <FaTimesCircle className="w-7 h-7 hidden md:block" />

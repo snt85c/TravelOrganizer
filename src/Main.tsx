@@ -32,6 +32,7 @@ export interface iGear {
   available: boolean;
   ready: boolean;
   highlighted:boolean;
+  status:"unavailable"| "available" | "ready";
 }
 
 export default function Main() {

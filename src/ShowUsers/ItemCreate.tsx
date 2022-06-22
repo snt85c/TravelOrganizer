@@ -19,6 +19,7 @@ export default function ItemCreate(props: {
     available: false,
     ready: false,
     highlighted:false,
+    status:"unavailable"
   });
 
   const createButton = (array: string) => {
