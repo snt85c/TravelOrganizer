@@ -35,13 +35,10 @@ export default function Stats(props: { user: iUser }) {
     let tempNotRe: Array<string> = [];
 
     props.user.headgear.forEach((item) => {
-      if (item.available) {
+      if (item.status === "available") {
         tempavtrue++;
-      } else {
-        tempavfalse++;
-        tempNotAv.push(item.name);
-      }
-      if (item.ready) {
+      } 
+      if (item.status === "ready") {
         tempretrue++;
       } else {
         temprefalse++;
@@ -50,13 +47,10 @@ export default function Stats(props: { user: iUser }) {
     });
 
     props.user.topgear.forEach((item) => {
-      if (item.available) {
+      if (item.status === "available") {
         tempavtrue++;
-      } else {
-        tempavfalse++;
-        tempNotAv.push(item.name);
-      }
-      if (item.ready) {
+      } 
+      if (item.status === "ready") {
         tempretrue++;
       } else {
         temprefalse++;
@@ -64,13 +58,10 @@ export default function Stats(props: { user: iUser }) {
       }
     });
     props.user.bottomgear.forEach((item) => {
-      if (item.available) {
+      if (item.status === "available") {
         tempavtrue++;
-      } else {
-        tempavfalse++;
-        tempNotAv.push(item.name);
-      }
-      if (item.ready) {
+      } 
+      if (item.status === "ready") {
         tempretrue++;
       } else {
         temprefalse++;
@@ -78,13 +69,10 @@ export default function Stats(props: { user: iUser }) {
       }
     });
     props.user.footgear.forEach((item) => {
-      if (item.available) {
+      if (item.status === "available") {
         tempavtrue++;
-      } else {
-        tempavfalse++;
-        tempNotAv.push(item.name);
-      }
-      if (item.ready) {
+      } 
+      if (item.status === "ready") {
         tempretrue++;
       } else {
         temprefalse++;
@@ -92,13 +80,10 @@ export default function Stats(props: { user: iUser }) {
       }
     });
     props.user.extra.forEach((item) => {
-      if (item.available) {
+      if (item.status === "available") {
         tempavtrue++;
-      } else {
-        tempavfalse++;
-        tempNotAv.push(item.name);
       }
-      if (item.ready) {
+      if (item.status === "ready") {
         tempretrue++;
       } else {
         temprefalse++;
