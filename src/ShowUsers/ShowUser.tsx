@@ -14,7 +14,7 @@ export default function ShowUser(props: {
             className="rounded-full border border-white w-14 h-14 "
             src={props.user?.photoURL}
           />
-          <div className="font-[homeworld-norm] text-xs">
+          <div className="font-[homeworld-norm] text-xs select-none">
             {props.user?.displayName.toUpperCase()}
           </div>
         </div>

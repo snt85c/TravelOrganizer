@@ -42,7 +42,10 @@ export const lang = {
     swipeComponent:{
         delete:"delete?",
         deleteLx:"delete",
-        highlight:"highlight"
+        highlight:"highlight",
+        swipeInstructionLx:"swipe >> to delete",
+        swipeInstructionRx:"swipe << to highlight",
+
     }
     
 
@@ -88,7 +91,9 @@ export const lang = {
         swipeComponent:{
             delete:"elimina?",
             deleteLx:"elimina",
-        highlight:"evidenzia"
+        highlight:"evidenzia",
+        swipeInstructionLx:"swipe >> per cancellare",
+swipeInstructionRx:"swipe << per evidenziare",
         }
     },
   };

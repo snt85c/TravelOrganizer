@@ -186,7 +186,7 @@ export default function Item(props: {
         </>
       )}
       <div className="flex rounded-l-md rounded-r-md" style={{ backgroundColor:
-              //if the value of deltaX is below a certain amount, use the color of the swipe direction (red or purple), if i go over the limit, set the color to the bgColor(highlighted in purple when swiping left)
+              //cntainer for all the divs
               deltaX &&
               (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
@@ -198,7 +198,6 @@ export default function Item(props: {
           style={{
             opacity: opacityLx,
             width: deltaLx,
-            // backgroundColor: "red",
             display: deltaLx ? "block" : "none",
             textAlign:"right"
           }}
@@ -230,7 +229,7 @@ export default function Item(props: {
               <div className="text-gray-600 text-[0.7rem] -my-1">
                 {lang.itemComponent.name}:
               </div>
-              <div className="text-white ">
+              <div className="text-white select-none cursor-pointer">
                 {props.item?.name ? props.item?.name : "empty"}
               </div>
             </div>
@@ -264,7 +263,7 @@ export default function Item(props: {
             </div>
             {props.setUser && (
               <button onClick={handleDelete}>
-                <FaTimesCircle className="w-7 h-7" />
+                <FaTimesCircle className="w-7 h-7 hidden md:block" />
               </button>
             )}
           </div>
@@ -286,7 +285,6 @@ export default function Item(props: {
           style={{
             opacity: opacityRx,
             width: deltaRx,
-            // backgroundColor: "rgb(245 158 11 )",
             display: deltaRx ? "block" : "none",
           }}
           className="absolute z-10 right-2 py-2 flex items-center justify-center duration-300"

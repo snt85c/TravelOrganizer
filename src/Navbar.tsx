@@ -18,7 +18,7 @@ export default function Navbar(props: { toggle: () => void }) {
         <GoogleLoginButton />
         <div className="flex flex-col">
           <input type="checkbox" className="toggle" onClick={props.toggle} />
-          <div className="flex text-[0.7rem] -mt-[3px] justify-center items-center">
+          <div className="flex text-[0.7rem] -mt-[3px] justify-center items-center select-none">
             lang
           </div>
         </div>

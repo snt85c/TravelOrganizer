@@ -7,15 +7,22 @@ export default function UserElementsList(props: {
   user: iUser;
   setUser?: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
-  const lang = useContext(LangContext)
+  const lang = useContext(LangContext);
+  const SWIPE_INSTRUCTION_LX = lang.swipeComponent.swipeInstructionLx;
+  const SWIPE_INSTRUCTION_RX = lang.swipeComponent.swipeInstructionRx;
 
   return (
     <>
       {!props.setUser && (
         <div className="text-gray-300 text-[0.70rem]">
-          <span className="text-amber-500">readonly:</span>{lang.itemListComponent.readonlyMessage}
+          <span className="text-amber-500 select-none">readonly:</span>
+          {lang.itemListComponent.readonlyMessage}
         </div>
       )}
+      <div className="flex justify-between px-2 md:hidden select-none">
+        <span>{SWIPE_INSTRUCTION_LX}</span>
+        <span>{SWIPE_INSTRUCTION_RX}</span>
+      </div>
       <UserItemsList
         user={props.user}
         setUser={props.setUser}
@@ -36,11 +43,7 @@ export default function UserElementsList(props: {
         setUser={props.setUser}
         type={"footgear"}
       />
-      <UserItemsList
-        user={props.user}
-        setUser={props.setUser}
-        type={"extra"}
-      />
+      <UserItemsList user={props.user} setUser={props.setUser} type={"extra"} />
     </>
   );
 }
