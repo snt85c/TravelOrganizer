@@ -283,34 +283,12 @@ export default function Item(props: {
             /* right buttons overlay */ className="flex flex-row items-center gap-1"
           >
             <ToggleButton />
-            {/* <div
-              className="cursor-pointer"
-              style={{ color: props.item?.available ? "green" : "red" }}
-              onClick={changeButtonAvailable}
-            >
-              {props.item.available ? (
-                <FaCheckCircle className="w-7 h-7" />
-              ) : (
-                <FaExclamationCircle className="w-7 h-7" />
-              )}
-            </div>
-            <div
-              className="cursor-pointer"
-              style={{ color: props.item?.ready ? "green" : "red" }}
-              onClick={changeButtonReady}
-            >
-              {" "}
-              {props.item.ready ? (
-                <FaCheckCircle className="w-7 h-7" />
-              ) : (
-                <FaExclamationCircle className="w-7 h-7" />
-              )}
-            </div> */}
-
-            {props.setUser && (
+            {props.setUser && (<div className="flex flex-col justify-center items-center">
               <button onClick={handleDelete}>
                 <FaTimesCircle className="w-7 h-7 hidden md:block" />
               </button>
+              <div className="text-[0.7rem] select-none hidden md:block">remove</div>
+              </div>
             )}
           </div>
           {isDeleting && (
