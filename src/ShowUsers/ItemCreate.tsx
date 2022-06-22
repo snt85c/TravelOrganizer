@@ -46,18 +46,6 @@ export default function ItemCreate(props: {
     props.setIsAddClicked(!props.isAddClicked);
   };
 
-  const ToggleReady = () => {
-      let temp: iGear = { ...tempItem };
-      temp.ready = !tempItem.ready;
-      setTempItem(temp);
-  };
-
-  const ToggleAvailable = () => {
-    let temp: iGear = { ...tempItem };
-    temp.available = !tempItem.available;
-    setTempItem(temp);
-  };
-
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     let temp: iGear = { ...tempItem };
@@ -65,47 +53,73 @@ export default function ItemCreate(props: {
     setTempItem(temp);
   };
 
+  function ToggleButton() {
+    let temp: iGear = { ...tempItem };
+    const buttonToggle = () => {
+      if (temp.status === "unavailable") {
+        temp.status = "available";
+      } else if (temp.status === "available") {
+        temp.status = "ready";
+      } else if (temp.status === "ready") {
+        temp.status = "unavailable";
+      }
+      setTempItem(temp);
+    };
+
+    return (
+      <>
+        <div
+          onClick={buttonToggle}
+          className="flex flex-col cursor-pointer select-none w-12"
+        >
+          {temp.status === "unavailable" && (
+            <div className="flex justify-center items-center text-red-600">
+              {" "}
+              <FaExclamationCircle className="w-7 h-7" />
+            </div>
+          )}
+          {temp.status === "available" && (
+            <div className="flex justify-center items-center  text-amber-700">
+              {" "}
+              <FaExclamationCircle className="w-7 h-7" />
+            </div>
+          )}
+          {temp.status === "ready" && (
+            <div className="flex justify-center items-center  text-green-600">
+              {" "}
+              <FaCheckCircle className="w-7 h-7 " />
+            </div>
+          )}
+          <div className="text-[0.7rem] select-none flex justify-center items-center">
+            {temp.status}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-row p-2 gap-2 justify-between items-center">
         <div className="flex flex-row gap-1 items-center">
           <input
-            className="text-black min-w-[50%] md:w-[1/4]"
+            className="text-black min-w-[50%] md:w-[1/4] rounded-md px-2"
             placeholder="name"
             value={tempItem.name}
             onChange={(e) => {
               changeName(e);
             }}
           ></input>
-          <div className="flex flex-row gap-1">
-            <div
-              style={{ color: tempItem.available ? "green" : "red" }}
-              onClick={ToggleAvailable}
-            >
-              {tempItem.available ? (
-                <FaCheckCircle className="w-7 h-7" />
-              ) : (
-                <FaExclamationCircle className="w-7 h-7" />
-              )}
-            </div>
-            <div
-              style={{ color: tempItem.ready ? "green" : "red" }}
-              onClick={ToggleReady}
-            >
-              {tempItem.ready ? (
-                <FaCheckCircle className="w-7 h-7" />
-              ) : (
-                <FaExclamationCircle className="w-7 h-7" />
-              )}
-            </div>
+          <div className="mx-2">
+            <ToggleButton />
           </div>
         </div>
         <div className="flex flex-row gap-1">
-          <button onClick={() => createButton(props.type)}>
-            <FaPlusCircle className="w-7 h-7" />
-          </button>
           <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
             <FaTimesCircle className="w-7 h-7" />
+          </button>
+          <button onClick={() => createButton(props.type)}>
+            <FaPlusCircle className="w-7 h-7 text-green-500" />
           </button>
         </div>
       </div>
