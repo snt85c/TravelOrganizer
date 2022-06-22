@@ -185,16 +185,24 @@ export default function Item(props: {
           </div>
         </>
       )}
-      <div className="flex">
+      <div className="flex rounded-l-md rounded-r-md" style={{ backgroundColor:
+              //if the value of deltaX is below a certain amount, use the color of the swipe direction (red or purple), if i go over the limit, set the color to the bgColor(highlighted in purple when swiping left)
+              deltaX &&
+              (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+                ? swipeColor
+                : props.currentArray[props.index].highlighted
+                ? "rgb(245 158 11)"
+                : "",}}>
         <div
           //delete div
           style={{
             opacity: opacityLx,
             width: deltaLx,
-            backgroundColor: "red",
+            // backgroundColor: "red",
             display: deltaLx ? "block" : "none",
+            textAlign:"right"
           }}
-          className="absolute z-10 left-2 flex py-2 items-center justify-center rounded-l-xl duration-300"
+          className="absolute z-10 left-2 flex py-2 items-center justify-center  duration-300"
         >
           {lang.swipeComponent.deleteLx}
         </div>
@@ -278,10 +286,10 @@ export default function Item(props: {
           style={{
             opacity: opacityRx,
             width: deltaRx,
-            backgroundColor: "rgb(245 158 11 )",
+            // backgroundColor: "rgb(245 158 11 )",
             display: deltaRx ? "block" : "none",
           }}
-          className="absolute z-10 right-2 py-2 flex items-center justify-center rounded-r-xl duration-300"
+          className="absolute z-10 right-2 py-2 flex items-center justify-center duration-300"
         >
           {lang.swipeComponent.highlight}
         </div>
