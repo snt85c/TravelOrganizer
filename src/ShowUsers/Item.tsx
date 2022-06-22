@@ -194,7 +194,7 @@ export default function Item(props: {
             backgroundColor: "red",
             display: deltaLx ? "block" : "none",
           }}
-          className="absolute z-10 left-2 flex py-2 items-center justify-center rounded-l-xl"
+          className="absolute z-10 left-2 flex py-2 items-center justify-center rounded-l-xl duration-300"
         >
           {lang.swipeComponent.deleteLx}
         </div>
@@ -281,7 +281,7 @@ export default function Item(props: {
             backgroundColor: "rgb(245 158 11 )",
             display: deltaRx ? "block" : "none",
           }}
-          className="absolute z-10 right-2 py-2 flex items-center justify-center rounded-r-xl"
+          className="absolute z-10 right-2 py-2 flex items-center justify-center rounded-r-xl duration-300"
         >
           {lang.swipeComponent.highlight}
         </div>
