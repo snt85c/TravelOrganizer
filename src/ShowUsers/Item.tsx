@@ -9,7 +9,6 @@ import {
 import { LangContext } from "../LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
-import { IconType } from "react-icons";
 
 export default function Item(props: {
   index: number;
@@ -43,7 +42,7 @@ export default function Item(props: {
   const SWIPE_TRIGGER: number = 100;
   const SWIPE_CHANGE_COLOR: number = 50;
   const OPACITY_SPREAD: number = 100;
-
+ let icon:any
   let currentArray: iGear[];
   let temp: iUser | undefined = props.user;
 
@@ -119,32 +118,11 @@ export default function Item(props: {
     setHighlight("");
   };
 
-  const changeButtonReady = () => {
-    let temp: iUser | undefined = props.user;
-    temp = { ...props.user };
-    currentArray[props.index].ready = !props.currentArray[props.index].ready;
-    if (currentArray[props.index].ready) {
-      currentArray[props.index].available = true;
-    }
-    props.setUser && props.setUser(temp);
-  };
-
   const changeHighlight = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
     currentArray[props.index].highlighted =
       !props.currentArray[props.index].highlighted;
-    props.setUser && props.setUser(temp);
-  };
-
-  const changeButtonAvailable = () => {
-    let temp: iUser | undefined = props.user;
-    temp = { ...props.user };
-    currentArray[props.index].available =
-      !props.currentArray[props.index].available;
-    if (!currentArray[props.index].available) {
-      currentArray[props.index].ready = false;
-    }
     props.setUser && props.setUser(temp);
   };
 
@@ -166,7 +144,7 @@ export default function Item(props: {
 
   useEffect(() => {
     if (!currentArray[props.index].status) {
-      //to update the old data to the new format
+      //to update the old data to the new format (status)
       let temp: iUser | undefined = props.user;
       temp = { ...props.user };
       currentArray[props.index].status = currentArray[props.index].available
