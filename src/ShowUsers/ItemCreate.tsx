@@ -115,12 +115,18 @@ export default function ItemCreate(props: {
           </div>
         </div>
         <div className="flex flex-row gap-1">
+          <div className="flex flex-col">
           <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
             <FaTimesCircle className="w-7 h-7" />
           </button>
+          <div className="flex justify-center items-center select-none text-[0.7rem]">cancel</div>
+          </div>
+          <div className="flex flex-col">
           <button onClick={() => createButton(props.type)}>
             <FaPlusCircle className="w-7 h-7 text-green-500" />
           </button>
+          <div className="flex justify-center items-center select-none text-[0.7rem]">add</div>
+          </div>
         </div>
       </div>
     </>
