@@ -29,14 +29,19 @@ export default function Item(props: {
   const [opacityLx, setOpacityLx] = useState<number>(0);
   const [opacityRx, setOpacityRx] = useState<number>(0);
   const [messageRx, setMessageRx] = useState<string>("highlight");
-  const [swipeColor, setSwipeColor] = useState<"red" | "rgb(245 158 11)" | "">("");
-  const [highlight, setHighlight] = useState<"rgb(245 158 11)" | "" | "red">("");
+  const [swipeColor, setSwipeColor] = useState<"red" | "rgb(245 158 11)" | "">(
+    ""
+  );
+  const [highlight, setHighlight] = useState<"rgb(245 158 11)" | "" | "red">(
+    ""
+  );
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const MAX_SWIPE_ALLOWED: number = 150;
+  const MIN_SWIPE_ALLOWED: number = 10;
   const SWIPE_TRIGGER: number = 100;
-  const SWIPE_CHANGE_COLOR:number = 50;
-  const OPACITY_SPREAD:number = 100
+  const SWIPE_CHANGE_COLOR: number = 50;
+  const OPACITY_SPREAD: number = 100;
 
   let currentArray: iGear[];
   let temp: iUser | undefined = props.user;
@@ -61,7 +66,11 @@ export default function Item(props: {
 
   const swipeActions = useSwipeable({
     onSwiping: (e: SwipeEventData) => {
-      if (Math.abs(e.deltaX) < MAX_SWIPE_ALLOWED && props.setUser) {
+      if (
+        Math.abs(e.deltaX) < MAX_SWIPE_ALLOWED &&
+        Math.abs(e.deltaX) > MIN_SWIPE_ALLOWED &&
+        props.setUser
+      ) {
         //we restrict the max amount of the swipe, and we allow to set the delta state only if setUser has been passed, meaning that we are in a logged user component and we can perform operations on it. without setting deltaX, other swipe functions wont start
         setDeltaX(e.deltaX);
       }
@@ -77,7 +86,7 @@ export default function Item(props: {
     },
     onSwiped: (e: SwipeEventData) => {
       if (deltaX && deltaX < -SWIPE_TRIGGER) {
-        changeHighlight()
+        changeHighlight();
         highlight === "" ? setHighlight("rgb(245 158 11)") : setHighlight("");
         messageRx === "highlight"
           ? setMessageRx("remove highlight")
@@ -119,13 +128,13 @@ export default function Item(props: {
     props.setUser && props.setUser(temp);
   };
 
-  const changeHighlight = () =>{
+  const changeHighlight = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
-    currentArray[props.index].highlighted = !props.currentArray[props.index].highlighted
+    currentArray[props.index].highlighted =
+      !props.currentArray[props.index].highlighted;
     props.setUser && props.setUser(temp);
-
-  }
+  };
 
   const changeButtonAvailable = () => {
     let temp: iUser | undefined = props.user;
@@ -141,7 +150,9 @@ export default function Item(props: {
   const setNameChange = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
-    currentArray[props.index].name = change?change:currentArray[props.index].name;
+    currentArray[props.index].name = change
+      ? change
+      : currentArray[props.index].name;
     props.setUser && props.setUser(temp);
     setIsEditName(!isEditName);
   };
@@ -154,48 +165,53 @@ export default function Item(props: {
 
   return (
     <>
+      {isEditName && props.setUser && (
+        // edit overlay
+        <>
+          <div className="absolute top-auto left-auto z-50 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
+            <input
+              className="text-white rounded-xl px-2 bg-gray-600"
+              defaultValue={props.item.name}
+              onChange={(e) => setChange(e.target.value)}
+            ></input>
+            <div className="flex px-2 gap-2">
+              <button onClick={() => setIsEditName(!isEditName)}>
+                <FaTimesCircle />
+              </button>
+              <button onClick={setNameChange}>
+                <FaPlusCircle className="w-7 h-7" />
+              </button>
+            </div>
+          </div>
+        </>
+      )}
       <div className="flex">
-     <div
-        //delete div
-          style={{ opacity: opacityLx, width: deltaLx, backgroundColor: "red" }}
-          className="flex  items-center justify-center rounded-l-xl"
+        <div
+          //delete div
+          style={{
+            opacity: opacityLx,
+            width: deltaLx,
+            backgroundColor: "red",
+            display: deltaLx ? "block" : "none",
+          }}
+          className="absolute z-10 left-2 flex py-2 items-center justify-center rounded-l-xl"
         >
           {lang.swipeComponent.deleteLx}
         </div>
-        {isEditName && props.setUser && (
-          // edit overlay
-          <>
-            <div className="absolute top-auto left-auto z-50 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
-              <input
-                className="text-white rounded-xl px-2 bg-gray-600"
-                defaultValue={props.item.name}
-                onChange={(e) => setChange(e.target.value)}
-              ></input>
-              <div className="flex px-2 gap-2">
-                <button onClick={() => setIsEditName(!isEditName)}>
-                  <FaTimesCircle />
-                </button>
-                <button onClick={setNameChange}>
-                  <FaPlusCircle className="w-7 h-7" />
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-       
-
-
         <div
-        //main div
+          //main div
           {...swipeActions}
-          className="flex flex-row w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
+          className="flex flex-row shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
           style={{
             transform: `translateX(${deltaX}px)`,
             backgroundColor:
               //if the value of deltaX is below a certain amount, use the color of the swipe direction (red or purple), if i go over the limit, set the color to the bgColor(highlighted in purple when swiping left)
-              deltaX && (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+              deltaX &&
+              (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
-                : props.currentArray[props.index].highlighted?"rgb(245 158 11)":"",
+                : props.currentArray[props.index].highlighted
+                ? "rgb(245 158 11)"
+                : "",
           }}
         >
           <div className="flex flex-row">
@@ -212,7 +228,9 @@ export default function Item(props: {
             </div>
           </div>
 
-          <div /* right buttons overlay */ className="flex flex-row items-center gap-1">
+          <div
+            /* right buttons overlay */ className="flex flex-row items-center gap-1"
+          >
             <div
               className="cursor-pointer"
               style={{ color: props.item?.available ? "green" : "red" }}
@@ -241,29 +259,29 @@ export default function Item(props: {
                 <FaTimesCircle className="w-7 h-7" />
               </button>
             )}
-
           </div>
-            {isDeleting && (
-              //DELETE OVERLAY
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border border-white rounded-md w-1/4">
-                <div onClick={handleSwipeDeleteY}>
-                  <GiConfirmed />
-                </div>
-                <span>{lang.swipeComponent.delete}</span>
-                <span onClick={handleSwipeDeleteN}>
-                  <GiCancel />
-                </span>
+          {isDeleting && (
+            //DELETE OVERLAY
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border border-white rounded-md w-1/4">
+              <div onClick={handleSwipeDeleteY}>
+                <GiConfirmed />
               </div>
-            )}
+              <span>{lang.swipeComponent.delete}</span>
+              <span onClick={handleSwipeDeleteN}>
+                <GiCancel />
+              </span>
+            </div>
+          )}
         </div>
         <div
-        //highlight div
+          //highlight div
           style={{
             opacity: opacityRx,
             width: deltaRx,
             backgroundColor: "rgb(245 158 11 )",
+            display: deltaRx ? "block" : "none",
           }}
-          className="flex items-center justify-center rounded-r-xl"
+          className="absolute z-10 right-2 py-2 flex items-center justify-center rounded-r-xl"
         >
           {lang.swipeComponent.highlight}
         </div>
