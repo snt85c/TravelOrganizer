@@ -16,7 +16,6 @@ export default function ItemCreate(props: {
 }) {
   const [tempItem, setTempItem] = useState<iGear>({
     name: "",
-    available: false,
     ready: false,
     highlighted:false,
     status:"unavailable"

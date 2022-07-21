@@ -29,7 +29,6 @@ export interface iUser {
 
 export interface iGear {
   name: string;
-  available: boolean;
   ready: boolean;
   highlighted:boolean;
   status:"unavailable"| "available" | "ready";

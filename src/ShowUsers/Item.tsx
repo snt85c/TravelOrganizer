@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
@@ -42,25 +42,24 @@ export default function Item(props: {
   const SWIPE_TRIGGER: number = 100;
   const SWIPE_CHANGE_COLOR: number = 50;
   const OPACITY_SPREAD: number = 100;
- let icon:any
-  let currentArray: iGear[];
-  let temp: iUser | undefined = props.user;
+  let temp: iUser = props.user;
+  let currentGear: iGear[];
 
   switch (props.type) {
     case "headgear":
-      currentArray = temp.headgear;
+      currentGear = temp.headgear;
       break;
     case "topgear":
-      currentArray = temp.topgear;
+      currentGear = temp.topgear;
       break;
     case "bottomgear":
-      currentArray = temp.bottomgear;
+      currentGear = temp.bottomgear;
       break;
     case "footgear":
-      currentArray = temp.footgear;
+      currentGear = temp.footgear;
       break;
     case "extra":
-      currentArray = temp.extra;
+      currentGear = temp.extra;
       break;
   }
 
@@ -121,7 +120,7 @@ export default function Item(props: {
   const changeHighlight = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
-    currentArray[props.index].highlighted =
+    currentGear[props.index].highlighted =
       !props.currentArray[props.index].highlighted;
     props.setUser && props.setUser(temp);
   };
@@ -129,43 +128,43 @@ export default function Item(props: {
   const setNameChange = () => {
     let temp: iUser | undefined = props.user;
     temp = { ...props.user };
-    currentArray[props.index].name = change
+    currentGear[props.index].name = change
       ? change
-      : currentArray[props.index].name;
+      : currentGear[props.index].name;
     props.setUser && props.setUser(temp);
     setIsEditName(!isEditName);
   };
 
   const handleDelete = () => {
     let temp: iUser = { ...props.user };
-    currentArray.splice(props.index, 1);
+    currentGear.splice(props.index, 1);
     props.setUser && props.setUser(temp);
   };
 
-  useEffect(() => {
-    if (!currentArray[props.index].status) {
-      //to update the old data to the new format (status)
-      let temp: iUser | undefined = props.user;
-      temp = { ...props.user };
-      currentArray[props.index].status = currentArray[props.index].available
-        ? currentArray[props.index].ready
-          ? "ready"
-          : "available"
-        : "unavailable";
-      props.setUser && props.setUser(temp);
-    }
-  }, []);
+  // useEffect(() => {
+  //UPDATER
+  //   if (!currentArray[props.index].status) {
+  //     //to update the old data to the new format (status)
+  //     let temp: iUser | undefined = { ...props.user };
+  //     currentArray[props.index].status = currentArray[props.index].available
+  //       ? currentArray[props.index].ready
+  //         ? "ready"
+  //         : "available"
+  //       : "unavailable";
+  //     props.setUser && props.setUser(temp);
+  //   }
+  // }, []);
 
   function ToggleButton() {
     const buttonToggle = () => {
       let temp: iUser | undefined = props.user;
       temp = { ...props.user };
-      if (currentArray[props.index].status === "unavailable") {
-        currentArray[props.index].status = "available";
-      } else if (currentArray[props.index].status === "available") {
-        currentArray[props.index].status = "ready";
-      } else if (currentArray[props.index].status === "ready") {
-        currentArray[props.index].status = "unavailable";
+      if (currentGear[props.index].status === "unavailable") {
+        currentGear[props.index].status = "available";
+      } else if (currentGear[props.index].status === "available") {
+        currentGear[props.index].status = "ready";
+      } else if (currentGear[props.index].status === "ready") {
+        currentGear[props.index].status = "unavailable";
       }
       props.setUser && props.setUser(temp);
     };
@@ -243,9 +242,9 @@ export default function Item(props: {
             opacity: opacityLx,
             width: deltaLx,
             display: deltaLx ? "block" : "none",
-            textAlign: "right",
+            textAlign: "center",
           }}
-          className="absolute z-10 left-2 flex py-2 items-center justify-center  duration-300"
+          className="absolute z-10 left-2 flex py-3 duration-300"
         >
           {lang.swipeComponent.deleteLx}
         </div>
@@ -278,16 +277,17 @@ export default function Item(props: {
               </div>
             </div>
           </div>
-
-          <div
-            /* right buttons overlay */ className="flex flex-row items-center gap-1"
-          >
+          {/* right buttons overlay */}
+          <div className="flex flex-row items-center gap-1">
             <ToggleButton />
-            {props.setUser && (<div className="flex flex-col justify-center items-center">
-              <button onClick={handleDelete}>
-                <FaTimesCircle className="w-7 h-7 hidden md:block" />
-              </button>
-              <div className="text-[0.7rem] select-none hidden md:block">remove</div>
+            {props.setUser && (
+              <div className="flex flex-col justify-center items-center">
+                <button onClick={handleDelete}>
+                  <FaTimesCircle className="w-7 h-7 hidden md:block" />
+                </button>
+                <div className="text-[0.7rem] select-none hidden md:block">
+                  remove
+                </div>
               </div>
             )}
           </div>
@@ -310,8 +310,9 @@ export default function Item(props: {
             opacity: opacityRx,
             width: deltaRx,
             display: deltaRx ? "block" : "none",
+            textAlign: "center",
           }}
-          className="absolute z-10 right-2 py-2 flex items-center justify-center duration-300"
+          className="absolute z-10 right-2 py-3 flex  duration-300"
         >
           {lang.swipeComponent.highlight}
         </div>
