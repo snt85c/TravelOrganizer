@@ -70,18 +70,6 @@ export default function UserItemsList(props: {
     <>
       <div className="">
         <ItemListHeader currentArray={currentArray} type={props.type} />
-        {/* {list.length !== 0 && (
-          <>
-            <div className=" justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700 hidden md:flex select-none">
-              {props.setUser
-                ? lang.itemListArrayComponent.toggledescr
-                : lang.itemListArrayComponent.toggledescrDISABLED}
-            </div>
-            <div className=" justify-end px-2 text-gray-500 text-[0.60rem] bg-gradient-to-r from-slate-900 to-slade-700 flex md:hidden select-none">
-              {lang.itemListArrayComponent.toggledescrDISABLED}
-            </div>
-          </>
-        )} */}
         <div>{list}</div>
         {isAddClicked && (
           <>

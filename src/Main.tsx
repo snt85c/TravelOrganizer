@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   DocumentData,
+  getDoc,
   getDocs,
   setDoc,
   updateDoc,
@@ -16,9 +17,7 @@ import Footer from "./Footer";
 import NavButton from "./ShowUsers/NavButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage";
-import { iUser } from "./Interface";
-
-
+import { iUser, iUserInfo } from "./Interface";
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
@@ -35,6 +34,8 @@ export default function Main() {
     },
   });
   const [usersList, setUsersList] = useState<iUser[]>([]);
+  const [travelList, setTravelList] = useState<Array<string>>();
+  const [travel, setTravel] = useState<string>("");
 
   const [user, setUser] = useState<iUser>({
     headgear: [],
@@ -49,7 +50,6 @@ export default function Main() {
     },
   });
 
-  const navigate = useNavigate();
   const [language, setLanguage] = useState<string>("en");
 
   useEffect(() => {
@@ -73,6 +73,17 @@ export default function Main() {
         }
       }
       try {
+        //get list of travels
+        const querySnapshotTravels = await getDoc(
+          doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
+        );
+        let traveListTemp: Array<string> = [];
+        let temp2: DocumentData | undefined = querySnapshotTravels.data();
+        console.log(temp2?.travel);
+        traveListTemp.push(temp2?.travel);
+        setTravelList(traveListTemp);
+
+        //get the users
         const querySnapshot = await getDocs(collection(db, "users"));
         let listTemp: iUser[] = [];
         let tempdata: iUser = {} as iUser;
@@ -81,7 +92,7 @@ export default function Main() {
           if (tempdata.userInfo.uid === loggedUser?.uid) {
             //when logged, set the user and navigate to the page
             setUser(tempdata);
-            navigate("/user");
+            // navigate("/user");
           }
           listTemp.push(tempdata);
         });
@@ -140,7 +151,12 @@ export default function Main() {
             setOtherUser={setOtherUser}
           />
           <Routes>
-            <Route path="/" element={<PresentationPage />} />
+            <Route
+              path="/"
+              element={
+                <PresentationPage travels={travelList} setTravel={setTravel} />
+              }
+            />
             <Route
               path="/user"
               element={<ShowUser user={user} setUser={setUser} />}
