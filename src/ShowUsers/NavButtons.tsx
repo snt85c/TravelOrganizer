@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iUser } from "../Main";
+import { iUser } from "../Interface";
 
 export default function NavButton(props: {
   user: iUser;
@@ -19,7 +19,7 @@ export default function NavButton(props: {
   };
 
   const handleClickSelection = (user: iUser) => {
-    if (user.uid !== props.loggedUser?.uid) {
+    if (user.userInfo.uid !== props.loggedUser?.uid) {
       props.setOtherUser(user);
       navigate("/other");
     } else {
@@ -35,8 +35,8 @@ export default function NavButton(props: {
         key={i}
         onClick={() => handleClickSelection(user)}
       >
-        {user.displayName.toUpperCase()}
-        <img src={user.photoURL} className="w-10 h-10 rounded-full" />
+        {user.userInfo.displayName.toUpperCase()}
+        <img src={user.userInfo.photoURL} className="w-10 h-10 rounded-full" />
       </div>
     );
   });

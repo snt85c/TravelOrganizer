@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { LangContext } from "../LangContextProvider";
-import { iUser } from "../Main";
+import { iUser } from "../Interface";
 
 interface iStats {
   total: number;

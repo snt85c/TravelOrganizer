@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { iGear, iUser } from "../Main";
+import { iGear, iUser } from "../Interface";
 import {
   FaTimesCircle,
   FaPlusCircle,

@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { iGear, iUser } from "../Main";
 import {
   FaTimesCircle,
   FaPlusCircle,
@@ -9,6 +8,7 @@ import {
 import { LangContext } from "../LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
+import { iGear, iUser } from "../Interface";
 
 export default function Item(props: {
   index: number;

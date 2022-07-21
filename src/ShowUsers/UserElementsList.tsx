@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { LangContext } from "../LangContextProvider";
-import { iUser } from "../Main";
+import { iUser } from "../Interface";
 import UserItemsList from "./UserItemsList";
 
 export default function UserElementsList(props: {

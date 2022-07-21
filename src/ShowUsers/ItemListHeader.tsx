@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { LangContext } from "../LangContextProvider";
-import { iGear } from "../Main";
+import { iGear } from "../Interface";
 import { FaHatCowboySide, FaTshirt } from "react-icons/fa";
 
 import { GiTrousers, GiRunningShoe, GiRoundStar } from "react-icons/gi";

@@ -1,4 +1,4 @@
-import { iUser } from "../Main";
+import { iUser } from "../Interface";
 import UserElementsList from "./UserElementsList";
 import Stats from "./Stats";
 
@@ -16,10 +16,10 @@ export default function ShowUser(props: {
           <div className="flex flex-col p-4 pt-6 items-center w-1/2">
             <img
               className="rounded-full  w-14 h-14 "
-              src={props.user?.photoURL}
+              src={props.user?.userInfo.photoURL}
             />
             <div className="font-[homeworld-norm] text-xs select-none">
-              {props.user?.displayName.toUpperCase()}
+              {props.user?.userInfo.displayName.toUpperCase()}
             </div>
           </div>
         </div>

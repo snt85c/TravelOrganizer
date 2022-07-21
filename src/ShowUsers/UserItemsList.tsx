@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { iGear, iUser } from "../Main";
+import { iGear, iUser } from "../Interface";
 import Item from "./Item";
 import ItemCreate from "./ItemCreate";
 import ItemListHeader from "./ItemListHeader";
