@@ -20,3 +20,8 @@ export interface iUser {
     highlighted: boolean;
     status: "unavailable" | "available" | "ready";
   }
+
+  export interface iTravel {
+    name: String;
+    id: number;    
+  }

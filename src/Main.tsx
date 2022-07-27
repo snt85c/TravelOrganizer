@@ -17,7 +17,7 @@ import Footer from "./Footer";
 import NavButton from "./ShowUsers/NavButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage";
-import { iUser, iUserInfo } from "./Interface";
+import { iTravel, iUser, iUserInfo } from "./Interface";
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
@@ -34,8 +34,14 @@ export default function Main() {
     },
   });
   const [usersList, setUsersList] = useState<iUser[]>([]);
-  const [travelList, setTravelList] = useState<Array<string>>();
-  const [travel, setTravel] = useState<string>("");
+  const [travelList, setTravelList] = useState<[iTravel?]>([]);
+  // const [selectedTravel, setSelectedTravel] = useState<String>("");
+  const [language, setLanguage] = useState<string>("en");
+
+  useEffect(()=>{
+    console.log(travelList, "travellist")
+
+  },[travelList])
 
   const [user, setUser] = useState<iUser>({
     headgear: [],
@@ -50,11 +56,25 @@ export default function Main() {
     },
   });
 
-  const [language, setLanguage] = useState<string>("en");
+  useEffect(() => {
+    try {
+      const getTravels = async () => {
+        //get list of travels
+        const querySnapshotTravels = await getDoc(
+          doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
+        );
+        let temp2: DocumentData | undefined = querySnapshotTravels.data();
+        setTravelList(temp2?.travel);
+      };
+      getTravels();
+    } catch (e) {
+      console.log(e, "error in getTravels");
+    }
+  }, []);
+
 
   useEffect(() => {
     async function setAndFetchDataFromFirestore() {
-      //immediately set an user with the data provided from the login, otherwise merge the data. afterthis it will get all the data from firestore, creating a list for all the users and settng the logged user
       if (loggedUser) {
         try {
           await setDoc(
@@ -73,16 +93,6 @@ export default function Main() {
         }
       }
       try {
-        //get list of travels
-        const querySnapshotTravels = await getDoc(
-          doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
-        );
-        let traveListTemp: Array<string> = [];
-        let temp2: DocumentData | undefined = querySnapshotTravels.data();
-        console.log(temp2?.travel);
-        traveListTemp.push(temp2?.travel);
-        setTravelList(traveListTemp);
-
         //get the users
         const querySnapshot = await getDocs(collection(db, "users"));
         let listTemp: iUser[] = [];
@@ -118,7 +128,7 @@ export default function Main() {
         }
       }
     }
-    updateDataInFirestore();
+    // updateDataInFirestore();
   }, [user]);
 
   const HandleLang = () => {
@@ -154,7 +164,11 @@ export default function Main() {
             <Route
               path="/"
               element={
-                <PresentationPage travels={travelList} setTravel={setTravel} />
+                <PresentationPage
+                travelList={travelList}
+                  // setTravel={setSelectedTravel}
+                  setTravelList={setTravelList}
+                />
               }
             />
             <Route
