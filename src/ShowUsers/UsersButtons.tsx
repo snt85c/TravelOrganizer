@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
 import { iUser } from "../Interface";
 
-export default function NavButton(props: {
+export default function UserButton(props: {
   user: iUser;
   users: iUser[];
   loggedUser: any;
@@ -45,7 +45,7 @@ export default function NavButton(props: {
     <>
       <div className="flex flex-row justify-between mx-2 md:mx-20">
         <button
-          className="flex z-20 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex z-20 rounded shadow-lg mt-4 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={handleShowOther}
         >
           {lang.button.showOtherButton}

@@ -14,9 +14,9 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import ShowUser from "./ShowUsers/ShowUser(01)";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import NavButton from "./ShowUsers/NavButtons";
+import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
-import PresentationPage from "./PresentationPage";
+import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iUser, iUserInfo } from "./Interface";
 
 export default function Main() {
@@ -35,7 +35,7 @@ export default function Main() {
   });
   const [usersList, setUsersList] = useState<iUser[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
-  // const [selectedTravel, setSelectedTravel] = useState<String>("");
+  const [selectedTravel, setSelectedTravel] = useState<String>("");
   const [language, setLanguage] = useState<string>("en");
 
   useEffect(()=>{
@@ -58,8 +58,8 @@ export default function Main() {
 
   useEffect(() => {
     try {
+      //get list of travels
       const getTravels = async () => {
-        //get list of travels
         const querySnapshotTravels = await getDoc(
           doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
         );
@@ -152,21 +152,21 @@ export default function Main() {
   return (
     <>
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
-        <Navbar toggle={HandleLangToggle} />
+        <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel}/>
         <LangContext.Provider value={HandleLang()}>
-          <NavButton
+          {selectedTravel && <UserButton
             user={user}
             users={usersList}
             loggedUser={loggedUser}
             setOtherUser={setOtherUser}
-          />
+          />}
           <Routes>
             <Route
               path="/"
               element={
                 <PresentationPage
                 travelList={travelList}
-                  // setTravel={setSelectedTravel}
+                  setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                 />
               }

@@ -1,14 +1,11 @@
-import flairImage from "./img/undraw_explore_re_8l4v.svg";
-import flairImage2 from "./img/undraw_journey_re_ec5q.svg";
-import flairImage3 from "./img/undraw_travelers_re_y25a.svg";
-import TravelButtonItem from "./TravelButtons";
+import flairImage from "../img/undraw_travelers_re_y25a.svg";
+import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
-import { iTravel } from "./Interface";
-import { useEffect } from "react";
+import { iTravel } from "../Interface";
 
 export default function PresentationPage(props: {
   travelList: [iTravel?];
-  // setTravel: React.Dispatch<React.SetStateAction<String>>;
+  setTravel: React.Dispatch<React.SetStateAction<String>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
   const travelButtonsList = props.travelList.map(
@@ -18,7 +15,7 @@ export default function PresentationPage(props: {
           key={i}
           i={i}
           data={currentData}
-          // setTravel={props.setTravel}
+          setTravel={props.setTravel}
           travelList={props.travelList}
           setTravelList={props.setTravelList}
         />
@@ -39,12 +36,12 @@ export default function PresentationPage(props: {
         />
       </div>
       <img
-        src={flairImage3}
+        src={flairImage}
         style={{
           backgroundImage:
             "radial-gradient(ellipse, rgb(100 116 139), transparent 70%)",
         }}
-        className="absolute h-[200px] bottom-10 right-10 "
+        className="absolute h-[100px] md:h-[200px] bottom-10 right-5 md:right-10 "
       />
     </div>
   );
