@@ -4,8 +4,8 @@ import { LangContext } from "../LangContextProvider";
 import { iUser } from "../Interface";
 
 export default function UserButton(props: {
-  user: iUser;
-  users: iUser[];
+  user?: iUser;
+  users?: iUser[];
   loggedUser: any;
   setOtherUser: React.Dispatch<React.SetStateAction<iUser>>;
 }) {

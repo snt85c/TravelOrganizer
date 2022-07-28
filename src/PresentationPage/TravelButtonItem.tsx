@@ -5,7 +5,7 @@ import { db } from "../LoginComponents/firebase";
 export default function TravelButtonItem(props: {
   i?: number;
   data?: iTravel;
-  setTravel: React.Dispatch<React.SetStateAction<String>>;
+  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
@@ -27,10 +27,10 @@ export default function TravelButtonItem(props: {
 
   return (
     <div
-      onClick={() => props.setTravel(props.data?props.data.name:"")}
+      onClick={() => props.setTravel(props.data?props.data:{name:"",id:0})}
       className="flex flex-col relative w-[1/4] m-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border "
     >
-      <div className="absolute -top-1 left-0">{props.i && props.i + 1}</div>
+      <div className="absolute -top-1 left-0 text-[0.5rem]">{props.i}</div>
       <div>{props.data?.name}</div>
       <div className="text-[0.5rem] -mt-2">id:{props.data?.id}</div>
       <div className="flex">

@@ -1,7 +1,8 @@
 import GoogleLoginButton from "./LoginComponents/GoogleLoginButton";
 import shell from "./img/whiteShell.png";
 import { useNavigate } from "react-router-dom";
-export default function Navbar(props: { toggle: () => void , selectedTravel:String}) {
+import { iTravel } from "./Interface";
+export default function Navbar(props: { toggle: () => void , selectedTravel?:iTravel}) {
   const navigate = useNavigate();
 
   return (
@@ -17,7 +18,7 @@ export default function Navbar(props: { toggle: () => void , selectedTravel:Stri
           height="40px"
           onClick={() => navigate("/")}
           />
-          <div className="text-[0.5rem]">{props.selectedTravel}</div>
+          <div className=" text-[0.5rem]">{props.selectedTravel?.name}</div>
           </div>
         <GoogleLoginButton />
         <div className="flex flex-col">

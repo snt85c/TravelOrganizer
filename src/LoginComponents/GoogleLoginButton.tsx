@@ -13,7 +13,7 @@ export default function GoogleLoginButton() {
     e.preventDefault();
     try {
       await googleSignIn();
-      navigate("/user");
+      // navigate("/user");
     } catch (err) {
       console.log(err);
     }

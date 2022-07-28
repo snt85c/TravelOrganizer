@@ -5,7 +5,7 @@ import { iTravel } from "../Interface";
 
 export default function PresentationPage(props: {
   travelList: [iTravel?];
-  setTravel: React.Dispatch<React.SetStateAction<String>>;
+  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
   const travelButtonsList = props.travelList.map(

@@ -17,7 +17,7 @@ import Footer from "./Footer";
 import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
-import { iTravel, iUser, iUserInfo } from "./Interface";
+import { iTravel, iTravelData, iUser, iUserInfo } from "./Interface";
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
@@ -33,28 +33,18 @@ export default function Main() {
       uid: "",
     },
   });
+  const [user, setUser] = useState<any>({});
+  const [selectedTravel, setSelectedTravel] = useState<iTravel>({
+    name: "",
+    id: 0,
+  });
   const [usersList, setUsersList] = useState<iUser[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
-  const [selectedTravel, setSelectedTravel] = useState<String>("");
   const [language, setLanguage] = useState<string>("en");
 
-  useEffect(()=>{
-    console.log(travelList, "travellist")
-
-  },[travelList])
-
-  const [user, setUser] = useState<iUser>({
-    headgear: [],
-    topgear: [],
-    bottomgear: [],
-    footgear: [],
-    extra: [],
-    userInfo: {
-      displayName: "",
-      photoURL: "",
-      uid: "",
-    },
-  });
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -72,10 +62,69 @@ export default function Main() {
     }
   }, []);
 
+  useEffect(() => {
+    async function fetchUsersByTravelsInFirestore() {
+      try {
+        if (selectedTravel.id !== 0) {
+          const querySnapshot = await getDocs(collection(db, "users"));
+          // let listTemp: iUser[] = [];
+          let tempdata: iTravelData = {} as iTravelData;
+          querySnapshot.forEach((doc) => {
+            tempdata = doc.data() as iTravelData;
+            // console.log(tempdata[selectedTravel?.id] && tempdata[selectedTravel?.id].hasOwnProperty("extra"))
+            if (tempdata[selectedTravel?.id] === undefined) {
+              let newUserData = {
+                userInfo: {
+                  displayName: loggedUser.displayName.split(" ")[0],
+                  photoURL: loggedUser.photoURL,
+                  uid: loggedUser.uid,
+                },
+                [selectedTravel.id]: {
+                  id: selectedTravel.id,
+                  name: selectedTravel.name,
+                  headgear: [],
+                  topgear: [],
+                  bottomgear: [],
+                  footgear: [],
+                  extra: [],
+                },
+              };
+              setUser(newUserData);
+            } else {
+              let newUserData = {
+                userInfo: {
+                  displayName: loggedUser.displayName.split(" ")[0],
+                  photoURL: loggedUser.photoURL,
+                  uid: loggedUser.uid,
+                },
+                [selectedTravel.id]: {
+                  id: selectedTravel.id,
+                  name: selectedTravel.name,
+                  headgear: tempdata[selectedTravel.id]?.headgear,
+                  topgear: tempdata[selectedTravel.id]?.topgear,
+                  bottomgear: tempdata[selectedTravel.id]?.bottomgear,
+                  footgear: tempdata[selectedTravel.id]?.footgear,
+                  extra: tempdata[selectedTravel.id]?.extra,
+                },
+              };
+              setUser(newUserData);
+            }
+            // }
+            // listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+          });
+          // setUsersList(listTemp);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchUsersByTravelsInFirestore();
+  }, [selectedTravel, loggedUser]);
 
   useEffect(() => {
-    async function setAndFetchDataFromFirestore() {
+    async function setDataInFirestore() {
       if (loggedUser) {
+        //get the info of the logged user
         try {
           await setDoc(
             doc(db, "users", loggedUser.uid),
@@ -92,26 +141,8 @@ export default function Main() {
           console.log(err);
         }
       }
-      try {
-        //get the users
-        const querySnapshot = await getDocs(collection(db, "users"));
-        let listTemp: iUser[] = [];
-        let tempdata: iUser = {} as iUser;
-        querySnapshot.forEach((doc) => {
-          tempdata = doc.data() as iUser;
-          if (tempdata.userInfo.uid === loggedUser?.uid) {
-            //when logged, set the user and navigate to the page
-            setUser(tempdata);
-            // navigate("/user");
-          }
-          listTemp.push(tempdata);
-        });
-        setUsersList(listTemp);
-      } catch (err) {
-        console.log(err);
-      }
     }
-    setAndFetchDataFromFirestore();
+    setDataInFirestore();
   }, [loggedUser]);
 
   useEffect(() => {
@@ -128,7 +159,7 @@ export default function Main() {
         }
       }
     }
-    // updateDataInFirestore();
+    updateDataInFirestore();
   }, [user]);
 
   const HandleLang = () => {
@@ -152,20 +183,22 @@ export default function Main() {
   return (
     <>
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
-        <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel}/>
+        <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
-          {selectedTravel && <UserButton
-            user={user}
-            users={usersList}
-            loggedUser={loggedUser}
-            setOtherUser={setOtherUser}
-          />}
+          {/* {selectedTravel && (
+            <UserButton
+              user={user}
+              users={usersList}
+              loggedUser={loggedUser}
+              setOtherUser={setOtherUser}
+            />
+          )} */}
           <Routes>
             <Route
               path="/"
               element={
                 <PresentationPage
-                travelList={travelList}
+                  travelList={travelList}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                 />
