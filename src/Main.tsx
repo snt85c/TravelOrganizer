@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ShowUser from "./ShowUsers/ShowUser(01)";
 import Navbar from "./Navbar";
 import Footer from "./Footer";

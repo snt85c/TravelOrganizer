@@ -119,23 +119,19 @@ export default function Item(props: {
   };
 
   const changeHighlight = () => {
-    let currentTravel: iUser | undefined = props.user[props.travelId];
-    currentTravel = { ...props.user[props.travelId] };
+    let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
     currentGear[props.index].highlighted =
       !props.currentArray[props.index].highlighted;
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-
     props.setUser && props.setUser(currentUser);
   };
 
   const setNameChange = () => {
-    let currentTravel: iUser | undefined = props.user[props.travelId];
-    currentTravel = { ...props.user[props.travelId] };
+    let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
     currentGear[props.index].name = change
       ? change
       : currentGear[props.index].name;
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-
     props.setUser && props.setUser(currentUser);
     setIsEditName(!isEditName);
   };
@@ -144,14 +140,12 @@ export default function Item(props: {
     let currentTravel: iUser = { ...props.user[props.travelId] };
     currentGear.splice(props.index, 1);
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-
     props.setUser && props.setUser(currentUser);
   };
   
   function ToggleButton() {
     const buttonToggle = () => {
-      let currentTravel: iUser | undefined = props.user[props.travelId];
-      currentTravel = { ...props.user[props.travelId] };
+      let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
       if (currentGear[props.index].status === "unavailable") {
         currentGear[props.index].status = "available";
       } else if (currentGear[props.index].status === "available") {
@@ -160,7 +154,6 @@ export default function Item(props: {
         currentGear[props.index].status = "unavailable";
       }
       const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-
       props.setUser && props.setUser(currentUser);
     };
 
