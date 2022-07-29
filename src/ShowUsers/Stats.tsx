@@ -34,7 +34,7 @@ export default function Stats(props: { user: iUser }) {
     let tempNotAv: Array<string> = [];
     let tempNotRe: Array<string> = [];
 
-    props.user.headgear.forEach((item) => {
+    props.user?.headgear.forEach((item) => {
       if (item.status === "available") {
         tempavtrue++;
       } 
@@ -46,7 +46,7 @@ export default function Stats(props: { user: iUser }) {
       }
     });
 
-    props.user.topgear.forEach((item) => {
+    props.user?.topgear.forEach((item) => {
       if (item.status === "available") {
         tempavtrue++;
       } 
@@ -57,7 +57,7 @@ export default function Stats(props: { user: iUser }) {
         tempNotRe.push(item.name);
       }
     });
-    props.user.bottomgear.forEach((item) => {
+    props.user?.bottomgear.forEach((item) => {
       if (item.status === "available") {
         tempavtrue++;
       } 
@@ -68,7 +68,7 @@ export default function Stats(props: { user: iUser }) {
         tempNotRe.push(item.name);
       }
     });
-    props.user.footgear.forEach((item) => {
+    props.user?.footgear.forEach((item) => {
       if (item.status === "available") {
         tempavtrue++;
       } 
@@ -79,7 +79,7 @@ export default function Stats(props: { user: iUser }) {
         tempNotRe.push(item.name);
       }
     });
-    props.user.extra.forEach((item) => {
+    props.user?.extra.forEach((item) => {
       if (item.status === "available") {
         tempavtrue++;
       }

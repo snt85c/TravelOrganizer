@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { LangContext } from "../LangContextProvider";
-import { iUser } from "../Interface";
-import UserItemsList from "./UserItemsList";
+import { iTravelData, iUser } from "../Interface";
+import UserItemsList from "./UserItemsList(03)";
 
 export default function UserElementsList(props: {
-  user: iUser;
+  user: iTravelData;
+  travelId: number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   const lang = useContext(LangContext);
@@ -12,6 +13,7 @@ export default function UserElementsList(props: {
   const SWIPE_INSTRUCTION_RX = lang.swipeComponent.swipeInstructionRx;
   const MD_HIGHLIGHT_INSTRUCTION = lang.itemListComponent.highlightInstruction;
 
+  console.log(props.user, "in 02");
   return (
     <>
       {!props.setUser && (
@@ -34,25 +36,34 @@ export default function UserElementsList(props: {
       )}
       <UserItemsList
         user={props.user}
+        travelId={props.travelId}
         setUser={props.setUser}
         type={"headgear"}
       />
       <UserItemsList
         user={props.user}
+        travelId={props.travelId}
         setUser={props.setUser}
         type={"topgear"}
       />
       <UserItemsList
+        travelId={props.travelId}
         user={props.user}
         setUser={props.setUser}
         type={"bottomgear"}
       />
       <UserItemsList
+        travelId={props.travelId}
         user={props.user}
         setUser={props.setUser}
         type={"footgear"}
       />
-      <UserItemsList user={props.user} setUser={props.setUser} type={"extra"} />
+      <UserItemsList
+        user={props.user}
+        travelId={props.travelId}
+        setUser={props.setUser}
+        type={"extra"}
+      />
     </>
   );
 }

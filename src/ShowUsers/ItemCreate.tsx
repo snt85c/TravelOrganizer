@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { iGear, iUser } from "../Interface";
+import { iGear, iTravelData, iUser } from "../Interface";
 import {
   FaTimesCircle,
   FaPlusCircle,
@@ -8,7 +8,8 @@ import {
 } from "react-icons/fa";
 
 export default function ItemCreate(props: {
-  user: iUser;
+  user: iTravelData;
+  travelId:number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
   isAddClicked: boolean;
   setIsAddClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,28 +21,30 @@ export default function ItemCreate(props: {
     highlighted:false,
     status:"unavailable"
   });
+  console.log(props.user, "in create")
 
   const createButton = (array: string) => {
-    let temp: iUser = { ...props.user };
+    let temp: iUser = { ...props.user[props.travelId] };
 
     switch (array) {
       case "headgear":
-        temp.headgear?.push(tempItem);
+        temp.headgear.push(tempItem);
         break;
       case "topgear":
-        temp.topgear?.push(tempItem);
+        temp.topgear.push(tempItem);
         break;
       case "bottomgear":
-        temp.bottomgear?.push(tempItem);
+        temp.bottomgear.push(tempItem);
         break;
       case "footgear":
-        temp.footgear?.push(tempItem);
+        temp.footgear.push(tempItem);
         break;
       case "extra":
-        temp.extra?.push(tempItem);
+        temp.extra.push(tempItem);
         break;
     }
-    props.setUser && props.setUser(temp);
+    const temp2:any = {...props.user, [props.travelId]:temp}
+    props.setUser && props.setUser(temp2);
     props.setIsAddClicked(!props.isAddClicked);
   };
 

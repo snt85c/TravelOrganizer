@@ -32,7 +32,7 @@ export default function CreateNewTravel(props: {
           value={newTravel}
           onChange={(e) => setNewTravel(e.target.value)}
         />
-        <div onClick={handleClick}>
+        <div className=" cursor-pointer hover:text-amber-500 duration-300" onClick={handleClick}>
           {!newTravel ? "new travel" : "add " + newTravel}
         </div>
       </div>

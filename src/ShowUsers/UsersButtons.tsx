@@ -1,10 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iUser } from "../Interface";
+import { iTravelData, iUser } from "../Interface";
 
 export default function UserButton(props: {
-  user?: iUser;
+  travelId:number,
+  user?: iTravelData;
   users?: iUser[];
   loggedUser: any;
   setOtherUser: React.Dispatch<React.SetStateAction<iUser>>;
@@ -15,6 +16,8 @@ export default function UserButton(props: {
 
 
   const handleShowOther = () => {
+    console.log(props.user)
+    console.log(props.users)
     setShowOther(!showOther);
   };
 
@@ -30,13 +33,13 @@ export default function UserButton(props: {
 
   let usersList = props.users?.map((user, i) => {
     return (
-      <div
+       <div
         className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
-        {user.userInfo.displayName.toUpperCase()}
-        <img src={user.userInfo.photoURL} className="w-10 h-10 rounded-full" />
+        {user?.userInfo.displayName.toUpperCase()}
+        <img src={user?.userInfo.photoURL} className="w-10 h-10 rounded-full" />
       </div>
     );
   });

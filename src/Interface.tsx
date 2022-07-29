@@ -16,8 +16,8 @@ export interface iTravelData {
     bottomgear: iGear[];
     footgear: iGear[];
     extra: iGear[];
+    userInfo: iUserInfo;
   };
-  userInfo: iUserInfo;
 }
 
 export interface iUserInfo {

@@ -8,14 +8,15 @@ import {
 import { LangContext } from "../LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
-import { iGear, iUser } from "../Interface";
+import { iGear, iTravelData, iUser } from "../Interface";
 
 export default function Item(props: {
   index: number;
   type: string;
+  travelId: number;
   currentArray: iGear[];
   item: iGear;
-  user: iUser;
+  user: iTravelData;
   setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
@@ -42,24 +43,24 @@ export default function Item(props: {
   const SWIPE_TRIGGER: number = 100;
   const SWIPE_CHANGE_COLOR: number = 50;
   const OPACITY_SPREAD: number = 100;
-  let temp: iUser = props.user;
+  let currentTravel: iUser = props.user[props.travelId];
   let currentGear: iGear[];
 
   switch (props.type) {
     case "headgear":
-      currentGear = temp.headgear;
+      currentGear = currentTravel.headgear;
       break;
     case "topgear":
-      currentGear = temp.topgear;
+      currentGear = currentTravel.topgear;
       break;
     case "bottomgear":
-      currentGear = temp.bottomgear;
+      currentGear = currentTravel.bottomgear;
       break;
     case "footgear":
-      currentGear = temp.footgear;
+      currentGear = currentTravel.footgear;
       break;
     case "extra":
-      currentGear = temp.extra;
+      currentGear = currentTravel.extra;
       break;
   }
 
@@ -118,47 +119,39 @@ export default function Item(props: {
   };
 
   const changeHighlight = () => {
-    let temp: iUser | undefined = props.user;
-    temp = { ...props.user };
+    let currentTravel: iUser | undefined = props.user[props.travelId];
+    currentTravel = { ...props.user[props.travelId] };
     currentGear[props.index].highlighted =
       !props.currentArray[props.index].highlighted;
-    props.setUser && props.setUser(temp);
+    const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+
+    props.setUser && props.setUser(currentUser);
   };
 
   const setNameChange = () => {
-    let temp: iUser | undefined = props.user;
-    temp = { ...props.user };
+    let currentTravel: iUser | undefined = props.user[props.travelId];
+    currentTravel = { ...props.user[props.travelId] };
     currentGear[props.index].name = change
       ? change
       : currentGear[props.index].name;
-    props.setUser && props.setUser(temp);
+    const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+
+    props.setUser && props.setUser(currentUser);
     setIsEditName(!isEditName);
   };
 
   const handleDelete = () => {
-    let temp: iUser = { ...props.user };
+    let currentTravel: iUser = { ...props.user[props.travelId] };
     currentGear.splice(props.index, 1);
-    props.setUser && props.setUser(temp);
+    const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+
+    props.setUser && props.setUser(currentUser);
   };
-
-  // useEffect(() => {
-  //UPDATER
-  //   if (!currentArray[props.index].status) {
-  //     //to update the old data to the new format (status)
-  //     let temp: iUser | undefined = { ...props.user };
-  //     currentArray[props.index].status = currentArray[props.index].available
-  //       ? currentArray[props.index].ready
-  //         ? "ready"
-  //         : "available"
-  //       : "unavailable";
-  //     props.setUser && props.setUser(temp);
-  //   }
-  // }, []);
-
+  
   function ToggleButton() {
     const buttonToggle = () => {
-      let temp: iUser | undefined = props.user;
-      temp = { ...props.user };
+      let currentTravel: iUser | undefined = props.user[props.travelId];
+      currentTravel = { ...props.user[props.travelId] };
       if (currentGear[props.index].status === "unavailable") {
         currentGear[props.index].status = "available";
       } else if (currentGear[props.index].status === "available") {
@@ -166,7 +159,9 @@ export default function Item(props: {
       } else if (currentGear[props.index].status === "ready") {
         currentGear[props.index].status = "unavailable";
       }
-      props.setUser && props.setUser(temp);
+      const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+
+      props.setUser && props.setUser(currentUser);
     };
 
     return (
