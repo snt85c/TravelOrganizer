@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../LoginComponents/firebase";
-import { iTravel } from "../Interface";
+import { iTravel, iUserInfo } from "../Interface";
 
 export default function CreateNewTravel(props: {
+  user:iUserInfo
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
@@ -11,7 +12,7 @@ export default function CreateNewTravel(props: {
 
   const handleClick = async () => {
     const tempTravelList: any = props.travelList.slice(); //pass by value, not reference by slice function that returns a new array
-    const newTravelObject: iTravel = { name: newTravel, id: Date.now() };
+    const newTravelObject: iTravel = { name: newTravel, id: Date.now(), createdBy:props.user.uid };
     tempTravelList.push(newTravelObject);
     props.setTravelList(tempTravelList);
     // console.log(tempTravelList === props.travelList,  "equality add")

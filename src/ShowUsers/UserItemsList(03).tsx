@@ -15,7 +15,6 @@ export default function UserItemsList(props: {
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
   const lang = useContext(LangContext);
 
-  console.log(props.user, "in 03")
   let currentArray: iGear[] = [] ;
   switch (props.type) {
     case "headgear":

@@ -13,7 +13,6 @@ export default function UserElementsList(props: {
   const SWIPE_INSTRUCTION_RX = lang.swipeComponent.swipeInstructionRx;
   const MD_HIGHLIGHT_INSTRUCTION = lang.itemListComponent.highlightInstruction;
 
-  console.log(props.user, "in 02");
   return (
     <>
       {!props.setUser && (

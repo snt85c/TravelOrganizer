@@ -1,9 +1,11 @@
 import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
-import { iTravel } from "../Interface";
+import { iTravel, iTravelData, iUser, iUserInfo } from "../Interface";
 
 export default function PresentationPage(props: {
+  user:iUserInfo;
+  loggedUser: any;
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
@@ -14,6 +16,7 @@ export default function PresentationPage(props: {
         <TravelButtonItem
           key={i}
           i={i}
+          loggedUser={props.loggedUser}
           data={currentData}
           setTravel={props.setTravel}
           travelList={props.travelList}
@@ -31,6 +34,7 @@ export default function PresentationPage(props: {
       <div className="flex flex-col w-[1/4] p-2">
         <div>{travelButtonsList}</div>
         <CreateNewTravel
+        user={props.user}
           travelList={props.travelList}
           setTravelList={props.setTravelList}
         />

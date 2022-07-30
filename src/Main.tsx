@@ -18,6 +18,7 @@ import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iTravelData, iUser, iUserInfo } from "./Interface";
+import { GiConsoleController } from "react-icons/gi";
 
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
@@ -26,15 +27,11 @@ export default function Main() {
   const [selectedTravel, setSelectedTravel] = useState<iTravel>({
     name: "",
     id: 0,
+    createdBy: "",
   });
   const [usersList, setUsersList] = useState<iUser[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
-
-  useEffect(() => {
-    console.log(user[selectedTravel.id], "in main");
-    console.log(user, "in main, full user");
-  }, [user]);
 
   useEffect(() => {
     try {
@@ -61,7 +58,9 @@ export default function Main() {
           let tempdata: iTravelData = {} as iTravelData;
           querySnapshot.forEach((doc) => {
             tempdata = doc.data() as iTravelData;
+            console.log(tempdata, "single user")
             if (tempdata[selectedTravel?.id] === undefined) {
+              // initialize the object when travel item is clicked by a new user for the first time
               let newUserData = {
                 userInfo: {
                   displayName: loggedUser.displayName.split(" ")[0],
@@ -84,6 +83,8 @@ export default function Main() {
                 },
               };
               setUser(newUserData);
+              listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+
             } else {
               let newUserData = {
                 userInfo: {
@@ -107,10 +108,11 @@ export default function Main() {
                 },
               };
               setUser(newUserData);
-            }
-            listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+              listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+            } 
           });
           setUsersList(listTemp);
+          console.log(usersList, "userlist in main");
         }
       } catch (e) {
         console.log(e);
@@ -158,7 +160,7 @@ export default function Main() {
       }
     }
     updateUserDataInFirestore();
-  }, [user]);
+  }, [user]); //user
 
   const HandleLang = () => {
     //for LangContext.Provider sets the value to return from the toggle in a way that can be interpreted by it
@@ -197,6 +199,8 @@ export default function Main() {
               path="/"
               element={
                 <PresentationPage
+                  user={user.userInfo}
+                  loggedUser={loggedUser}
                   travelList={travelList}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}

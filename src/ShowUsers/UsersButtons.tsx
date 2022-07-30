@@ -16,8 +16,6 @@ export default function UserButton(props: {
 
 
   const handleShowOther = () => {
-    console.log(props.user)
-    console.log(props.users)
     setShowOther(!showOther);
   };
 
