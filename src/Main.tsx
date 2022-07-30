@@ -29,9 +29,11 @@ export default function Main() {
     id: 0,
     createdBy: "",
   });
-  const [usersList, setUsersList] = useState<iUser[]>([]);
+  const [usersList, setUsersList] = useState<iTravelData[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
+
+  useEffect(()=>{console.log(otherUser, "other user")},[otherUser])
 
   useEffect(() => {
     try {
@@ -55,7 +57,7 @@ export default function Main() {
         if (selectedTravel.id !== 0) {
           console.log(selectedTravel.name.toUpperCase(),selectedTravel.id, " selected")
           const querySnapshot = await getDocs(collection(db, "users"));
-          let listTemp: iUser[] = [];
+          let listTemp: iTravelData[] = [];
           let tempdata: iTravelData = {} as iTravelData;
           querySnapshot.forEach((doc) => {
             tempdata = doc.data() as iTravelData;
@@ -86,7 +88,7 @@ export default function Main() {
                   },
                 };
                 setUser(newUserData);
-                listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+                listTemp.push(tempdata[selectedTravel.id]);
               } else {
                 console.log("///COLLATING ELEMENTS FOR NEW USER ",  loggedUser.displayName.split(" ")[0].toUpperCase())
                 //collates the data to push in the user state
@@ -116,12 +118,12 @@ export default function Main() {
                   tempdata[selectedTravel.id],
                   "to be pushed in list in main"
                 );
-                listTemp.push(tempdata[selectedTravel.id] );
+                listTemp.push(tempdata );
               }
             }else{
             console.log(tempdata[selectedTravel.id], "pushed in list");
             if(tempdata[selectedTravel.id] && selectedTravel.id === tempdata[selectedTravel.id].id){
-              listTemp.push(tempdata[selectedTravel.id]);
+              listTemp.push(tempdata);
             }
             }
           });

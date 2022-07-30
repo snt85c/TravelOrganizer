@@ -6,9 +6,9 @@ import { iTravelData, iUser } from "../Interface";
 export default function UserButton(props: {
   travelId:number,
   user?: iTravelData;
-  users?: iUser[];
+  users?: iTravelData[];
   loggedUser: any;
-  setOtherUser: React.Dispatch<React.SetStateAction<iUser>>;
+  setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }) {
   const [showOther, setShowOther] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -19,8 +19,9 @@ export default function UserButton(props: {
     setShowOther(!showOther);
   };
 
-  const handleClickSelection = (user: iUser) => {
+  const handleClickSelection = (user: iTravelData) => {
     if (user.userInfo.uid !== props.loggedUser?.uid) {
+      console.log(user, "selected user by button")
       props.setOtherUser(user);
       navigate("/other");
     } else {
