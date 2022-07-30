@@ -21,7 +21,6 @@ export default function ItemCreate(props: {
     highlighted:false,
     status:"unavailable"
   });
-  console.log(props.user, "in create")
 
   const createButton = (array: string) => {
     let temp: iUser = { ...props.user[props.travelId] };

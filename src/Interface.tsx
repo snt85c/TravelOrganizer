@@ -18,6 +18,7 @@ export interface iTravelData {
     extra: iGear[];
     userInfo: iUserInfo;
   };
+  userInfo: iUserInfo;
 }
 
 export interface iUserInfo {

@@ -53,66 +53,82 @@ export default function Main() {
     async function fetchUsersByTravelsInFirestore() {
       try {
         if (selectedTravel.id !== 0) {
+          console.log(selectedTravel.name.toUpperCase(),selectedTravel.id, " selected")
           const querySnapshot = await getDocs(collection(db, "users"));
           let listTemp: iUser[] = [];
           let tempdata: iTravelData = {} as iTravelData;
           querySnapshot.forEach((doc) => {
             tempdata = doc.data() as iTravelData;
-            console.log(tempdata, "single user")
-            if (tempdata[selectedTravel?.id] === undefined) {
-              // initialize the object when travel item is clicked by a new user for the first time
-              let newUserData = {
-                userInfo: {
-                  displayName: loggedUser.displayName.split(" ")[0],
-                  photoURL: loggedUser.photoURL,
-                  uid: loggedUser.uid,
-                },
-                [selectedTravel.id]: {
-                  id: selectedTravel.id,
-                  name: selectedTravel.name,
-                  headgear: [],
-                  topgear: [],
-                  bottomgear: [],
-                  footgear: [],
-                  extra: [],
+            console.log(tempdata, "single user");
+            if (loggedUser && tempdata.userInfo.uid === loggedUser.uid) {
+              if (!tempdata[selectedTravel?.id]) {
+                console.log("///NEW USER DATA CREATED ///", loggedUser.displayName.split(" ")[0].toUpperCase())
+                // initialize the object when travel item is clicked by a new user for the first time
+                let newUserData = {
                   userInfo: {
                     displayName: loggedUser.displayName.split(" ")[0],
                     photoURL: loggedUser.photoURL,
                     uid: loggedUser.uid,
                   },
-                },
-              };
-              setUser(newUserData);
-              listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
-
-            } else {
-              let newUserData = {
-                userInfo: {
-                  displayName: loggedUser.displayName.split(" ")[0],
-                  photoURL: loggedUser.photoURL,
-                  uid: loggedUser.uid,
-                },
-                [selectedTravel.id]: {
-                  id: selectedTravel.id,
-                  name: selectedTravel.name,
-                  headgear: tempdata[selectedTravel.id]?.headgear,
-                  topgear: tempdata[selectedTravel.id]?.topgear,
-                  bottomgear: tempdata[selectedTravel.id]?.bottomgear,
-                  footgear: tempdata[selectedTravel.id]?.footgear,
-                  extra: tempdata[selectedTravel.id]?.extra,
+                  [selectedTravel.id]: {
+                    id: selectedTravel.id,
+                    name: selectedTravel.name,
+                    headgear: [],
+                    topgear: [],
+                    bottomgear: [],
+                    footgear: [],
+                    extra: [],
+                    userInfo: {
+                      displayName: loggedUser.displayName.split(" ")[0],
+                      photoURL: loggedUser.photoURL,
+                      uid: loggedUser.uid,
+                    },
+                  },
+                };
+                setUser(newUserData);
+                listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
+              } else {
+                console.log("///COLLATING ELEMENTS FOR NEW USER ",  loggedUser.displayName.split(" ")[0].toUpperCase())
+                //collates the data to push in the user state
+                let newUserData = {
                   userInfo: {
                     displayName: loggedUser.displayName.split(" ")[0],
                     photoURL: loggedUser.photoURL,
                     uid: loggedUser.uid,
                   },
-                },
-              };
-              setUser(newUserData);
-              listTemp.push(tempdata[selectedTravel.id] as unknown as iUser);
-            } 
+                  [selectedTravel.id]: {
+                    id: selectedTravel.id,
+                    name: selectedTravel.name,
+                    headgear: tempdata[selectedTravel.id]?.headgear,
+                    topgear: tempdata[selectedTravel.id]?.topgear,
+                    bottomgear: tempdata[selectedTravel.id]?.bottomgear,
+                    footgear: tempdata[selectedTravel.id]?.footgear,
+                    extra: tempdata[selectedTravel.id]?.extra,
+                    userInfo: {
+                      displayName: loggedUser.displayName.split(" ")[0],
+                      photoURL: loggedUser.photoURL,
+                      uid: loggedUser.uid,
+                    },
+                  },
+                };
+                setUser(newUserData);
+                console.log(
+                  tempdata[selectedTravel.id],
+                  "to be pushed in list in main"
+                );
+                listTemp.push(tempdata[selectedTravel.id] );
+              }
+            }else{
+            console.log(tempdata[selectedTravel.id], "pushed in list");
+            if(tempdata[selectedTravel.id] && selectedTravel.id === tempdata[selectedTravel.id].id){
+              listTemp.push(tempdata[selectedTravel.id]);
+            }
+            }
           });
           setUsersList(listTemp);
-          console.log(usersList, "userlist in main");
+          console.log(usersList, "userlist")
+          console.log(user, "user")
+
         }
       } catch (e) {
         console.log(e);
@@ -149,6 +165,7 @@ export default function Main() {
     async function updateUserDataInFirestore() {
       //when logged user is modified, push to firestore
       if (loggedUser) {
+        console.log("UDATING ON FIRESTORE")
         try {
           await updateDoc(
             doc(db, "users", loggedUser.uid),

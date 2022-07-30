@@ -51,7 +51,7 @@ export default function TravelButtonItem(props: {
       <div className="absolute top-0 left-1 text-[0.7rem]">{props.i}</div>
       <div className="text-xl cursor-pointer text-gray-800 hover:text-amber-500 duration-300">{props.data?.name}</div>
       <div className="text-[0.5rem] -mt-2">id:{props.data?.id}</div>
-      {props.loggedUser.uid === props.data?.createdBy && <div className="flex -mt-1">
+      {props.loggedUser?.uid === props.data?.createdBy && <div className="flex -mt-1">
         <div
           className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300"
           onClick={handleDelete}
