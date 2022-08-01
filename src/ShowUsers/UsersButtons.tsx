@@ -20,12 +20,17 @@ export default function UserButton(props: {
   };
 
   const handleClickSelection = (user: iTravelData) => {
-    if (user.userInfo.uid !== props.loggedUser?.uid) {
-      console.log(user, "selected user by button")
+    if(props.loggedUser){
+      if (user.userInfo.uid !== props.loggedUser?.uid) {
+        props.setOtherUser(user);
+        navigate("/other");
+      } else {
+        navigate("/user");
+      }
+
+    }else{
       props.setOtherUser(user);
       navigate("/other");
-    } else {
-      navigate("/user");
     }
     setShowOther(false);
   };

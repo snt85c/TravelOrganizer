@@ -53,6 +53,8 @@ export default function UserItemsList(props: {
     setIsAddClicked(!isAddClicked);
   };
 
+  // console.log(currentArray, " current array in UserItemList(03)")
+
   const list = currentArray?.map((item: iGear, i: number) => {
     return (
       <Item

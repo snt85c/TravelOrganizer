@@ -1,10 +1,12 @@
 export interface iUser {
-  headgear: iGear[];
-  topgear: iGear[];
-  bottomgear: iGear[];
-  footgear: iGear[];
-  extra: iGear[];
-  userInfo: iUserInfo;
+  id:number;
+    tName:string;
+    headgear: iGear[];
+    topgear: iGear[];
+    bottomgear: iGear[];
+    footgear: iGear[];
+    extra: iGear[];
+    userInfo: iUserInfo;
 }
 
 export interface iTravelData {
