@@ -2,6 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { iTravel } from "../Interface";
 import { db } from "../LoginComponents/firebase";
+import { telegramBotKey, chat_id } from "../Main";
 
 export default function TravelButtonItem(props: {
   i?: number;
@@ -22,6 +23,15 @@ export default function TravelButtonItem(props: {
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
+      const data = `travel: ${props.data?.name} has been deleted by: ${
+        props.loggedUser.displayName.split(" ")[0]
+      }`;
+
+      fetch(
+        `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
+      ).then((res) => {
+        console.log("Request complete! response:", res);
+      });
     } catch (e) {
       console.log(e);
     }
@@ -34,14 +44,17 @@ export default function TravelButtonItem(props: {
     //   });
     //   console.log(temp, "TEMP");
     //   const newItem = {...temp, name:"temp"}
-      // console.log(newItem)
-      // props.setTravelList([temp])
+    // console.log(newItem)
+    // props.setTravelList([temp])
   };
 
   const handleClick = () => {
-    const temp:iTravel = props.data?.name? props.data : { name: "", id: 0, createdBy: "" };
+    const temp: iTravel = props.data?.name
+      ? props.data
+      : { name: "", id: 0, createdBy: "" };
     props.setTravel(temp);
-    if(props.loggedUser)navigate("/user");
+    console.log(temp);
+    // if(props.loggedUser)navigate("/user");
   };
 
   return (

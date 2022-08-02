@@ -19,6 +19,9 @@ import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iTravelData } from "./Interface";
 
+export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
+export let chat_id = 231233238;
+
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
   const [otherUser, setOtherUser] = useState<any>();
@@ -32,7 +35,9 @@ export default function Main() {
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
 
-  useEffect(()=>{console.log(otherUser, "OHTER USER")},[otherUser])
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -50,76 +55,61 @@ export default function Main() {
     }
   }, []);
 
-  function newEmptyTravel() {
-    return {
-      userInfo: {
-        displayName: loggedUser.displayName.split(" ")[0],
-        photoURL: loggedUser.photoURL,
-        uid: loggedUser.uid,
-      },
-      [selectedTravel.id]: {
-        id: selectedTravel.id,
-        name: selectedTravel.name,
-        headgear: [],
-        topgear: [],
-        bottomgear: [],
-        footgear: [],
-        extra: [],
-        userInfo: {
-          displayName: loggedUser.displayName.split(" ")[0],
-          photoURL: loggedUser.photoURL,
-          uid: loggedUser.uid,
-        },
-      },
-    };
-  }
-
-  function collateDataForTravel(tempdata: iTravelData) {
-    console.log("COLLATEDATA")
-    return {
-      userInfo: {
-        displayName: loggedUser.displayName.split(" ")[0] + " loggedin",
-        photoURL: loggedUser.photoURL,
-        uid: loggedUser.uid,
-      },
-      [selectedTravel.id]: {
-        id: selectedTravel.id,
-        name: selectedTravel.name,
-        headgear: tempdata[selectedTravel.id]?.headgear,
-        topgear: tempdata[selectedTravel.id]?.topgear,
-        bottomgear: tempdata[selectedTravel.id]?.bottomgear,
-        footgear: tempdata[selectedTravel.id]?.footgear,
-        extra: tempdata[selectedTravel.id]?.extra,
-        userInfo: {
-          displayName: loggedUser.displayName.split(" ")[0],
-          photoURL: loggedUser.photoURL,
-          uid: loggedUser.uid,
-        },
-      },
-    };
-  }
-
-  function otherUsersData(tempdata: iTravelData) {
-    console.log("ohterUSERFUNTION")
+  function userTravelDataFactory(
+    type: "newEmpty" | "collatedLoggedUser" | "collatedOtherUsers",
+    tempdata?: iTravelData
+  ) {
     return {
       userInfo: {
         displayName:
-          tempdata[selectedTravel.id].userInfo.displayName + " loggedout",
-        photoURL: tempdata[selectedTravel.id].userInfo.photoURL,
-        uid: tempdata[selectedTravel.id].userInfo.uid,
+          type === "collatedOtherUsers"
+            ? tempdata && tempdata[selectedTravel.id].userInfo.displayName
+            : loggedUser.displayName.split(" ")[0],
+        photoURL:
+          type === "collatedOtherUsers"
+            ? tempdata && tempdata[selectedTravel.id].userInfo.photoURL
+            : loggedUser.photoURL,
+        uid:
+          type === "collatedOtherUsers"
+            ? tempdata && tempdata[selectedTravel.id].userInfo.uid
+            : loggedUser.uid,
       },
       [selectedTravel.id]: {
         id: selectedTravel.id,
         name: selectedTravel.name,
-        headgear: tempdata[selectedTravel.id]?.headgear,
-        topgear: tempdata[selectedTravel.id]?.topgear,
-        bottomgear: tempdata[selectedTravel.id]?.bottomgear,
-        footgear: tempdata[selectedTravel.id]?.footgear,
-        extra: tempdata[selectedTravel.id]?.extra,
+        headgear:
+          type === "collatedOtherUsers" || "collatedLoggedUser"
+            ? tempdata && tempdata[selectedTravel.id]?.headgear
+            : [],
+        topgear:
+          type === "collatedOtherUsers" || "collatedLoggedUser"
+            ? tempdata && tempdata[selectedTravel.id]?.topgear
+            : [],
+        bottomgear:
+          type === "collatedOtherUsers" || "collatedLoggedUser"
+            ? tempdata && tempdata[selectedTravel.id]?.bottomgear
+            : [],
+        footgear:
+          type === "collatedOtherUsers" || "collatedLoggedUser"
+            ? tempdata && tempdata[selectedTravel.id]?.footgear
+            : [],
+        extra:
+          type === "collatedOtherUsers" || "collatedLoggedUser"
+            ? tempdata && tempdata[selectedTravel.id]?.extra
+            : [],
         userInfo: {
-          displayName: tempdata[selectedTravel.id].userInfo.displayName,
-          photoURL: tempdata[selectedTravel.id].userInfo.photoURL,
-          uid: tempdata[selectedTravel.id].userInfo.uid,
+          displayName:
+            type === "collatedOtherUsers"
+              ? tempdata && tempdata[selectedTravel.id].userInfo.displayName
+              : loggedUser.displayName.split(" ")[0],
+          photoURL:
+            type === "collatedOtherUsers"
+              ? tempdata && tempdata[selectedTravel.id].userInfo.photoURL
+              : loggedUser.photoURL,
+          uid:
+            type === "collatedOtherUsers"
+              ? tempdata && tempdata[selectedTravel.id].userInfo.uid
+              : loggedUser.uid,
         },
       },
     };
@@ -137,24 +127,36 @@ export default function Main() {
             if (loggedUser) {
               if (tempdata.userInfo.uid === loggedUser.uid) {
                 if (!tempdata[selectedTravel?.id]) {
-                  let newUserData = newEmptyTravel();
+                  let newUserData = userTravelDataFactory("newEmpty");
                   setUser(newUserData);
                   listTemp.push(newUserData as unknown as iTravelData);
                 } else {
-                  let newUserData = collateDataForTravel(tempdata);
+                  console.log("collatedUSER");
+                  let newUserData = userTravelDataFactory(
+                    "collatedLoggedUser",
+                    tempdata
+                  );
                   setUser(newUserData);
                   listTemp.push(newUserData as unknown as iTravelData);
                 }
-              } else{
+              } else {
                 if (tempdata[selectedTravel.id]) {
-                  let newUserData = otherUsersData(tempdata);
+                  console.log("collatedOTHERS");
+                  let newUserData = userTravelDataFactory(
+                    "collatedOtherUsers",
+                    tempdata
+                  );
                   listTemp.push(newUserData as unknown as iTravelData);
                 }
               }
             } else {
               if (tempdata[selectedTravel.id]) {
-                console.log("offlinetrigger")
-                let newUserData = otherUsersData(tempdata);
+                console.log("offlinetrigger");
+
+                let newUserData = userTravelDataFactory(
+                  "collatedOtherUsers",
+                  tempdata
+                );
                 listTemp.push(newUserData as unknown as iTravelData);
               }
             }
@@ -167,11 +169,6 @@ export default function Main() {
     }
     fetchUsersByTravelsInFirestore();
   }, [selectedTravel.id, loggedUser]);
-  
-  useEffect(()=>{
-    console.log(user, "user");
-    console.log(usersList, "userlist");
-  },[user,usersList])
 
   useEffect(() => {
     async function setUserDataInFirestore() {
@@ -196,6 +193,16 @@ export default function Main() {
     }
     setUserDataInFirestore();
   }, [loggedUser]);
+
+  const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
+  useEffect(() => {
+    const getBotUpdates = () =>
+      fetch(`https://api.telegram.org/bot${telegramBotKey}/getUpdates`).then(
+        (response) => console.log(response.json())
+      );
+    getBotUpdates();
+  }, []);
+
 
   useEffect(() => {
     async function updateUserDataInFirestore() {
@@ -273,10 +280,7 @@ export default function Main() {
             <Route
               path="/other"
               element={
-                <ShowUser
-                  travelId={selectedTravel.id}
-                  user={otherUser}
-                />
+                <ShowUser travelId={selectedTravel.id} user={otherUser} />
               }
             />
           </Routes>

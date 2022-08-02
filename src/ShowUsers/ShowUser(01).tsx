@@ -9,9 +9,6 @@ export default function ShowUser(props: {
 }) {
   return (
     <>
-    {props.setUser && <div>userpage</div> }
-    {!props.setUser && <div>otheruserpage</div> }
-
       {props.user && (
         <div className="flex flex-col justify-between mx-2 md:mx-20">
           <div className="flex flex-row border mt-2 border-gray-500">

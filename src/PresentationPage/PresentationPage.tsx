@@ -34,6 +34,7 @@ export default function PresentationPage(props: {
       <div className="flex flex-col w-[1/4] p-2">
         <div>{travelButtonsList}</div>
         <CreateNewTravel
+        loggedUser={props.loggedUser}
         user={props.user}
           travelList={props.travelList}
           setTravelList={props.setTravelList}
