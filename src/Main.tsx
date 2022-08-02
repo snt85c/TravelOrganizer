@@ -171,6 +171,21 @@ export default function Main() {
   }, [selectedTravel.id, loggedUser]);
 
   useEffect(() => {
+    function telegramAlert() {
+      if (loggedUser && loggedUser.displayName) {
+        fetch(
+          `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${loggedUser.displayName} has logged in Travel Organizer `
+        );
+      } else {
+        fetch(
+          `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text="unknown user is visiting Travel Organizer" `
+        );
+      }
+    }
+    telegramAlert();
+  }, [loggedUser]);
+
+  useEffect(() => {
     async function setUserDataInFirestore() {
       if (loggedUser) {
         //get the info of the logged user
@@ -202,7 +217,6 @@ export default function Main() {
       );
     getBotUpdates();
   }, []);
-
 
   useEffect(() => {
     async function updateUserDataInFirestore() {
