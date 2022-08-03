@@ -13,6 +13,7 @@ export interface iTravelData {
   [id:number]: {
     id:number;
     tName:string;
+    name:string;
     headgear: iGear[];
     topgear: iGear[];
     bottomgear: iGear[];

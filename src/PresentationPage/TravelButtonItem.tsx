@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   DocumentData,
+  getDoc,
   getDocs,
   setDoc,
   updateDoc,
@@ -62,15 +63,35 @@ export default function TravelButtonItem(props: {
     });
   }
 
-  const handleRename = () => {
-    // console.log(props.data?.id)
-    //   let temp: iTravel | undefined = props.travelList.find(() => {
-    //     return props.data?.id;
-    //   });
-    //   console.log(temp, "TEMP");
-    //   const newItem = {...temp, name:"temp"}
-    // console.log(newItem)
-    // props.setTravelList([temp])
+  const handleRename = async () => {
+    let travelIdToRename: number = props.data?.id ? props.data?.id : 0;
+
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      let currentUser: iTravelData = doc.data() as iTravelData;
+      if (currentUser[travelIdToRename]) {
+        console.log(
+          currentUser[travelIdToRename],
+          "found user on firestore on ",
+          currentUser[travelIdToRename].userInfo.displayName
+        );
+      }
+    });
+
+    const querySnapshotTravels = await getDoc(
+      doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
+    );
+    let temp2 = querySnapshotTravels.data();
+    temp2?.travel.forEach((temp: { id: number }) => {
+      if (temp.id === travelIdToRename) {
+        console.log(temp, "found on travels in firestore");
+      }
+    });
+
+    let temp: iTravel | undefined = props.travelList.find(() => {
+      return travelIdToRename;
+    });
+    console.log(temp, "found on travel list state");
   };
 
   const handleClick = () => {
