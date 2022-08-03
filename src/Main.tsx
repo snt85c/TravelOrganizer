@@ -55,7 +55,6 @@ export default function Main() {
     type: "newEmpty" | "collatedLoggedUser" | "collatedOtherUsers",
     tempdata?: iTravelData
   ) {
-    console.log(type);
     return {
       userInfo: {
         displayName:

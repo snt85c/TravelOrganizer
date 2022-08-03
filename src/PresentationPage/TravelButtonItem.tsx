@@ -1,5 +1,12 @@
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
-import { iTravel } from "../Interface";
+import {
+  collection,
+  doc,
+  DocumentData,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
 
@@ -25,37 +32,35 @@ export default function TravelButtonItem(props: {
 
   const handleDelete = async () => {
     try {
+      let travelIdToDelete: number = props.data?.id ? props.data?.id : 0;
       let filteredTravelList: any = props.travelList?.filter((item) => {
         return item?.id !== props.data?.id;
+        //create a new list and filter out the item we are deleting, set the state and update firestore
       });
       props.setTravelList(filteredTravelList);
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
-      // telegramAlertDeleteTravel()
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        //get each user and if there is a key with the travelIdToDelete, delete the key then update firestore
+        let currentUser: iTravelData = doc.data() as iTravelData;
+        if (currentUser[travelIdToDelete]) {
+          delete currentUser[travelIdToDelete];
+          handleDeleteOnFirestore(currentUser);
+        }
+      });
+      telegramAlertDeleteTravel();
     } catch (e) {
       console.log(e);
     }
-
-
-    // try {
-    //   console.log(props.data?.id, "ID")
-    //   let id = props.data?.id ? props.data?.id: "" 
-    //   const querySnapshot = await getDocs(collection(db, "users"));
-    //   querySnapshot.forEach((doc) => {
-    //     console.log(doc.data());
-    //     let temp = doc.data()
-    //     if(temp[id]){
-    //       console.log("found on ", temp[id].userInfo.displayName)
-    //       delete temp[id]
-    //       console.log(temp)
-    //     }
-
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
   };
+
+  async function handleDeleteOnFirestore(tempUser: any) {
+    await setDoc(doc(db, "users", tempUser.userInfo.uid), tempUser, {
+      merge: false,
+    });
+  }
 
   const handleRename = () => {
     // console.log(props.data?.id)
