@@ -12,8 +12,18 @@ export default function CreateNewTravel(props: {
 }) {
   const [newTravel, setNewTravel] = useState<string>("");
 
+  function telegramAlertCreateTravel(newTravelObject:iTravel){
+    const data = `new travel: ${
+      newTravelObject.name ? newTravelObject.name : "noName"
+    } created by: ${props.loggedUser.displayName.split(" ")[0]}`;
+    fetch(
+      `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
+    ).then((res) => {
+      // console.log("Request complete! response:", res);
+    });
+  }
+
   const handleClick = async () => {
-    console.log("click");
     const tempTravelList: any = props.travelList.slice(); //pass by value, not reference by slice function that returns a new array
     const newTravelObject: iTravel = {
       name: newTravel,
@@ -26,14 +36,7 @@ export default function CreateNewTravel(props: {
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: arrayUnion(newTravelObject),
       });
-      const data = `new travel: ${
-        newTravelObject.name ? newTravelObject.name : "noName"
-      } created by: ${props.loggedUser.displayName.split(" ")[0]}`;
-      fetch(
-        `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
-      ).then((res) => {
-        console.log("Request complete! response:", res);
-      });
+      telegramAlertCreateTravel(newTravelObject)
     } catch (e) {
       console.log(e);
     }

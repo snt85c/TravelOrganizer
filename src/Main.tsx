@@ -36,10 +36,6 @@ export default function Main() {
   const [language, setLanguage] = useState<string>("en");
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  useEffect(() => {
     try {
       //get list of travels
       const getTravelsFromFirestore = async () => {
@@ -59,6 +55,7 @@ export default function Main() {
     type: "newEmpty" | "collatedLoggedUser" | "collatedOtherUsers",
     tempdata?: iTravelData
   ) {
+    console.log(type);
     return {
       userInfo: {
         displayName:
@@ -78,25 +75,25 @@ export default function Main() {
         id: selectedTravel.id,
         name: selectedTravel.name,
         headgear:
-          type === "collatedOtherUsers" || "collatedLoggedUser"
-            ? tempdata && tempdata[selectedTravel.id]?.headgear
-            : [],
+          type === "newEmpty"
+            ? []
+            : tempdata && tempdata[selectedTravel.id]?.headgear,
         topgear:
-          type === "collatedOtherUsers" || "collatedLoggedUser"
-            ? tempdata && tempdata[selectedTravel.id]?.topgear
-            : [],
+          type === "newEmpty"
+            ? []
+            : tempdata && tempdata[selectedTravel.id]?.topgear,
         bottomgear:
-          type === "collatedOtherUsers" || "collatedLoggedUser"
-            ? tempdata && tempdata[selectedTravel.id]?.bottomgear
-            : [],
+          type === "newEmpty"
+            ? []
+            : tempdata && tempdata[selectedTravel.id]?.bottomgear,
         footgear:
-          type === "collatedOtherUsers" || "collatedLoggedUser"
-            ? tempdata && tempdata[selectedTravel.id]?.footgear
-            : [],
+        type === "newEmpty"
+        ? []
+        : tempdata && tempdata[selectedTravel.id]?.footgear,
         extra:
-          type === "collatedOtherUsers" || "collatedLoggedUser"
-            ? tempdata && tempdata[selectedTravel.id]?.extra
-            : [],
+        type === "newEmpty"
+        ? []
+        : tempdata && tempdata[selectedTravel.id]?.extra,
         userInfo: {
           displayName:
             type === "collatedOtherUsers"
@@ -116,6 +113,10 @@ export default function Main() {
   }
 
   useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  useEffect(() => {
     async function fetchUsersByTravelsInFirestore() {
       try {
         if (selectedTravel.id) {
@@ -127,11 +128,11 @@ export default function Main() {
             if (loggedUser) {
               if (tempdata.userInfo.uid === loggedUser.uid) {
                 if (!tempdata[selectedTravel?.id]) {
+                  console.log("newDataRegistered");
                   let newUserData = userTravelDataFactory("newEmpty");
                   setUser(newUserData);
                   listTemp.push(newUserData as unknown as iTravelData);
                 } else {
-                  console.log("collatedUSER");
                   let newUserData = userTravelDataFactory(
                     "collatedLoggedUser",
                     tempdata
@@ -141,7 +142,6 @@ export default function Main() {
                 }
               } else {
                 if (tempdata[selectedTravel.id]) {
-                  console.log("collatedOTHERS");
                   let newUserData = userTravelDataFactory(
                     "collatedOtherUsers",
                     tempdata
@@ -151,8 +151,6 @@ export default function Main() {
               }
             } else {
               if (tempdata[selectedTravel.id]) {
-                console.log("offlinetrigger");
-
                 let newUserData = userTravelDataFactory(
                   "collatedOtherUsers",
                   tempdata
@@ -209,13 +207,13 @@ export default function Main() {
     setUserDataInFirestore();
   }, [loggedUser]);
 
-  const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
   useEffect(() => {
+    //to collect basic usage data from the telegrambot, not in use
     const getBotUpdates = () =>
       fetch(`https://api.telegram.org/bot${telegramBotKey}/getUpdates`).then(
         (response) => console.log(response.json())
       );
-    getBotUpdates();
+    // getBotUpdates();
   }, []);
 
   useEffect(() => {

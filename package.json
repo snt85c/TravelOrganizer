@@ -16,6 +16,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-icons": "^4.4.0",
+    "react-query": "^4.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-swipeable": "^7.0.0",
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-query": "^1.2.9",
     "autoprefixer": "^10.4.7",
     "gh-pages": "^4.0.0",
     "postcss": "^8.4.14",

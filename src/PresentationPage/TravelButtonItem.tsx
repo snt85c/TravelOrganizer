@@ -1,5 +1,4 @@
-import { doc, updateDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { iTravel } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
@@ -12,7 +11,17 @@ export default function TravelButtonItem(props: {
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
-  const navigate = useNavigate();
+  function telegramAlertDeleteTravel() {
+    const data = `travel: ${props.data?.name} has been deleted by: ${
+      props.loggedUser.displayName.split(" ")[0]
+    }`;
+
+    fetch(
+      `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
+    ).then((res) => {
+      // console.log("Request complete! response:", res);
+    });
+  }
 
   const handleDelete = async () => {
     try {
@@ -23,18 +32,29 @@ export default function TravelButtonItem(props: {
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
-      const data = `travel: ${props.data?.name} has been deleted by: ${
-        props.loggedUser.displayName.split(" ")[0]
-      }`;
-
-      fetch(
-        `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
-      ).then((res) => {
-        console.log("Request complete! response:", res);
-      });
+      // telegramAlertDeleteTravel()
     } catch (e) {
       console.log(e);
     }
+
+
+    // try {
+    //   console.log(props.data?.id, "ID")
+    //   let id = props.data?.id ? props.data?.id: "" 
+    //   const querySnapshot = await getDocs(collection(db, "users"));
+    //   querySnapshot.forEach((doc) => {
+    //     console.log(doc.data());
+    //     let temp = doc.data()
+    //     if(temp[id]){
+    //       console.log("found on ", temp[id].userInfo.displayName)
+    //       delete temp[id]
+    //       console.log(temp)
+    //     }
+
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   const handleRename = () => {
@@ -53,8 +73,6 @@ export default function TravelButtonItem(props: {
       ? props.data
       : { name: "", id: 0, createdBy: "" };
     props.setTravel(temp);
-    console.log(temp);
-    // if(props.loggedUser)navigate("/user");
   };
 
   return (
