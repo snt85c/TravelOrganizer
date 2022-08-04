@@ -1,7 +1,7 @@
 import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
-import { iTravel, iTravelData, iUser, iUserInfo } from "../Interface";
+import { iTravel, iUserInfo } from "../Interface";
 
 export default function PresentationPage(props: {
   user:iUserInfo;

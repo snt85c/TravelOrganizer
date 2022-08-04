@@ -24,7 +24,7 @@ export default function CreateNewTravel(props: {
   }
 
   const handleClick = async () => {
-    const tempTravelList: any = props.travelList.slice(); //pass by value, not reference by slice function that returns a new array
+    const tempTravelList: any = [...props.travelList] //pass by value, not reference, otherwise setTraveliList wont happen, as it will do a shallow equivalence check with the current state and the previous state and find out that the values are the same (as w were working on the reference values of travelList, effectively modifying the values without settign the state), at the moment of settign the state, it woudl find that there is no difference between the current and past state, so it woulndt work. this way, being a copy, there wil be a difference and it will work
     const newTravelObject: iTravel = {
       name: newTravel,
       id: Date.now(),

@@ -35,6 +35,10 @@ export default function Main() {
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
 
+  useEffect(()=>{
+console.log(travelList, "TRAVELLIST ON MAIN")
+  },[travelList])
+
   useEffect(() => {
     try {
       //get list of travels
@@ -112,8 +116,8 @@ export default function Main() {
   }
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    console.log(travelList);
+  }, [travelList]);
 
   useEffect(() => {
     async function fetchUsersByTravelsInFirestore() {
@@ -165,7 +169,7 @@ export default function Main() {
       }
     }
     fetchUsersByTravelsInFirestore();
-  }, [selectedTravel.id, loggedUser]);
+  }, [selectedTravel.id, loggedUser, travelList]);
 
   useEffect(() => {
     function telegramAlert() {

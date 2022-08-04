@@ -1,7 +1,6 @@
 import {
   collection,
   doc,
-  DocumentData,
   getDoc,
   getDocs,
   setDoc,
@@ -26,9 +25,7 @@ export default function TravelButtonItem(props: {
 
     fetch(
       `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
-    ).then((res) => {
-      // console.log("Request complete! response:", res);
-    });
+    );
   }
 
   const handleDelete = async () => {
@@ -38,10 +35,12 @@ export default function TravelButtonItem(props: {
         return item?.id !== props.data?.id;
         //create a new list and filter out the item we are deleting, set the state and update firestore
       });
+
       props.setTravelList(filteredTravelList);
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
+
       const querySnapshot = await getDocs(collection(db, "users"));
       querySnapshot.forEach((doc) => {
         //get each user and if there is a key with the travelIdToDelete, delete the key then update firestore
@@ -52,49 +51,63 @@ export default function TravelButtonItem(props: {
         }
       });
       telegramAlertDeleteTravel();
+      props.setTravel({ name: "", id: 0, createdBy: "" })
     } catch (e) {
       console.log(e);
     }
   };
 
-  async function handleDeleteOnFirestore(tempUser: any) {
-    await setDoc(doc(db, "users", tempUser.userInfo.uid), tempUser, {
+  async function handleDeleteOnFirestore(userToUpdate: iTravelData) {
+    await setDoc(doc(db, "users", userToUpdate.userInfo.uid), userToUpdate, {
       merge: false,
     });
   }
 
   const handleRename = async () => {
     let travelIdToRename: number = props.data?.id ? props.data?.id : 0;
+    let newNameForSelectedTravel: string = "success";
+    const updateUserOnFirestore = async (uid: string, user: iTravelData) => {
+      await setDoc(doc(db, "users", uid), user, { merge: true });
+    };
 
+    //GET AND MODIFY EACH USERS TO CHANGE THE TRAVEL NAME
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
       let currentUser: iTravelData = doc.data() as iTravelData;
       if (currentUser[travelIdToRename]) {
-        console.log(
-          currentUser[travelIdToRename],
-          "found user on firestore on ",
-          currentUser[travelIdToRename].userInfo.displayName
+        currentUser[travelIdToRename].name = newNameForSelectedTravel;
+        updateUserOnFirestore(
+          currentUser[travelIdToRename].userInfo.uid,
+          currentUser
         );
       }
     });
 
+    //GET AND MODIFY TRAVELS FROM FIRESTORE
     const querySnapshotTravels = await getDoc(
       doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
     );
     let temp2 = querySnapshotTravels.data();
-    temp2?.travel.forEach((temp: { id: number }) => {
+    temp2?.travel.forEach((temp: { id: number; name: string }) => {
       if (temp.id === travelIdToRename) {
-        console.log(temp, "found on travels in firestore");
+        temp.name = newNameForSelectedTravel;
       }
     });
-
-    let temp: iTravel | undefined = props.travelList.find(() => {
-      return travelIdToRename;
+    await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
+      travel: temp2,
     });
-    console.log(temp, "found on travel list state");
+
+    //GET AND MODIFY TRAVELLIST STATE
+    let tempArray: [(iTravel | undefined)?] = [...props.travelList];
+    tempArray.forEach((item) => {
+      if (item?.id === travelIdToRename) {
+        item.name = newNameForSelectedTravel;
+      }
+    });
+    props.setTravelList(tempArray);
   };
 
-  const handleClick = () => {
+  const handleClickSetTravel = () => {
     const temp: iTravel = props.data?.name
       ? props.data
       : { name: "", id: 0, createdBy: "" };
@@ -105,8 +118,8 @@ export default function TravelButtonItem(props: {
     <div className="flex flex-col relative w-[1/4] m-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border ">
       <div className="absolute top-0 left-1 text-[0.7rem]">{props.i}</div>
       <div
-        onClick={handleClick}
-        className="text-xl cursor-pointer text-gray-800 hover:text-amber-500 duration-300"
+        onClick={handleClickSetTravel}
+        className="text-xl cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
       >
         {props.data?.name}
       </div>
@@ -114,13 +127,13 @@ export default function TravelButtonItem(props: {
       {props.loggedUser?.uid === props.data?.createdBy && (
         <div className="flex -mt-1">
           <div
-            className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300"
+            className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
             onClick={handleDelete}
           >
             delete
           </div>
           <div
-            className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300"
+            className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
             onClick={handleRename}
           >
             rename
