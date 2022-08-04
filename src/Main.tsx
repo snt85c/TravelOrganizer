@@ -169,7 +169,7 @@ console.log(travelList, "TRAVELLIST ON MAIN")
       }
     }
     fetchUsersByTravelsInFirestore();
-  }, [selectedTravel.id, loggedUser, travelList]);
+  }, [selectedTravel.id, loggedUser]);
 
   useEffect(() => {
     function telegramAlert() {

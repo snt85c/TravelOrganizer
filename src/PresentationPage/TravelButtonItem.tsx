@@ -33,7 +33,6 @@ export default function TravelButtonItem(props: {
       let travelIdToDelete: number = props.data?.id ? props.data?.id : 0;
       let filteredTravelList: any = props.travelList?.filter((item) => {
         return item?.id !== props.data?.id;
-        //create a new list and filter out the item we are deleting, set the state and update firestore
       });
 
       props.setTravelList(filteredTravelList);
@@ -48,6 +47,7 @@ export default function TravelButtonItem(props: {
         if (currentUser[travelIdToDelete]) {
           delete currentUser[travelIdToDelete];
           handleDeleteOnFirestore(currentUser);
+          console.log(currentUser)
         }
       });
       telegramAlertDeleteTravel();
@@ -55,13 +55,13 @@ export default function TravelButtonItem(props: {
     } catch (e) {
       console.log(e);
     }
+    async function handleDeleteOnFirestore(userToUpdate: iTravelData) {
+      await setDoc(doc(db, "users", userToUpdate.userInfo.uid), userToUpdate, {
+        merge: false,
+      });
+    }
   };
 
-  async function handleDeleteOnFirestore(userToUpdate: iTravelData) {
-    await setDoc(doc(db, "users", userToUpdate.userInfo.uid), userToUpdate, {
-      merge: false,
-    });
-  }
 
   const handleRename = async () => {
     let travelIdToRename: number = props.data?.id ? props.data?.id : 0;
