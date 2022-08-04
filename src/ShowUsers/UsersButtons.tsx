@@ -4,7 +4,7 @@ import { LangContext } from "../LangContextProvider";
 import { iTravelData, iUser } from "../Interface";
 
 export default function UserButton(props: {
-  travelId:number,
+  travelId: number;
   user?: iTravelData;
   users?: iTravelData[];
   loggedUser: any;
@@ -12,23 +12,39 @@ export default function UserButton(props: {
 }) {
   const [showOther, setShowOther] = useState<boolean>(false);
   const navigate = useNavigate();
-  const lang = useContext(LangContext)
+  const lang = useContext(LangContext);
+  const { ref } = HandleClickOutsideComponent(setShowOther);
 
+  function HandleClickOutsideComponent(
+    setShowOther: React.Dispatch<React.SetStateAction<boolean>>
+  ) {
+    const ref = useRef<HTMLDivElement>(null);
 
-  const handleShowOther = () => {
-    setShowOther(!showOther);
-  };
+    const handleClickOutside = (event: Event) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setShowOther(false);
+      }
+    };
+
+    useEffect(() => {
+      document.addEventListener("click", handleClickOutside, true);
+      return () => {
+        document.removeEventListener("click", handleClickOutside, true);
+      };
+    });
+
+    return { ref };
+  }
 
   const handleClickSelection = (user: iTravelData) => {
-    if(props.loggedUser){
+    if (props.loggedUser) {
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
         navigate("/other");
       } else {
         navigate("/user");
       }
-
-    }else{
+    } else {
       props.setOtherUser(user);
       navigate("/other");
     }
@@ -37,7 +53,7 @@ export default function UserButton(props: {
 
   let usersList = props.users?.map((user, i) => {
     return (
-       <div
+      <div
         className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
         key={i}
         onClick={() => handleClickSelection(user)}
@@ -53,16 +69,22 @@ export default function UserButton(props: {
       <div className="flex flex-row justify-between mx-2 md:mx-20">
         <button
           className="flex z-20 rounded shadow-lg mt-4 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
-          onClick={handleShowOther}
+          onClick={() => {
+            setShowOther(!showOther);
+          }}
         >
           {lang.button.showOtherButton}
         </button>
       </div>
-      {showOther && (
-        <div className="absolute top-auto md:left-[4.5rem] z-20 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 ">
+      {
+        <div
+          ref={ref}
+          className="absolute top-auto md:left-[4.5rem] z-20 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 "
+          style={{ display: showOther ? "flex" : "none" }}
+        >
           {usersList}
         </div>
-      )}
+      }
     </>
   );
 }
