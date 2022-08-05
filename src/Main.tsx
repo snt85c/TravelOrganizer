@@ -35,10 +35,6 @@ export default function Main() {
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
 
-  useEffect(()=>{
-console.log(travelList, "TRAVELLIST ON MAIN")
-  },[travelList])
-
   useEffect(() => {
     try {
       //get list of travels
@@ -115,10 +111,6 @@ console.log(travelList, "TRAVELLIST ON MAIN")
     };
   }
 
-  // useEffect(() => {
-  //   console.log(travelList);
-  // }, [travelList]);
-
   useEffect(() => {
     async function fetchUsersByTravelsInFirestore() {
       try {
@@ -131,7 +123,6 @@ console.log(travelList, "TRAVELLIST ON MAIN")
             if (loggedUser) {
               if (tempdata.userInfo.uid === loggedUser.uid) {
                 if (!tempdata[selectedTravel?.id]) {
-                  console.log("newDataRegistered");
                   let newUserData = userTravelDataFactory("newEmpty");
                   setUser(newUserData);
                   listTemp.push(newUserData as unknown as iTravelData);
@@ -223,7 +214,6 @@ console.log(travelList, "TRAVELLIST ON MAIN")
     async function updateUserDataInFirestore() {
       //when logged user is modified, push to firestore
       if (loggedUser) {
-        console.log("UDATING ON FIRESTORE");
         try {
           await updateDoc(
             doc(db, "users", loggedUser.uid),

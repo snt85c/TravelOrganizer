@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
@@ -22,7 +23,9 @@ export default function TravelButtonItem(props: {
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
+  const navigate = useNavigate();
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
   function isAuthor() {
@@ -61,6 +64,7 @@ export default function TravelButtonItem(props: {
   }
 
   const handleDelete = async () => {
+    setIsDeleting(false);
     async function handleDeleteOnFirestore(userToUpdate: iTravelData) {
       await setDoc(doc(db, "users", userToUpdate.userInfo.uid), userToUpdate, {
         merge: false,
@@ -152,18 +156,24 @@ export default function TravelButtonItem(props: {
       ? props.data
       : { name: "", id: 0, createdBy: "" };
     props.setTravel(temp);
+    if(props.loggedUser)navigate("/user")
   };
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
     setIsRenaming(false);
+    setIsDeleting(false);
   };
 
   return (
     <div
       className="flex flex-col relative w-[1/4] m-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
       style={{
-        height: isEditing ? (isRenaming ? "130px" : "100px") : "50px",
+        height: isEditing
+          ? isRenaming || isDeleting
+            ? "130px"
+            : "100px"
+          : "50px",
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
@@ -185,36 +195,49 @@ export default function TravelButtonItem(props: {
             </div>
           )}
           {isEditing && (
-            <div className="flex flex-col justify-evenly items-center">
-              <div ref={ref} className="flex flex-row p-1 m-1">
-                <div
-                  className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                  onClick={handleDelete}
-                >
-                  delete
+            <div ref={ref}>
+              <div className="flex flex-col justify-evenly items-center">
+                <div className="flex flex-row p-1 m-1">
+                  <div
+                    className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                    onClick={() => {
+                      setIsDeleting(!isDeleting);
+                      setIsRenaming(false);
+                    }}
+                  >
+                    delete
+                  </div>
+                  <div
+                    className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                    onClick={() => {
+                      setIsRenaming(!isRenaming);
+                      setIsDeleting(false);
+                    }}
+                  >
+                    rename
+                  </div>
                 </div>
-                <div
-                  className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                  onClick={() => setIsRenaming(!isRenaming)}
-                >
-                  rename
-                </div>
-                <div
-                  className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                  onClick={handleEdit}
-                >
-                  close edit
-                </div>
+                {isRenaming && (
+                  <div>
+                    <input
+                      className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center"
+                      onChange={(e) => setNewName(e.target.value)}
+                    />
+                    <button onClick={handleRename}>ok</button>
+                  </div>
+                )}
+                {isDeleting && (
+                  <div
+                    className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
+                    onClick={handleDelete}
+                  >
+                    <div>press to delete</div>
+                    <div className="text-[0.5rem] -mt-2">
+                      this will cancel your data permanently
+                    </div>
+                  </div>
+                )}
               </div>
-              {isRenaming && (
-                <div>
-                  <input
-                    className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center"
-                    onChange={(e) => setNewName(e.target.value)}
-                  />
-                  <button onClick={handleRename}>ok</button>
-                </div>
-              )}
             </div>
           )}
         </div>

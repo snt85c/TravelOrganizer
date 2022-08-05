@@ -37,6 +37,7 @@ export default function CreateNewTravel(props: {
         travel: arrayUnion(newTravelObject),
       });
       telegramAlertCreateTravel(newTravelObject)
+      setNewTravel("")
     } catch (e) {
       console.log(e);
     }
