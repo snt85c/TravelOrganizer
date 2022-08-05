@@ -115,9 +115,9 @@ console.log(travelList, "TRAVELLIST ON MAIN")
     };
   }
 
-  useEffect(() => {
-    console.log(travelList);
-  }, [travelList]);
+  // useEffect(() => {
+  //   console.log(travelList);
+  // }, [travelList]);
 
   useEffect(() => {
     async function fetchUsersByTravelsInFirestore() {

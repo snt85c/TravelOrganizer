@@ -1,0 +1,3 @@
+fix renaming to be custom, create edit button, css to have responsive TravelButtonItems
+
+TravelButtonItems now has delete and rename under the button "edit", when clicked it expands the size of the div to accomodate the button delete, rename and close edit, when clicking rename, it expands again to add an inout and a button. it will close automatically when clicking somewhere else
