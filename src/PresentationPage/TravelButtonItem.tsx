@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  DocumentData,
   getDoc,
   getDocs,
   setDoc,
@@ -87,15 +88,16 @@ export default function TravelButtonItem(props: {
     const querySnapshotTravels = await getDoc(
       doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
     );
-    let temp2 = querySnapshotTravels.data();
-    temp2?.travel.forEach((temp: { id: number; name: string }) => {
+    let travelsFromFirestore: DocumentData | {travel:[]}|undefined = querySnapshotTravels.data();
+    travelsFromFirestore?.travel.forEach((temp: { id: number; name: string }) => {
       if (temp.id === travelIdToRename) {
         temp.name = newNameForSelectedTravel;
       }
     });
-    await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
-      travel: temp2,
-    });
+    console.log(travelsFromFirestore)
+    await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), 
+      {...travelsFromFirestore}
+    );
 
     //GET AND MODIFY TRAVELLIST STATE
     let tempArray: [(iTravel | undefined)?] = [...props.travelList];
