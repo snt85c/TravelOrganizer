@@ -31,7 +31,7 @@ export default function Navbar(props: { toggle: () => void , selectedTravel?:iTr
             lang
           </div>
         </div> */}
-        {loggedUser && <div><img src={loggedUser.photoURL}/></div>}
+        {loggedUser && <div className="h-10 w-10 rounded-full border "><img src={loggedUser.photoURL}/></div>}
       </div>
     </>
   );

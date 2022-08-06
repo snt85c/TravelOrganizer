@@ -48,6 +48,7 @@ export default function CreateNewTravel(props: {
       className="flex mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500"
     >
       <div className="flex flex-col justify-center items-center m-1 ">
+        <form>
         <input
           className="rounded border-2 mt-1 select-none shadow-md text-black text-center"
           value={newTravel}
@@ -60,6 +61,7 @@ export default function CreateNewTravel(props: {
         >
           {!newTravel ? "new travel" : "add " + newTravel}
         </div>
+        </form>
       </div>
     </div>
     </>
