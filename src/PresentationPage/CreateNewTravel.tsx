@@ -26,7 +26,7 @@ export default function CreateNewTravel(props: {
   const handleClick = async () => {
     const tempTravelList: any = [...props.travelList] //pass by value, not reference, otherwise setTraveliList wont happen, as it will do a shallow equivalence check with the current state and the previous state and find out that the values are the same (as w were working on the reference values of travelList, effectively modifying the values without settign the state), at the moment of settign the state, it woudl find that there is no difference between the current and past state, so it woulndt work. this way, being a copy, there wil be a difference and it will work
     const newTravelObject: iTravel = {
-      name: newTravel,
+      name: newTravel != ""?newTravel: "no name",
       id: Date.now(),
       createdBy: props.loggedUser.uid,
     };
@@ -44,19 +44,24 @@ export default function CreateNewTravel(props: {
   };
   return (
     <>
-      <div className="flex flex-col justify-center items-center m-5">
+    <div
+      className="flex mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500"
+    >
+      <div className="flex flex-col justify-center items-center m-1 ">
         <input
-          className="rounded shadow-md text-black text-center"
+          className="rounded border-2 mt-1 select-none shadow-md text-black text-center"
           value={newTravel}
           onChange={(e) => setNewTravel(e.target.value)}
+          onKeyDown={(e)=>{if(e.key === "Enter")handleClick()}}
         />
         <div
-          className=" cursor-pointer hover:text-amber-500 duration-300"
+          className=" cursor-pointer mt-2 hover:text-black duration-300 text-white"
           onClick={handleClick}
         >
           {!newTravel ? "new travel" : "add " + newTravel}
         </div>
       </div>
+    </div>
     </>
   );
 }

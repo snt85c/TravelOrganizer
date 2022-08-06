@@ -2,8 +2,12 @@ import GoogleLoginButton from "./LoginComponents/GoogleLoginButton";
 import shell from "./img/whiteShell.png";
 import { useNavigate } from "react-router-dom";
 import { iTravel } from "./Interface";
+import { useUserAuth } from "./LoginComponents/UserAuth";
 export default function Navbar(props: { toggle: () => void , selectedTravel?:iTravel}) {
   const navigate = useNavigate();
+  const { user: loggedUser } = useUserAuth();
+
+  
 
   return (
     <>
@@ -21,12 +25,13 @@ export default function Navbar(props: { toggle: () => void , selectedTravel?:iTr
           <div className=" text-[0.5rem]">{props.selectedTravel?.name}</div>
           </div>
         <GoogleLoginButton />
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <input type="checkbox" className="toggle" onClick={props.toggle} />
           <div className="flex text-[0.7rem] -mt-[3px] justify-center items-center select-none">
             lang
           </div>
-        </div>
+        </div> */}
+        {loggedUser && <div><img src={loggedUser.photoURL}/></div>}
       </div>
     </>
   );

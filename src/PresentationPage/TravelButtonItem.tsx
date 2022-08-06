@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
+import Draggable from "react-draggable";
 
 export default function TravelButtonItem(props: {
   i?: number;
@@ -100,6 +101,8 @@ export default function TravelButtonItem(props: {
 
   const handleRename = async () => {
     setIsRenaming(false);
+    setIsDeleting(false);
+    setIsEditing(false);
     try {
       let travelIdToRename: number = props.data?.id ? props.data?.id : 0;
       let newNameForSelectedTravel: string = newName;
@@ -133,7 +136,6 @@ export default function TravelButtonItem(props: {
           }
         }
       );
-      console.log(travelsFromFirestore);
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         ...travelsFromFirestore,
       });
@@ -156,7 +158,7 @@ export default function TravelButtonItem(props: {
       ? props.data
       : { name: "", id: 0, createdBy: "" };
     props.setTravel(temp);
-    if(props.loggedUser)navigate("/user")
+    if (props.loggedUser) navigate("/user");
   };
 
   const handleEdit = () => {
@@ -166,6 +168,7 @@ export default function TravelButtonItem(props: {
   };
 
   return (
+  
     <div
       className="flex flex-col relative w-[1/4] m-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
       style={{
@@ -183,15 +186,15 @@ export default function TravelButtonItem(props: {
       >
         {props.data?.name}
       </div>
-      <div className="text-[0.5rem] -mt-2">id:{props.data?.id}</div>
+      <div className="text-[0.5rem] -mt-1 select-none">id:{props.data?.id}</div>
       {isAuthor() && (
         <div className="flex -mt-1">
           {!isEditing && (
             <div
-              className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+              className="mx-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
               onClick={handleEdit}
             >
-              edit
+              Edit
             </div>
           )}
           {isEditing && (
@@ -205,7 +208,7 @@ export default function TravelButtonItem(props: {
                       setIsRenaming(false);
                     }}
                   >
-                    delete
+                    Delete
                   </div>
                   <div
                     className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
@@ -214,16 +217,25 @@ export default function TravelButtonItem(props: {
                       setIsDeleting(false);
                     }}
                   >
-                    rename
+                    Rename
                   </div>
                 </div>
                 {isRenaming && (
-                  <div>
+                  <div
+                  onKeyDown={(e) => {
+                    console.log(e.key)
+                    if (e.key === "Enter" && isRenaming) handleRename();
+                  }}>
                     <input
                       className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center"
                       onChange={(e) => setNewName(e.target.value)}
                     />
-                    <button onClick={handleRename}>ok</button>
+                    <button
+                      onClick={handleRename}
+                     
+                    >
+                      ok
+                    </button>
                   </div>
                 )}
                 {isDeleting && (
@@ -231,7 +243,8 @@ export default function TravelButtonItem(props: {
                     className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
                     onClick={handleDelete}
                   >
-                    <div>press to delete</div>
+                    <div
+                    >press to delete</div>
                     <div className="text-[0.5rem] -mt-2">
                       this will cancel your data permanently
                     </div>

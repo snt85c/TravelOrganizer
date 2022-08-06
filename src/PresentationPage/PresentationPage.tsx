@@ -2,6 +2,7 @@ import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iUserInfo } from "../Interface";
+import Draggable from 'react-draggable';
 
 export default function PresentationPage(props: {
   user:iUserInfo;
@@ -10,6 +11,12 @@ export default function PresentationPage(props: {
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
+
+  const eventLogger = (e: MouseEvent, data: Object) => {
+    console.log('Event: ', e);
+    console.log('Data: ', data);
+  };
+
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
@@ -22,6 +29,7 @@ export default function PresentationPage(props: {
           travelList={props.travelList}
           setTravelList={props.setTravelList}
         />
+
       );
     }
   );
@@ -32,7 +40,11 @@ export default function PresentationPage(props: {
         BACKPACK ORGANIZER
       </div>
       <div className="flex flex-col w-[1/4] p-2">
-        <div>{travelButtonsList}</div>
+        <div>
+
+          {travelButtonsList}
+
+          </div>
         <CreateNewTravel
         loggedUser={props.loggedUser}
         user={props.user}
