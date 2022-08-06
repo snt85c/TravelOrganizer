@@ -32,36 +32,50 @@ export default function UserElementsList(props: {
           </div>
         </>
       )}
-      <UserItemsList
-        user={props.user}
-        travelId={props.travelId}
-        setUser={props.setUser}
-        type={"headgear"}
-      />
-      <UserItemsList
-        user={props.user}
-        travelId={props.travelId}
-        setUser={props.setUser}
-        type={"topgear"}
-      />
-      <UserItemsList
-        travelId={props.travelId}
-        user={props.user}
-        setUser={props.setUser}
-        type={"bottomgear"}
-      />
-      <UserItemsList
-        travelId={props.travelId}
-        user={props.user}
-        setUser={props.setUser}
-        type={"footgear"}
-      />
-      <UserItemsList
-        user={props.user}
-        travelId={props.travelId}
-        setUser={props.setUser}
-        type={"extra"}
-      />
+      <div className="flex">
+        <div className="w-[90%]">
+          <UserItemsList
+            user={props.user}
+            travelId={props.travelId}
+            setUser={props.setUser}
+            type={"headgear"}
+          />
+          <UserItemsList
+            user={props.user}
+            travelId={props.travelId}
+            setUser={props.setUser}
+            type={"topgear"}
+          />
+          <UserItemsList
+            travelId={props.travelId}
+            user={props.user}
+            setUser={props.setUser}
+            type={"bottomgear"}
+          />
+          <UserItemsList
+            travelId={props.travelId}
+            user={props.user}
+            setUser={props.setUser}
+            type={"footgear"}
+          />
+          <UserItemsList
+            user={props.user}
+            travelId={props.travelId}
+            setUser={props.setUser}
+            type={"extra"}
+          />
+        </div>
+        {props.user.userInfo && <div
+          style={{ writingMode: "vertical-rl" }}
+          className="flex font-[phonk] text-[5rem]  leading-none"
+        >
+           <img
+            className="rounded-full  w-14 h-14 "
+            src={props.user.userInfo.photoURL}
+          />
+          {props.user.userInfo.displayName.toUpperCase()}
+        </div>}
+      </div>
     </>
   );
 }

@@ -22,8 +22,8 @@ export default function Navbar(props: { toggle: () => void , selectedTravel?:iTr
           height="40px"
           onClick={() => navigate("/")}
           />
-          <div className=" text-[0.5rem]">{props.selectedTravel?.name}</div>
-          </div>
+          {/* <div className=" text-[0.5rem] font-[homeworld-norm] select-none text-amber-500">{props.selectedTravel?.name.toUpperCase()}</div> */}
+          </div> 
         <GoogleLoginButton />
         {/* <div className="flex flex-col">
           <input type="checkbox" className="toggle" onClick={props.toggle} />
@@ -31,7 +31,7 @@ export default function Navbar(props: { toggle: () => void , selectedTravel?:iTr
             lang
           </div>
         </div> */}
-        {loggedUser && <div className="h-10 w-10 rounded-full border "><img className="h-10 w-10 rounded-full border " src={loggedUser.photoURL}/></div>}
+        {loggedUser && <div><img className="h-10 w-10 rounded-full border " src={loggedUser.photoURL}/></div>}
       </div>
     </>
   );

@@ -19,6 +19,14 @@
        url('./font/Microgramma.ttf') format('ttf'), /* Pretty Modern Browsers */
        url('./font/Microgramma.ttf')  format('ttf'), /* Safari, Android, iOS */
 }
+@font-face {
+  font-family: 'phonk';
+  src: url('./font/PhonkRegular.otf'); /* IE9 Compat Modes */
+  src: url('./font/PhonkRegular.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('./font/PhonkRegular.otf') format('otf'), /* Super Modern Browsers */
+       url('./font/PhonkRegular.otf') format('otf'), /* Pretty Modern Browsers */
+       url('./font/PhonkRegular.otf')  format('otf'), /* Safari, Android, iOS */
+}
 
 html,body, #root{
   height:100%;

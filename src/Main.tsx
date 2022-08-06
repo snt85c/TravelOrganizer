@@ -252,7 +252,7 @@ export default function Main() {
         <LangContext.Provider value={HandleLang()}>
           {selectedTravel.id !== 0 && (
             <UserButton
-              travelId={user[selectedTravel.id]?.id}
+              travelId={selectedTravel.id}
               user={user}
               users={usersList}
               loggedUser={loggedUser}

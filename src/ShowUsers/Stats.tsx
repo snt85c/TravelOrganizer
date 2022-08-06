@@ -112,9 +112,9 @@ export default function Stats(props: { user: iUser }) {
   return (
     <>
       <div className="flex flex-col my-1 p-1 w-full ">
-        <div className="font-extrabold font-[homeworld-norm] text-sm">
+        {/* <div className="font-extrabold font-[homeworld-norm] text-sm">
           {lang.stats.statsHeader}
-        </div>
+        </div> */}
         <div className="font-xs">
           {stats.AvTrue !== stats.ReTrue && (
             <div>{lang.stats.statsAvailable} {stats.AvTrue}</div>

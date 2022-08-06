@@ -101,10 +101,10 @@ export default function ItemCreate(props: {
 
   return (
     <>
-      <div className="flex flex-row p-2 gap-2 justify-between items-center">
+      <div className="flex flex-row space-between py-1">
         <div className="flex flex-row gap-1 items-center">
           <input
-            className="text-black min-w-[50%] md:w-[1/4] rounded-md px-2"
+            className="text-black w-[150px] rounded-md px-2"
             placeholder="name"
             value={tempItem.name}
             onChange={(e) => {

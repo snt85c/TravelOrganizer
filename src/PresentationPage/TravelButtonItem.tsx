@@ -181,9 +181,9 @@ export default function TravelButtonItem(props: {
     >
       <div
         onClick={handleClickSetTravel}
-        className="text-xl cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+        className="text-[0.9rem] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
       >
-        {props.data?.name}
+        {props.data?.name.toUpperCase()}
       </div>
       <div className="text-[0.5rem] -mt-1 select-none">id:{props.data?.id}</div>
       {isAuthor() && (

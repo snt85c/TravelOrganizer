@@ -76,7 +76,7 @@ export default function UserItemsList(props: {
         <ItemListHeader currentArray={currentArray} type={props.type} />
         <div>{list}</div>
         {isAddClicked && (
-          <div style={{height:isAddClicked?"75px": "0px", transitionDuration: "300ms"}}>
+          <>
             <ItemCreate
               isAddClicked={isAddClicked}
               travelId={props.travelId}
@@ -85,7 +85,7 @@ export default function UserItemsList(props: {
               setUser={props.setUser}
               type={props.type}
             />
-          </div>
+          </>
         )}
         {!isAddClicked && props.setUser && (
           <button
