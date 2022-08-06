@@ -296,7 +296,7 @@ export default function Item(props: {
           //highlight div
           style={{
             opacity: opacityRx,
-            width: deltaRx,
+            width: deltaRx + 120,
             display: deltaRx ? "block" : "none",
             textAlign: "center",
           }}

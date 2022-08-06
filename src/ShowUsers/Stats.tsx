@@ -137,9 +137,9 @@ export default function Stats(props: { user: iUser }) {
               <div>{notAvList}</div>
             </>
           )}
-          {stats.ReFalse !== 0 && (
+          {/* {stats.ReFalse !== 0 && (
             <div> {lang.stats.statsToPack} {stats.ReFalse}<span className="text-amber-500">{notReList}</span></div>
-          )}
+          )} */}
          
         </div>
       </div>

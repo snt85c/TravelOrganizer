@@ -70,7 +70,7 @@ export default function UserElementsList(props: {
           className="flex font-[phonk] text-[5rem]  leading-none"
         >
            <img
-            className="rounded-full  w-14 h-14 "
+            className="rounded-full m-2 w-14 h-14 "
             src={props.user.userInfo.photoURL}
           />
           {props.user.userInfo.displayName.toUpperCase()}

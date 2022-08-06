@@ -17,7 +17,7 @@ export default function ShowUser(props: {
             onClick={() => setIsShowingStats(!isShowingStats)}
             className="flex flex-row justify-center items-center text-center rounded-md border my-2 bg-gray-500 duration-300"
             style={{
-              height: isShowingStats ? "150px" : "25px",
+              height: isShowingStats ? "100px" : "25px",
               backgroundColor: isShowingStats ? "" : "white",
             }}
           >
