@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
-import Draggable from "react-draggable";
 
 export default function TravelButtonItem(props: {
   i?: number;
@@ -223,7 +222,6 @@ export default function TravelButtonItem(props: {
                 {isRenaming && (
                   <div
                   onKeyDown={(e) => {
-                    console.log(e.key)
                     if (e.key === "Enter" && isRenaming) handleRename();
                   }}>
                     <input
