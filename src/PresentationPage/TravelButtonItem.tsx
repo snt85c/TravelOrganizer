@@ -175,7 +175,7 @@ export default function TravelButtonItem(props: {
           ? isRenaming || isDeleting
             ? "130px"
             : "100px"
-          : "50px",
+          : "65px",
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
