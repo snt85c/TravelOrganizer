@@ -47,6 +47,9 @@ export default function CreateNewTravel(props: {
     <div
       className="flex mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500"
     >
+        <div className="flex mt-5 justify-center items-center font-[homeworld-norm]">
+        CREATE YOUR OWN TRAVEL
+      </div>
       <div className="flex flex-col justify-center items-center m-1 ">
         <form>
         <input
@@ -56,10 +59,10 @@ export default function CreateNewTravel(props: {
           onKeyDown={(e)=>{if(e.key === "Enter")handleClick()}}
         />
         <div
-          className=" cursor-pointer mt-2 hover:text-black duration-300 text-white text-center"
+          className=" cursor-pointer m-2 hover:text-black duration-300 text-white text-center"
           onClick={handleClick}
         >
-          {!newTravel ? "new travel" : "add " + newTravel}
+          {!newTravel ? "Add" : "Add " + newTravel}
         </div>
         </form>
       </div>

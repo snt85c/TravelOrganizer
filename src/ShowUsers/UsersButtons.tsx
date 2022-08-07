@@ -68,19 +68,19 @@ export default function UserButton(props: {
     <>
       <div className="flex flex-row justify-between mx-2 md:mx-20">
         <button
-          className="flex z-20 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
             setShowOther(!showOther);
           }}
         >
           {lang.button.showOtherButton}
         </button>
-        {props.travelId && <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 "><span className="font-[homeworld-norm]">//</span> {props.travelId}XX</div>}
+        {props.travelId && <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 z-20 "><span className="font-[homeworld-norm]">//</span> {props.travelId}XX</div>}
       </div>
       {
         <div
           ref={ref}
-          className="absolute top-auto md:left-[4.5rem] z-20 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 "
+          className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 "
           style={{ display: showOther ? "flex" : "none" }}
         >
           {usersList}
