@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iTravelData, iUser } from "../Interface";
+import { iTravelData } from "../Interface";
 
 export default function UserButton(props: {
   travelId: number;

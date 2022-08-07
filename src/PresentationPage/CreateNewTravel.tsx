@@ -29,6 +29,7 @@ export default function CreateNewTravel(props: {
       name: newTravel != ""?newTravel: "no name",
       id: Date.now(),
       createdBy: props.loggedUser.uid,
+      userName: props.loggedUser.displayName.split(" ")[0]
     };
     tempTravelList.push(newTravelObject);
     props.setTravelList(tempTravelList);

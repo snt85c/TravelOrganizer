@@ -40,5 +40,6 @@ export interface iGear {
 export interface iTravel {
   name: String;
   id: number;
-  createdBy:string
+  createdBy:string,
+  userName:string
 }

@@ -18,6 +18,7 @@ import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iTravelData } from "./Interface";
+import { LargeNumberLike } from "crypto";
 
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
@@ -26,14 +27,15 @@ export default function Main() {
   const { user: loggedUser } = useUserAuth();
   const [otherUser, setOtherUser] = useState<any>();
   const [user, setUser] = useState<any>({});
+  const [usersList, setUsersList] = useState<iTravelData[]>([]);
+  const [travelList, setTravelList] = useState<[iTravel?]>([]);
+  const [language, setLanguage] = useState<string>("en");
   const [selectedTravel, setSelectedTravel] = useState<iTravel>({
     name: "",
     id: 0,
     createdBy: "",
+    userName: "",
   });
-  const [usersList, setUsersList] = useState<iTravelData[]>([]);
-  const [travelList, setTravelList] = useState<[iTravel?]>([]);
-  const [language, setLanguage] = useState<string>("en");
 
   useEffect(() => {
     try {
@@ -86,13 +88,13 @@ export default function Main() {
             ? []
             : tempdata && tempdata[selectedTravel.id]?.bottomgear,
         footgear:
-        type === "newEmpty"
-        ? []
-        : tempdata && tempdata[selectedTravel.id]?.footgear,
+          type === "newEmpty"
+            ? []
+            : tempdata && tempdata[selectedTravel.id]?.footgear,
         extra:
-        type === "newEmpty"
-        ? []
-        : tempdata && tempdata[selectedTravel.id]?.extra,
+          type === "newEmpty"
+            ? []
+            : tempdata && tempdata[selectedTravel.id]?.extra,
         userInfo: {
           displayName:
             type === "collatedOtherUsers"
@@ -109,6 +111,51 @@ export default function Main() {
         },
       },
     };
+  }
+
+  async function watchTravel(travelId:number, travelName:string) {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    let listTemp: iTravelData[] = [];
+    let tempdata: iTravelData = {} as iTravelData;
+    querySnapshot.forEach((doc) => {
+      tempdata = doc.data() as iTravelData;
+      if (tempdata[travelId]) {
+        let newUserData = {
+          userInfo: {
+            displayName:
+                tempdata && tempdata[travelId].userInfo.displayName,
+            photoURL:
+                 tempdata && tempdata[travelId].userInfo.photoURL,
+            uid:
+                 tempdata && tempdata[travelId].userInfo.uid,
+          },
+          [selectedTravel.id]: {
+            id: travelId,
+            name: travelName,
+            headgear:
+                tempdata && tempdata[travelId]?.headgear,
+            topgear:
+               tempdata && tempdata[travelId]?.topgear,
+            bottomgear:
+                 tempdata && tempdata[travelId]?.bottomgear,
+            footgear:
+                tempdata && tempdata[travelId]?.footgear,
+            extra:
+                 tempdata && tempdata[travelId]?.extra,
+              userInfo: {
+                displayName:
+                    tempdata && tempdata[travelId].userInfo.displayName,
+                photoURL:
+                     tempdata && tempdata[travelId].userInfo.photoURL,
+                uid:
+                     tempdata && tempdata[travelId].userInfo.uid,
+              },
+          },
+        };
+        listTemp.push(newUserData as unknown as iTravelData);
+      }
+    });
+    setUsersList(listTemp);
   }
 
   useEffect(() => {
@@ -250,7 +297,7 @@ export default function Main() {
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
-          {selectedTravel.id !== 0 && (
+          {usersList.length !== 0 && (
             <UserButton
               travelId={selectedTravel.id}
               user={user}
@@ -269,6 +316,7 @@ export default function Main() {
                   travelList={travelList}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
+                  watchTravel={watchTravel}
                 />
               }
             />

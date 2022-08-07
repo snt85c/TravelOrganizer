@@ -7,6 +7,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { ImEnter, ImEye } from "react-icons/im";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { iTravel, iTravelData } from "../Interface";
@@ -20,6 +21,7 @@ export default function TravelButtonItem(props: {
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
+  watchTravel: Function;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -92,7 +94,7 @@ export default function TravelButtonItem(props: {
         }
       });
       telegramAlertDeleteTravel();
-      props.setTravel({ name: "", id: 0, createdBy: "" });
+      props.setTravel({ name: "", id: 0, createdBy: "", userName: "" });
     } catch (e) {
       console.log(e);
     }
@@ -155,7 +157,7 @@ export default function TravelButtonItem(props: {
   const handleClickSetTravel = () => {
     const temp: iTravel = props.data?.name
       ? props.data
-      : { name: "", id: 0, createdBy: "" };
+      : { name: "", id: 0, createdBy: "", userName: "" };
     props.setTravel(temp);
     if (props.loggedUser) navigate("/user");
   };
@@ -167,9 +169,8 @@ export default function TravelButtonItem(props: {
   };
 
   return (
-  
     <div
-      className="flex flex-col relative w-[1/4] m-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
+      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
       style={{
         height: isEditing
           ? isRenaming || isDeleting
@@ -179,13 +180,39 @@ export default function TravelButtonItem(props: {
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
-      <div
-        onClick={handleClickSetTravel}
-        className="text-[0.9rem] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
-      >
-        {props.data?.name.toUpperCase()}
+      <div className="flex justify-between w-full">
+        <div
+          onClick={() => props.watchTravel(props.data?.id, props.data?.name)}
+          className="m-2 flex items-center justify-center"
+        >
+          {!isAuthor() && <ImEye />}
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <div
+            // onClick={handleClickSetTravel}
+          onClick={() => {!isAuthor()? props.watchTravel(props.data?.id, props.data?.name) : handleClickSetTravel()}}
+            className="text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
+          >
+            {props.data?.name.toUpperCase()}
+          </div>
+          <div className="text-[0.5rem] -mt-1 select-none">
+            created by:{" "}
+            <span className="text-[0.7rem] text-pink-600 font-bold">
+              {isAuthor() ? "You" : props.data?.userName}
+            </span>{" "}
+            id:
+            <span className="text-[0.7rem] text-pink-600 font-bold">
+              {props.data?.id}
+            </span>
+          </div>
+        </div>
+        <div
+          onClick={handleClickSetTravel}
+          className="m-2 flex items-center justify-center"
+        >
+          {!isAuthor() && <ImEnter />}
+        </div>
       </div>
-      <div className="text-[0.5rem] -mt-1 select-none">id:{props.data?.id}</div>
       {isAuthor() && (
         <div className="flex -mt-1">
           {!isEditing && (
@@ -221,19 +248,15 @@ export default function TravelButtonItem(props: {
                 </div>
                 {isRenaming && (
                   <div
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && isRenaming) handleRename();
-                  }}>
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && isRenaming) handleRename();
+                    }}
+                  >
                     <input
                       className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center"
                       onChange={(e) => setNewName(e.target.value)}
                     />
-                    <button
-                      onClick={handleRename}
-                     
-                    >
-                      ok
-                    </button>
+                    <button onClick={handleRename}>ok</button>
                   </div>
                 )}
                 {isDeleting && (
@@ -241,8 +264,7 @@ export default function TravelButtonItem(props: {
                     className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
                     onClick={handleDelete}
                   >
-                    <div
-                    >press to delete</div>
+                    <div>press to delete</div>
                     <div className="text-[0.5rem] -mt-2">
                       this will cancel your data permanently
                     </div>
