@@ -33,7 +33,7 @@ export default function PresentationPage(props: {
     <>
       <div className="flex flex-col   my-5 justify-between h-[80%]">
         <>
-          <div className="flex mt-5 justify-center items-center font-[homeworld-norm] select-none">
+          <div className="flex mt-5 justify-center items-center font-[homeworld-norm] text-[2vw] sm:text-[1rem] select-none">
             AVAILABLE TRAVELS
           </div>
           <div className="flex z-20 flex-col w-[1/4] p-2 ">
