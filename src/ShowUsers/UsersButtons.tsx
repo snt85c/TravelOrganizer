@@ -2,13 +2,13 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
 import { iTravelData } from "../Interface";
-import ShowUser from "./ShowUser(01)";
 
 export default function UserButton(props: {
   travelId: number;
   user?: iTravelData;
   users?: iTravelData[];
   loggedUser: any;
+  setUser:React.Dispatch<any>;
   setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }) {
   const [showOther, setShowOther] = useState<boolean>(false);
@@ -37,11 +37,13 @@ export default function UserButton(props: {
     return { ref };
   }
 
-  useEffect(() => {
-    if (props.users?.length !== 0 ){
-      setShowOther(true);
-    }
-  }, [props.users?.length]);
+  // useEffect(() => {
+  //   if (props.users?.length !== 0 ){
+  //     setShowOther(true);
+  //   }
+  // }, [props.users?.length]);
+
+  console.log(props.user," in USerButton")
 
   const handleClickSelection = (user: iTravelData) => {
     if (props.loggedUser) {
@@ -49,6 +51,8 @@ export default function UserButton(props: {
         props.setOtherUser(user);
         navigate("/other");
       } else {
+        console.log(user, "inUSerButton if")
+        props.setUser(user);
         navigate("/user");
       }
     } else {
@@ -57,8 +61,7 @@ export default function UserButton(props: {
     }
     setShowOther(false);
   };
-  console.log(props.users?.length)
-  console.log(showOther)
+
 
   let usersList = props.users?.map((user, i) => {
     return (
@@ -83,7 +86,7 @@ export default function UserButton(props: {
         >
           {"travellers"}
         </button>
-        {props.travelId && (
+        {props.travelId !== 0 && (
           <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
             <span className="font-[homeworld-norm]">//</span> {props.travelId}XX
           </div>

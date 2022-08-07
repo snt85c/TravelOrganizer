@@ -18,7 +18,6 @@ import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iTravelData } from "./Interface";
-import { LargeNumberLike } from "crypto";
 
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
@@ -36,6 +35,10 @@ export default function Main() {
     createdBy: "",
     userName: "",
   });
+
+  useEffect(()=>{
+    console.log(user, "USER HAS CHANGED")
+  },[user])
 
   useEffect(() => {
     try {
@@ -112,8 +115,9 @@ export default function Main() {
       },
     };
   }
-
+console.log(usersList)
   async function watchTravel(travelId:number, travelName:string) {
+    console.log(travelId, travelName, "in watchTravelf")
     const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
     let tempdata: iTravelData = {} as iTravelData;
@@ -129,7 +133,7 @@ export default function Main() {
             uid:
                  tempdata && tempdata[travelId].userInfo.uid,
           },
-          [selectedTravel.id]: {
+          [travelId]: {
             id: travelId,
             name: travelName,
             headgear:
@@ -152,10 +156,17 @@ export default function Main() {
               },
           },
         };
+        console.log(newUserData, "funct output")
         listTemp.push(newUserData as unknown as iTravelData);
       }
     });
     setUsersList(listTemp);
+    // setSelectedTravel({
+    //   name: "",
+    //   id: 0,
+    //   createdBy: "",
+    //   userName: "",
+    // })
   }
 
   useEffect(() => {
@@ -302,6 +313,7 @@ export default function Main() {
               user={user}
               users={usersList}
               loggedUser={loggedUser}
+              setUser={setUser}
               setOtherUser={setOtherUser}
             />
           <Routes>

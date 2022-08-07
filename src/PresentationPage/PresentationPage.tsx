@@ -33,7 +33,7 @@ export default function PresentationPage(props: {
     <>
       <div className="flex flex-col   my-5 justify-between h-[80%]">
         <>
-          <div className="flex mt-5 justify-center items-center font-[homeworld-norm]">
+          <div className="flex mt-5 justify-center items-center font-[homeworld-norm] select-none">
             AVAILABLE TRAVELS
           </div>
           <div className="flex z-20 flex-col w-[1/4] p-2 ">
@@ -47,7 +47,7 @@ export default function PresentationPage(props: {
           </div>
         </>
 
-        <div className=" absolute z-10 bottom-7 left-2  font-[phonk] leading-none">
+        <div className=" absolute z-10 bottom-7 left-2  font-[phonk] leading-none select-none">
           <div className="flex text-[20vw] sm:text-[8rem]">Travel</div>
           <div className="text-[10vw] sm:text-[4rem] -mt-[3vh]">organizer<span className="text-[3vw] sm:text-[1rem] -mt-[3vh]">by Snt</span></div>
         </div>

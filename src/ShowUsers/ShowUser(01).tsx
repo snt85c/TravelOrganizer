@@ -9,8 +9,12 @@ export default function ShowUser(props: {
   setUser?: React.Dispatch<React.SetStateAction<iUser>>;
 }) {
   const [isShowingStats, setIsShowingStats] = useState(false);
+  console.log(props.user, "inShowUsers")
   return (
     <>
+    {/* {props.setUser && <div>{props.user[props.travelId].id}</div>}
+    {!props.setUser && <div>notuser</div>} */}
+
       {props.user && (
         <div className="flex flex-col justify-between mx-2 md:mx-20">
           <div

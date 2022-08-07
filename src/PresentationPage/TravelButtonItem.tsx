@@ -90,7 +90,6 @@ export default function TravelButtonItem(props: {
         if (currentUser[travelIdToDelete]) {
           delete currentUser[travelIdToDelete];
           handleDeleteOnFirestore(currentUser);
-          console.log(currentUser);
         }
       });
       telegramAlertDeleteTravel();
@@ -199,13 +198,15 @@ export default function TravelButtonItem(props: {
           <div
             // onClick={handleClickSetTravel}
             onClick={() => {
+              console.log(props.data?.id)
                 props.watchTravel(props.data?.id, props.data?.name)
+                // handleClickSetTravel()
             }}
             className="text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
           >
             {props.data?.name.toUpperCase()}
           </div>
-          <div className="text-[0.5rem] -mt-1 select-none">
+          <div className="text-[0.5rem] -my-1 select-none">
             created by:{" "}
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
@@ -220,7 +221,7 @@ export default function TravelButtonItem(props: {
           onClick={handleClickSetTravel}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
-          {!isAuthor() && (
+          { (
             <>
               <div>
                 {" "}
@@ -235,7 +236,7 @@ export default function TravelButtonItem(props: {
         <div className="flex -mt-1">
           {!isEditing && (
             <div
-              className="mx-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+              className="mx-2 -mt-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
               onClick={handleEdit}
             >
               Edit

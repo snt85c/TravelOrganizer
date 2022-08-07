@@ -22,7 +22,7 @@ export default function Navbar(props: { toggle: () => void , selectedTravel?:iTr
           height="40px"
           onClick={() => navigate("/")}
           />
-          {/* <div className=" text-[0.5rem] font-[homeworld-norm] select-none text-amber-500">{props.selectedTravel?.name.toUpperCase()}</div> */}
+          <div className=" text-[0.5rem] font-[homeworld-norm] select-none text-amber-500">{props.selectedTravel?.name.toUpperCase()}</div>
           </div> 
         <GoogleLoginButton />
         {/* <div className="flex flex-col">
