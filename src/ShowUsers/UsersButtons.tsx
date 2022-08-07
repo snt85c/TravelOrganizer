@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
 import { iTravelData } from "../Interface";
+import ShowUser from "./ShowUser(01)";
 
 export default function UserButton(props: {
   travelId: number;
@@ -36,6 +37,12 @@ export default function UserButton(props: {
     return { ref };
   }
 
+  useEffect(() => {
+    if (props.users?.length !== 0 ){
+      setShowOther(true);
+    }
+  }, [props.users?.length]);
+
   const handleClickSelection = (user: iTravelData) => {
     if (props.loggedUser) {
       if (user.userInfo.uid !== props.loggedUser?.uid) {
@@ -50,6 +57,8 @@ export default function UserButton(props: {
     }
     setShowOther(false);
   };
+  console.log(props.users?.length)
+  console.log(showOther)
 
   let usersList = props.users?.map((user, i) => {
     return (
@@ -63,19 +72,22 @@ export default function UserButton(props: {
       </div>
     );
   });
-
   return (
     <>
       <div className="flex flex-row justify-between mx-2 md:mx-20">
         <button
           className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
-            setShowOther(!showOther);
+            setShowOther(!showOther)
           }}
         >
-          {lang.button.showOtherButton}
+          {"travellers"}
         </button>
-        {props.travelId && <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 z-20 "><span className="font-[homeworld-norm]">//</span> {props.travelId}XX</div>}
+        {props.travelId && (
+          <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
+            <span className="font-[homeworld-norm]">//</span> {props.travelId}XX
+          </div>
+        )}
       </div>
       {
         <div

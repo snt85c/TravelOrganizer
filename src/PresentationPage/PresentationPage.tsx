@@ -12,7 +12,6 @@ export default function PresentationPage(props: {
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
   watchTravel: Function
 }) {
-  const [ready, setReady] = useState(false);
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (

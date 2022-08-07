@@ -297,7 +297,6 @@ export default function Main() {
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
-          {usersList.length !== 0 && (
             <UserButton
               travelId={selectedTravel.id}
               user={user}
@@ -305,7 +304,6 @@ export default function Main() {
               loggedUser={loggedUser}
               setOtherUser={setOtherUser}
             />
-          )}
           <Routes>
             <Route
               path="/"
@@ -320,6 +318,7 @@ export default function Main() {
                 />
               }
             />
+          
             <Route
               path="/user"
               element={

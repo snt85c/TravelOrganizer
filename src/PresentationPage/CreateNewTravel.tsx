@@ -60,7 +60,7 @@ export default function CreateNewTravel(props: {
           onKeyDown={(e)=>{if(e.key === "Enter")handleClick()}}
         />
         <div
-          className=" cursor-pointer m-2 hover:text-black duration-300 text-white text-center"
+          className=" cursor-pointer m-2 hover:text-black duration-300 text-white text-center select-none"
           onClick={handleClick}
         >
           {!newTravel ? "Add" : "Add " + newTravel}
