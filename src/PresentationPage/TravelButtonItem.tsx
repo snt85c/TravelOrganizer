@@ -180,11 +180,12 @@ export default function TravelButtonItem(props: {
       }}
     >
       <div className="flex justify-between w-full">
+       
         <div
           onClick={() => props.watchTravel(props.data?.id, props.data?.name)}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
-          {!isAuthor() && (
+          {/* {!isAuthor() && (
             <>
               <div>
                 {" "}
@@ -192,17 +193,17 @@ export default function TravelButtonItem(props: {
               </div>
               <div className="-mt-2">View</div>{" "}
             </>
-          )}
+          )} */}
         </div>
         <div className="flex flex-col justify-center items-center">
           <div
             // onClick={handleClickSetTravel}
             onClick={() => {
               console.log(props.data?.id)
-                props.watchTravel(props.data?.id, props.data?.name)
+                // props.watchTravel(props.data?.id, props.data?.name)
                 // handleClickSetTravel()
             }}
-            className="text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
+            className="text-[2.7vw] sm:text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
           >
             {props.data?.name.toUpperCase()}
           </div>
