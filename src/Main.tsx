@@ -52,8 +52,8 @@ export default function Main() {
         id: 0,
         createdBy: "",
         userName: "",
-      });
-      watchTravel()
+      })
+      // watchTravel();
     } catch (e) {
       console.log(e);
     }
@@ -136,6 +136,8 @@ export default function Main() {
   }
 
   async function watchTravel() {
+    setUsersList([]);
+
     // setUser({});
     const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
@@ -162,15 +164,13 @@ export default function Main() {
             if (!tempdata[selectedTravel.id]) {
               let newUserData = userTravelDataFactory("newEmpty");
               setUser(newUserData);
-              setUsersList([
-                ...usersList,
-                newUserData as unknown as iTravelData,
-              ]);
+              // setUsersList([
+              //   ...usersList,
+              //   newUserData as unknown as iTravelData,
+              // ]);
               navigate("/user");
-
               listTemp.push(newUserData as unknown as iTravelData);
             } else {
-
               let newUserData = userTravelDataFactory(
                 "collatedLoggedUser",
                 tempdata
@@ -196,14 +196,16 @@ export default function Main() {
       console.log(e);
     }
   }
+
+
   useEffect(() => {
     //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
     function selectViewModeOrJoin() {
-    if (isWatching) {
-      watchTravel();
-    } else if(selectedTravel.id !== 0) {
-      joinTravel();
-    }
+      if (isWatching) {
+        watchTravel();
+      } else if (selectedTravel.id !== 0) {
+        joinTravel();
+      }
     }
     selectViewModeOrJoin();
   }, [selectedTravel, isWatching]);

@@ -18,7 +18,7 @@ export default function DeleteUserButton(props: {
   return (
     <>
       <div
-        className="flex flex-col justify-center items-center bg-red-700 rounded-xl m-5 mb-5 mt-0 drop-shadow-2xl select-none cursor-pointer duration-300 leading-none"
+        className="flex flex-col justify-center items-center bg-red-700 rounded-xl m-5 mb-5 mt-0 drop-shadow-2xl select-none cursor-pointer duration-300 leading-none sm:mx-[30rem]"
         style={{
           height: !isDeleting ? "35px" : "50px",
           justifyContent: isDeleting ? "space-evenly" : "center",

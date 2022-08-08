@@ -202,7 +202,7 @@ export default function TravelButtonItem(props: {
           }
         </div>
         <div className="flex flex-col justify-center items-center">
-          <div className="text-[2.7vw] sm:text-[0.9rem] mt-1 text-gray-800  select-none font-[homeworld-norm]"
+          <div className="text-[2.7vw] sm:text-[0.9rem] mt-1 text-gray-800  select-none font-extrabold font-[homeworld-norm]"
           >
             {props.data?.name.toUpperCase()}
           </div>

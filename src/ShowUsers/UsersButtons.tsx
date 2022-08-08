@@ -8,8 +8,8 @@ export default function UserButton(props: {
   user?: iTravelData;
   users?: iTravelData[];
   loggedUser: any;
-  isWatching:boolean
-  setUser:React.Dispatch<any>;
+  isWatching: boolean;
+  setUser: React.Dispatch<any>;
   setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }) {
   const [showOther, setShowOther] = useState<boolean>(false);
@@ -39,12 +39,12 @@ export default function UserButton(props: {
   }
 
   useEffect(() => {
-      setShowOther(true);
-  }, [props.travel ]);
-
+    if (props.travel.id !== 0) setShowOther(true);
+  }, [props.travel]);
 
   const handleClickSelection = (user: iTravelData) => {
-    if (props.loggedUser && !props.isWatching ) { // && props.user
+    if (props.loggedUser && !props.isWatching) {
+      // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
         navigate("/other");
@@ -59,7 +59,6 @@ export default function UserButton(props: {
     setShowOther(false);
   };
 
-
   let usersList = props.users?.map((user, i) => {
     return (
       <div
@@ -68,7 +67,10 @@ export default function UserButton(props: {
         onClick={() => handleClickSelection(user)}
       >
         {user?.userInfo.displayName.toUpperCase()}
-        <img src={user?.userInfo.photoURL} className="w-10 h-10 rounded-full select-none" />
+        <img
+          src={user?.userInfo.photoURL}
+          className="w-10 h-10 rounded-full select-none"
+        />
       </div>
     );
   });
@@ -78,15 +80,19 @@ export default function UserButton(props: {
         <button
           className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
-            setShowOther(!showOther)
+            setShowOther(!showOther);
           }}
         >
           {"travellers"}
         </button>
         {props.travel.id !== 0 && (
           <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
-            <span className="font-[homeworld-norm] select-none">// {props.travel.id}XX</span>
-            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.7rem] select-none">{props.travel.name.toUpperCase()}</span>
+            <span className="font-[homeworld-norm] select-none">
+              // {props.travel.id}XX
+            </span>
+            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.7rem] select-none">
+              {props.travel.name.toUpperCase()}
+            </span>
           </div>
         )}
       </div>
