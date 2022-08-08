@@ -40,11 +40,10 @@ export default function UserButton(props: {
 
   useEffect(() => {
       setShowOther(true);
-  }, [props.travel]);
+  }, [props.travel ]);
 
 
   const handleClickSelection = (user: iTravelData) => {
-    console.log(props.isWatching)
     if (props.loggedUser && !props.isWatching ) { // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
@@ -64,18 +63,18 @@ export default function UserButton(props: {
   let usersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer"
+        className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer select-none"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
         {user?.userInfo.displayName.toUpperCase()}
-        <img src={user?.userInfo.photoURL} className="w-10 h-10 rounded-full" />
+        <img src={user?.userInfo.photoURL} className="w-10 h-10 rounded-full select-none" />
       </div>
     );
   });
   return (
     <>
-      <div className="flex flex-row justify-between mx-2 md:mx-20">
+      <div className="flex flex-row justify-between mx-2 md:mx-20 select-none">
         <button
           className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
@@ -86,15 +85,15 @@ export default function UserButton(props: {
         </button>
         {props.travel.id !== 0 && (
           <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
-            <span className="font-[homeworld-norm] ">// {props.travel.id}XX</span>
-            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.7rem]">{props.travel.name.toUpperCase()}</span>
+            <span className="font-[homeworld-norm] select-none">// {props.travel.id}XX</span>
+            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.7rem] select-none">{props.travel.name.toUpperCase()}</span>
           </div>
         )}
       </div>
       {
         <div
           ref={ref}
-          className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 "
+          className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 select-none "
           style={{ display: showOther ? "flex" : "none" }}
         >
           {usersList}

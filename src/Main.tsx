@@ -17,7 +17,7 @@ import Footer from "./Footer";
 import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
-import { iTravel, iTravelData } from "./Interface";
+import { iTravel, iTravelData, iUser } from "./Interface";
 
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
@@ -37,6 +37,27 @@ export default function Main() {
     userName: "",
   });
   const navigate = useNavigate();
+
+  const handleDeleteUser = async (id: number) => {
+    const docRef = doc(db, "users", loggedUser.uid);
+    try {
+      const doc = await getDoc(docRef);
+      let userCopyByValue = doc.data();
+      if (userCopyByValue && userCopyByValue[id]) {
+        delete userCopyByValue[id];
+      }
+      await setDoc(docRef, userCopyByValue);
+      setSelectedTravel({
+        name: "",
+        id: 0,
+        createdBy: "",
+        userName: "",
+      });
+      watchTravel()
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     try {
@@ -137,41 +158,37 @@ export default function Main() {
       querySnapshot.forEach((doc) => {
         tempdata = doc.data() as iTravelData;
         if (loggedUser) {
-        if (tempdata.userInfo.uid === loggedUser.uid) {
-          if (!tempdata[selectedTravel.id]) {
-            let newUserData = userTravelDataFactory("newEmpty");
-            setUser(newUserData);
-            navigate("/user");
+          if (tempdata.userInfo.uid === loggedUser.uid) {
+            if (!tempdata[selectedTravel.id]) {
+              let newUserData = userTravelDataFactory("newEmpty");
+              setUser(newUserData);
+              setUsersList([
+                ...usersList,
+                newUserData as unknown as iTravelData,
+              ]);
+              navigate("/user");
 
-            listTemp.push(newUserData as unknown as iTravelData);
+              listTemp.push(newUserData as unknown as iTravelData);
+            } else {
+
+              let newUserData = userTravelDataFactory(
+                "collatedLoggedUser",
+                tempdata
+              );
+              setUser(newUserData);
+              // setUsersList([...usersList, newUserData as unknown as iTravelData])
+              navigate("/user");
+              listTemp.push(newUserData as unknown as iTravelData);
+            }
           } else {
-            let newUserData = userTravelDataFactory(
-              "collatedLoggedUser",
-              tempdata
-            );
-            setUser(newUserData);
-            navigate("/user");
-            listTemp.push(newUserData as unknown as iTravelData);
+            if (tempdata[selectedTravel.id]) {
+              let newUserData = userTravelDataFactory(
+                "collatedOtherUsers",
+                tempdata
+              );
+              listTemp.push(newUserData as unknown as iTravelData);
+            }
           }
-        } else {
-          if (tempdata[selectedTravel.id]) {
-            let newUserData = userTravelDataFactory(
-              "collatedOtherUsers",
-              tempdata
-            );
-            listTemp.push(newUserData as unknown as iTravelData);
-          }
-        }
-        // }
-        // DEPRECATED, as you are not supposed to use this functionality when logged out, using watchTravel() instead
-        // else {
-        //   if (tempdata[selectedTravel.id]) {
-        //     let newUserData = userTravelDataFactory(
-        //       "collatedOtherUsers",
-        //       tempdata
-        //     );
-        //     listTemp.push(newUserData as unknown as iTravelData);
-        //   }
         }
       });
       setUsersList(listTemp);
@@ -179,15 +196,17 @@ export default function Main() {
       console.log(e);
     }
   }
-
   useEffect(() => {
     //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
     function selectViewModeOrJoin() {
-      if (isWatching) watchTravel();
-      if (!isWatching) joinTravel();
+    if (isWatching) {
+      watchTravel();
+    } else if(selectedTravel.id !== 0) {
+      joinTravel();
+    }
     }
     selectViewModeOrJoin();
-  }, [selectedTravel]);
+  }, [selectedTravel, isWatching]);
 
   useEffect(() => {
     function telegramAlert() {
@@ -310,6 +329,7 @@ export default function Main() {
                   user={user}
                   travelId={selectedTravel.id}
                   setUser={setUser}
+                  handleDeleteUser={handleDeleteUser}
                 />
               }
             />

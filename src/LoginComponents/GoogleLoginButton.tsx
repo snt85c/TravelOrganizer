@@ -28,7 +28,7 @@ export default function GoogleLoginButton() {
     <>
       {!user && (
         <div
-          className="flex text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold] hover:text-amber-500 duration-300"
+          className="flex select-none text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold] hover:text-amber-500 duration-300"
           onClick={(e) => handleGoogleSignIn(e)}
         >
           LOGIN
@@ -37,7 +37,7 @@ export default function GoogleLoginButton() {
       {user && (
         <>
           <div
-            className="flex text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold] hover:text-amber-500 duration-300"
+            className="flex select-none text-sm justify-center items-center cursor-pointer text-white font-[homeworld-bold] hover:text-amber-500 duration-300"
             onClick={handleGoogleLogout}
           >
             LOGOUT

@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
+import {  useNavigate } from "react-router-dom";
 
 export default function TravelButtonItem(props: {
   i?: number;
@@ -29,6 +30,8 @@ export default function TravelButtonItem(props: {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
+  const navigate = useNavigate();
+
 
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
@@ -176,7 +179,7 @@ export default function TravelButtonItem(props: {
           ? isRenaming || isDeleting
             ? "130px"
             : "100px"
-          : "50px",
+          : "70px",
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
@@ -199,13 +202,7 @@ export default function TravelButtonItem(props: {
           }
         </div>
         <div className="flex flex-col justify-center items-center">
-          <div
-            // onClick={handleClickSetTravel}
-            onClick={() => {
-              // props.watchTravel(props.data?.id, props.data?.name)
-              // handleClickSetTravel()
-            }}
-            className="text-[2.7vw] sm:text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
+          <div className="text-[2.7vw] sm:text-[0.9rem] mt-1 text-gray-800  select-none font-[homeworld-norm]"
           >
             {props.data?.name.toUpperCase()}
           </div>
@@ -224,6 +221,7 @@ export default function TravelButtonItem(props: {
           onClick={() => {
             handleClickSetTravel();
             props.setIsWatching(false)
+            navigate("/user")
           }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
@@ -242,7 +240,7 @@ export default function TravelButtonItem(props: {
         <div className="flex -mt-1">
           {!isEditing && (
             <div
-              className="mx-2 -mt-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+              className="mx-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
               onClick={handleEdit}
             >
               Edit

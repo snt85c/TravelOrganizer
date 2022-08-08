@@ -2,11 +2,13 @@ import { iTravelData, iUser } from "../Interface";
 import UserElementsList from "./UserElementsList(02)";
 import Stats from "./Stats";
 import { useState } from "react";
+import DeleteUserButton from "./DeleteUserButton";
 
 export default function ShowUser(props: {
   user: iTravelData;
   travelId: number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>>;
+  handleDeleteUser?:Function;
 }) {
   const [isShowingStats, setIsShowingStats] = useState(false);
   return (
@@ -26,24 +28,14 @@ export default function ShowUser(props: {
                 STATS
               </span>
             )}
-            {isShowingStats && <Stats user={props.user[props.travelId]} />}
-            {/* <div className="flex flex-col p-4 pt-6 items-center w-1/2"> */}
-            {/* <img
-                className="rounded-full  w-14 h-14 "
-                src={props.user[props.travelId]?.userInfo?.photoURL}
-              /> */}
-            {/* <div className="font-[homeworld-norm] text-xs select-none">
-                {props.user[
-                  props.travelId
-                ]?.userInfo?.displayName.toUpperCase()}
-              </div> */}
-            {/* </div> */}
+            {isShowingStats && <Stats user={props.user[props.travelId]} />}           
           </div>
           <UserElementsList
             user={props.user}
             travelId={props.travelId}
             setUser={props.setUser}
           />
+          {props.setUser && <DeleteUserButton handleDeleteUser={props.handleDeleteUser} user={props.user} travelId={props.travelId} setUser={props.setUser}/>}
         </div>
       )}
     </>
