@@ -2,7 +2,6 @@ import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iUserInfo } from "../Interface";
-import { useState } from "react";
 
 export default function PresentationPage(props: {
   user: iUserInfo;
@@ -10,6 +9,7 @@ export default function PresentationPage(props: {
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
+  setIsWatching:React.Dispatch<React.SetStateAction<boolean>>,
   watchTravel: Function
   joinTravel: Function
 }) {
@@ -24,6 +24,7 @@ export default function PresentationPage(props: {
           setTravel={props.setTravel}
           travelList={props.travelList}
           setTravelList={props.setTravelList}
+          setIsWatching={props.setIsWatching}
           watchTravel={props.watchTravel}
           joinTravel={props.joinTravel}
         />

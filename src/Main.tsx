@@ -38,11 +38,6 @@ export default function Main() {
   });
   const navigate = useNavigate();
 
-
-  useEffect(() => {
-    console.log(user, "USER HAS CHANGED");
-  }, [user]);
-
   useEffect(() => {
     try {
       //get list of travels
@@ -118,36 +113,16 @@ export default function Main() {
       },
     };
   }
-  async function watchTravel(travelId: number, travelName: string) {
-    setIsWatching(true);
-    setUser({})
+
+  async function watchTravel() {
+    // setUser({});
     const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
     let tempdata: iTravelData = {} as iTravelData;
     querySnapshot.forEach((doc) => {
       tempdata = doc.data() as iTravelData;
-      if (tempdata[travelId]) {
-        let newUserData = {
-          userInfo: {
-            displayName: tempdata && tempdata[travelId].userInfo.displayName,
-            photoURL: tempdata && tempdata[travelId].userInfo.photoURL,
-            uid: tempdata && tempdata[travelId].userInfo.uid,
-          },
-          [travelId]: {
-            id: travelId,
-            name: travelName,
-            headgear: tempdata && tempdata[travelId]?.headgear,
-            topgear: tempdata && tempdata[travelId]?.topgear,
-            bottomgear: tempdata && tempdata[travelId]?.bottomgear,
-            footgear: tempdata && tempdata[travelId]?.footgear,
-            extra: tempdata && tempdata[travelId]?.extra,
-            userInfo: {
-              displayName: tempdata && tempdata[travelId].userInfo.displayName,
-              photoURL: tempdata && tempdata[travelId].userInfo.photoURL,
-              uid: tempdata && tempdata[travelId].userInfo.uid,
-            },
-          },
-        };
+      if (tempdata[selectedTravel.id]) {
+        let newUserData = userTravelDataFactory("collatedOtherUsers", tempdata);
         listTemp.push(newUserData as unknown as iTravelData);
       }
     });
@@ -156,58 +131,63 @@ export default function Main() {
 
   async function joinTravel() {
     try {
-      if (selectedTravel.id) {
-        setIsWatching(false)
-        const querySnapshot = await getDocs(collection(db, "users"));
-        let listTemp: iTravelData[] = [];
-        let tempdata: iTravelData = {} as iTravelData;
-        querySnapshot.forEach((doc) => {
-          tempdata = doc.data() as iTravelData;
-          if (loggedUser) {
-            if (tempdata.userInfo.uid === loggedUser.uid) {
-              if (!tempdata[selectedTravel?.id]) {
-                let newUserData = userTravelDataFactory("newEmpty");
-                setUser(newUserData);
-                listTemp.push(newUserData as unknown as iTravelData);
-              } else {
-                let newUserData = userTravelDataFactory(
-                  "collatedLoggedUser",
-                  tempdata
-                );
-                setUser(newUserData);
-                listTemp.push(newUserData as unknown as iTravelData);
-              }
-            } else {
-              if (tempdata[selectedTravel.id]) {
-                let newUserData = userTravelDataFactory(
-                  "collatedOtherUsers",
-                  tempdata
-                );
-                listTemp.push(newUserData as unknown as iTravelData);
-              }
-            }
-          } else {
-            if (tempdata[selectedTravel.id]) {
-              let newUserData = userTravelDataFactory(
-                "collatedOtherUsers",
-                tempdata
-              );
-              listTemp.push(newUserData as unknown as iTravelData);
-            }
-          }
-        });
-        setUsersList(listTemp);
-        navigate("/user")
+      const querySnapshot = await getDocs(collection(db, "users"));
+      let listTemp: iTravelData[] = [];
+      let tempdata: iTravelData = {} as iTravelData;
+      querySnapshot.forEach((doc) => {
+        tempdata = doc.data() as iTravelData;
+        if (loggedUser) {
+        if (tempdata.userInfo.uid === loggedUser.uid) {
+          if (!tempdata[selectedTravel.id]) {
+            let newUserData = userTravelDataFactory("newEmpty");
+            setUser(newUserData);
+            navigate("/user");
 
-      }
+            listTemp.push(newUserData as unknown as iTravelData);
+          } else {
+            let newUserData = userTravelDataFactory(
+              "collatedLoggedUser",
+              tempdata
+            );
+            setUser(newUserData);
+            navigate("/user");
+            listTemp.push(newUserData as unknown as iTravelData);
+          }
+        } else {
+          if (tempdata[selectedTravel.id]) {
+            let newUserData = userTravelDataFactory(
+              "collatedOtherUsers",
+              tempdata
+            );
+            listTemp.push(newUserData as unknown as iTravelData);
+          }
+        }
+        // }
+        // DEPRECATED, as you are not supposed to use this functionality when logged out, using watchTravel() instead
+        // else {
+        //   if (tempdata[selectedTravel.id]) {
+        //     let newUserData = userTravelDataFactory(
+        //       "collatedOtherUsers",
+        //       tempdata
+        //     );
+        //     listTemp.push(newUserData as unknown as iTravelData);
+        //   }
+        }
+      });
+      setUsersList(listTemp);
     } catch (e) {
       console.log(e);
     }
   }
 
-  // useEffect(() => {
-  //   joinTravel();
-  // }, [loggedUser]);
+  useEffect(() => {
+    //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
+    function selectViewModeOrJoin() {
+      if (isWatching) watchTravel();
+      if (!isWatching) joinTravel();
+    }
+    selectViewModeOrJoin();
+  }, [selectedTravel]);
 
   useEffect(() => {
     function telegramAlert() {
@@ -314,6 +294,7 @@ export default function Main() {
                   user={user.userInfo}
                   loggedUser={loggedUser}
                   travelList={travelList}
+                  setIsWatching={setIsWatching}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                   watchTravel={watchTravel}

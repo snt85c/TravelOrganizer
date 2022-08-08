@@ -40,16 +40,16 @@ export default function UserButton(props: {
 
   useEffect(() => {
       setShowOther(true);
-  }, [props.travel.id]);
+  }, [props.travel]);
 
 
   const handleClickSelection = (user: iTravelData) => {
+    console.log(props.isWatching)
     if (props.loggedUser && !props.isWatching ) { // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
         navigate("/other");
       } else {
-        console.log(user, "inUSerButton if")
         props.setUser(user);
         navigate("/user");
       }

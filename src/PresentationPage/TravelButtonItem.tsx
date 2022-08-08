@@ -20,6 +20,7 @@ export default function TravelButtonItem(props: {
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
+  setIsWatching:React.Dispatch<React.SetStateAction<boolean>>,
   watchTravel: Function;
   joinTravel: Function;
 }) {
@@ -165,6 +166,8 @@ export default function TravelButtonItem(props: {
     setIsDeleting(false);
   };
 
+
+
   return (
     <div
       className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
@@ -180,8 +183,8 @@ export default function TravelButtonItem(props: {
       <div className="flex justify-between w-full">
         <div
           onClick={() => {
-            props.watchTravel(props.data?.id, props.data?.name);
             handleClickSetTravel();
+            props.setIsWatching(true)
           }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
@@ -199,7 +202,6 @@ export default function TravelButtonItem(props: {
           <div
             // onClick={handleClickSetTravel}
             onClick={() => {
-              console.log(props.data?.id);
               // props.watchTravel(props.data?.id, props.data?.name)
               // handleClickSetTravel()
             }}
@@ -220,8 +222,8 @@ export default function TravelButtonItem(props: {
         </div>
         <div
           onClick={() => {
-            props.joinTravel();
             handleClickSetTravel();
+            props.setIsWatching(false)
           }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
