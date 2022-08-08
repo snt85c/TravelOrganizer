@@ -11,6 +11,7 @@ export default function PresentationPage(props: {
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
   watchTravel: Function
+  joinTravel: Function
 }) {
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
@@ -24,6 +25,7 @@ export default function PresentationPage(props: {
           travelList={props.travelList}
           setTravelList={props.setTravelList}
           watchTravel={props.watchTravel}
+          joinTravel={props.joinTravel}
         />
       );
     }
@@ -33,7 +35,7 @@ export default function PresentationPage(props: {
     <>
       <div className="flex flex-col   my-5 justify-between h-[80%]">
         <>
-          <div className="flex mt-5 justify-center items-center font-[homeworld-norm] select-none">
+          <div className="flex justify-center items-center font-[homeworld-norm] select-none">
             AVAILABLE TRAVELS
           </div>
           <div className="flex z-20 flex-col w-[1/4] p-2 ">

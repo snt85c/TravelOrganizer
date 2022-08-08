@@ -9,7 +9,6 @@ import {
 } from "firebase/firestore";
 import { ImEnter, ImEye } from "react-icons/im";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
@@ -22,12 +21,12 @@ export default function TravelButtonItem(props: {
   travelList: [iTravel?];
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
   watchTravel: Function;
+  joinTravel: Function;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
-  const navigate = useNavigate();
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
   function isAuthor() {
@@ -158,7 +157,6 @@ export default function TravelButtonItem(props: {
       ? props.data
       : { name: "", id: 0, createdBy: "", userName: "" };
     props.setTravel(temp);
-    if (props.loggedUser) navigate("/user");
   };
 
   const handleEdit = () => {
@@ -175,33 +173,35 @@ export default function TravelButtonItem(props: {
           ? isRenaming || isDeleting
             ? "130px"
             : "100px"
-          : "65px",
+          : "50px",
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
       <div className="flex justify-between w-full">
-       
         <div
-          onClick={() => props.watchTravel(props.data?.id, props.data?.name)}
+          onClick={() => {
+            props.watchTravel(props.data?.id, props.data?.name);
+            handleClickSetTravel();
+          }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
-          {/* {!isAuthor() && (
+          {
             <>
               <div>
                 {" "}
-                <ImEye size={20}/>
+                <ImEye size={20} />
               </div>
               <div className="-mt-2">View</div>{" "}
             </>
-          )} */}
+          }
         </div>
         <div className="flex flex-col justify-center items-center">
           <div
             // onClick={handleClickSetTravel}
             onClick={() => {
-              console.log(props.data?.id)
-                // props.watchTravel(props.data?.id, props.data?.name)
-                // handleClickSetTravel()
+              console.log(props.data?.id);
+              // props.watchTravel(props.data?.id, props.data?.name)
+              // handleClickSetTravel()
             }}
             className="text-[2.7vw] sm:text-[0.9rem] mt-1 cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none font-[homeworld-norm]"
           >
@@ -219,18 +219,21 @@ export default function TravelButtonItem(props: {
           </div>
         </div>
         <div
-          onClick={handleClickSetTravel}
+          onClick={() => {
+            props.joinTravel();
+            handleClickSetTravel();
+          }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
-          { (
+          {props.loggedUser && 
             <>
               <div>
                 {" "}
-                <ImEnter size={20}/>
+                <ImEnter size={20} />
               </div>
               <div className="-mt-2">Join</div>
             </>
-          )}
+          }
         </div>
       </div>
       {isAuthor() && (

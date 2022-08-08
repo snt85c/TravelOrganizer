@@ -1,13 +1,14 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iTravelData } from "../Interface";
+import { iTravel, iTravelData } from "../Interface";
 
 export default function UserButton(props: {
-  travelId: number;
+  travel: iTravel;
   user?: iTravelData;
   users?: iTravelData[];
   loggedUser: any;
+  isWatching:boolean
   setUser:React.Dispatch<any>;
   setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }) {
@@ -37,16 +38,13 @@ export default function UserButton(props: {
     return { ref };
   }
 
-  // useEffect(() => {
-  //   if (props.users?.length !== 0 ){
-  //     setShowOther(true);
-  //   }
-  // }, [props.users?.length]);
+  useEffect(() => {
+      setShowOther(true);
+  }, [props.travel.id]);
 
-  console.log(props.user," in USerButton")
 
   const handleClickSelection = (user: iTravelData) => {
-    if (props.loggedUser) {
+    if (props.loggedUser && !props.isWatching ) { // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
         navigate("/other");
@@ -79,16 +77,17 @@ export default function UserButton(props: {
     <>
       <div className="flex flex-row justify-between mx-2 md:mx-20">
         <button
-          className="flex z-30 rounded shadow-lg mt-4 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
             setShowOther(!showOther)
           }}
         >
           {"travellers"}
         </button>
-        {props.travelId !== 0 && (
-          <div className="mt-2 font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
-            <span className="font-[homeworld-norm]">//</span> {props.travelId}XX
+        {props.travel.id !== 0 && (
+          <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
+            <span className="font-[homeworld-norm] ">// {props.travel.id}XX</span>
+            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.7rem]">{props.travel.name.toUpperCase()}</span>
           </div>
         )}
       </div>

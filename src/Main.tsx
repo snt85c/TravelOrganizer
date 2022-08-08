@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import ShowUser from "./ShowUsers/ShowUser(01)";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -29,16 +29,19 @@ export default function Main() {
   const [usersList, setUsersList] = useState<iTravelData[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
+  const [isWatching, setIsWatching] = useState<boolean>(false);
   const [selectedTravel, setSelectedTravel] = useState<iTravel>({
     name: "",
     id: 0,
     createdBy: "",
     userName: "",
   });
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    console.log(user, "USER HAS CHANGED")
-  },[user])
+
+  useEffect(() => {
+    console.log(user, "USER HAS CHANGED");
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -115,9 +118,9 @@ export default function Main() {
       },
     };
   }
-console.log(usersList)
-  async function watchTravel(travelId:number, travelName:string) {
-    console.log(travelId, travelName, "in watchTravelf")
+  async function watchTravel(travelId: number, travelName: string) {
+    setIsWatching(true);
+    setUser({})
     const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
     let tempdata: iTravelData = {} as iTravelData;
@@ -126,80 +129,53 @@ console.log(usersList)
       if (tempdata[travelId]) {
         let newUserData = {
           userInfo: {
-            displayName:
-                tempdata && tempdata[travelId].userInfo.displayName,
-            photoURL:
-                 tempdata && tempdata[travelId].userInfo.photoURL,
-            uid:
-                 tempdata && tempdata[travelId].userInfo.uid,
+            displayName: tempdata && tempdata[travelId].userInfo.displayName,
+            photoURL: tempdata && tempdata[travelId].userInfo.photoURL,
+            uid: tempdata && tempdata[travelId].userInfo.uid,
           },
           [travelId]: {
             id: travelId,
             name: travelName,
-            headgear:
-                tempdata && tempdata[travelId]?.headgear,
-            topgear:
-               tempdata && tempdata[travelId]?.topgear,
-            bottomgear:
-                 tempdata && tempdata[travelId]?.bottomgear,
-            footgear:
-                tempdata && tempdata[travelId]?.footgear,
-            extra:
-                 tempdata && tempdata[travelId]?.extra,
-              userInfo: {
-                displayName:
-                    tempdata && tempdata[travelId].userInfo.displayName,
-                photoURL:
-                     tempdata && tempdata[travelId].userInfo.photoURL,
-                uid:
-                     tempdata && tempdata[travelId].userInfo.uid,
-              },
+            headgear: tempdata && tempdata[travelId]?.headgear,
+            topgear: tempdata && tempdata[travelId]?.topgear,
+            bottomgear: tempdata && tempdata[travelId]?.bottomgear,
+            footgear: tempdata && tempdata[travelId]?.footgear,
+            extra: tempdata && tempdata[travelId]?.extra,
+            userInfo: {
+              displayName: tempdata && tempdata[travelId].userInfo.displayName,
+              photoURL: tempdata && tempdata[travelId].userInfo.photoURL,
+              uid: tempdata && tempdata[travelId].userInfo.uid,
+            },
           },
         };
-        console.log(newUserData, "funct output")
         listTemp.push(newUserData as unknown as iTravelData);
       }
     });
     setUsersList(listTemp);
-    // setSelectedTravel({
-    //   name: "",
-    //   id: 0,
-    //   createdBy: "",
-    //   userName: "",
-    // })
   }
 
-  useEffect(() => {
-    async function fetchUsersByTravelsInFirestore() {
-      try {
-        if (selectedTravel.id) {
-          const querySnapshot = await getDocs(collection(db, "users"));
-          let listTemp: iTravelData[] = [];
-          let tempdata: iTravelData = {} as iTravelData;
-          querySnapshot.forEach((doc) => {
-            tempdata = doc.data() as iTravelData;
-            if (loggedUser) {
-              if (tempdata.userInfo.uid === loggedUser.uid) {
-                if (!tempdata[selectedTravel?.id]) {
-                  let newUserData = userTravelDataFactory("newEmpty");
-                  setUser(newUserData);
-                  listTemp.push(newUserData as unknown as iTravelData);
-                } else {
-                  let newUserData = userTravelDataFactory(
-                    "collatedLoggedUser",
-                    tempdata
-                  );
-                  setUser(newUserData);
-                  listTemp.push(newUserData as unknown as iTravelData);
-                }
+  async function joinTravel() {
+    try {
+      if (selectedTravel.id) {
+        setIsWatching(false)
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let listTemp: iTravelData[] = [];
+        let tempdata: iTravelData = {} as iTravelData;
+        querySnapshot.forEach((doc) => {
+          tempdata = doc.data() as iTravelData;
+          if (loggedUser) {
+            if (tempdata.userInfo.uid === loggedUser.uid) {
+              if (!tempdata[selectedTravel?.id]) {
+                let newUserData = userTravelDataFactory("newEmpty");
+                setUser(newUserData);
+                listTemp.push(newUserData as unknown as iTravelData);
               } else {
-                if (tempdata[selectedTravel.id]) {
-                  let newUserData = userTravelDataFactory(
-                    "collatedOtherUsers",
-                    tempdata
-                  );
-                  listTemp.push(newUserData as unknown as iTravelData);
-                }
+                let newUserData = userTravelDataFactory(
+                  "collatedLoggedUser",
+                  tempdata
+                );
+                setUser(newUserData);
+                listTemp.push(newUserData as unknown as iTravelData);
               }
             } else {
               if (tempdata[selectedTravel.id]) {
@@ -210,15 +186,28 @@ console.log(usersList)
                 listTemp.push(newUserData as unknown as iTravelData);
               }
             }
-          });
-          setUsersList(listTemp);
-        }
-      } catch (e) {
-        console.log(e);
+          } else {
+            if (tempdata[selectedTravel.id]) {
+              let newUserData = userTravelDataFactory(
+                "collatedOtherUsers",
+                tempdata
+              );
+              listTemp.push(newUserData as unknown as iTravelData);
+            }
+          }
+        });
+        setUsersList(listTemp);
+        navigate("/user")
+
       }
+    } catch (e) {
+      console.log(e);
     }
-    fetchUsersByTravelsInFirestore();
-  }, [selectedTravel.id, loggedUser]);
+  }
+
+  // useEffect(() => {
+  //   joinTravel();
+  // }, [loggedUser]);
 
   useEffect(() => {
     function telegramAlert() {
@@ -308,14 +297,15 @@ console.log(usersList)
       <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
-            <UserButton
-              travelId={selectedTravel.id}
-              user={user}
-              users={usersList}
-              loggedUser={loggedUser}
-              setUser={setUser}
-              setOtherUser={setOtherUser}
-            />
+          <UserButton
+            travel={selectedTravel}
+            user={user}
+            users={usersList}
+            loggedUser={loggedUser}
+            isWatching={isWatching}
+            setUser={setUser}
+            setOtherUser={setOtherUser}
+          />
           <Routes>
             <Route
               path="/"
@@ -327,10 +317,11 @@ console.log(usersList)
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                   watchTravel={watchTravel}
+                  joinTravel={joinTravel}
                 />
               }
             />
-          
+
             <Route
               path="/user"
               element={
