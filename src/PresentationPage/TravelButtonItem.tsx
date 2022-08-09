@@ -14,9 +14,10 @@ import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
 import {  useNavigate } from "react-router-dom";
 
-export default function TravelButtonItem(props: {
-  i?: number;
+export default function TravelButtonItem(props
+  : {
   data?: iTravel;
+  usersList:iTravelData[],
   loggedUser: any;
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   travelList: [iTravel?];
@@ -24,14 +25,17 @@ export default function TravelButtonItem(props: {
   setIsWatching:React.Dispatch<React.SetStateAction<boolean>>,
   watchTravel: Function;
   joinTravel: Function;
-}) {
+}
+) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
+
   const navigate = useNavigate();
 
+  // console.log(props.data)
 
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
@@ -179,7 +183,7 @@ export default function TravelButtonItem(props: {
           ? isRenaming || isDeleting
             ? "130px"
             : "100px"
-          : "70px",
+          : `70px`,
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >

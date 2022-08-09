@@ -152,7 +152,7 @@ export default function Main() {
     setUsersList(listTemp);
   }
 
-  async function joinTravel() {
+   async function joinTravel() {
     try {
       const querySnapshot = await getDocs(collection(db, "users"));
       let listTemp: iTravelData[] = [];
@@ -313,6 +313,7 @@ export default function Main() {
               element={
                 <PresentationPage
                   user={user.userInfo}
+                  usersList={usersList}
                   loggedUser={loggedUser}
                   travelList={travelList}
                   setIsWatching={setIsWatching}
