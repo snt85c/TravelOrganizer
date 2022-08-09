@@ -6,10 +6,11 @@ import {
   FaCheckCircle,
   FaExclamationCircle,
 } from "react-icons/fa";
+import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 
 export default function ItemCreate(props: {
   user: iTravelData;
-  travelId:number;
+  travelId: number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
   isAddClicked: boolean;
   setIsAddClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,9 +19,11 @@ export default function ItemCreate(props: {
   const [tempItem, setTempItem] = useState<iGear>({
     name: "",
     ready: false,
-    highlighted:false,
-    status:"unavailable"
+    highlighted: false,
+    status: "unavailable",
   });
+
+  const { ref } = HandleClickOutsideComponent(props.setIsAddClicked);
 
   const createButton = (array: string) => {
     let temp: iUser = { ...props.user[props.travelId] };
@@ -42,7 +45,7 @@ export default function ItemCreate(props: {
         temp.extra.push(tempItem);
         break;
     }
-    const temp2:any = {...props.user, [props.travelId]:temp}
+    const temp2: any = { ...props.user, [props.travelId]: temp };
     props.setUser && props.setUser(temp2);
     props.setIsAddClicked(!props.isAddClicked);
   };
@@ -101,7 +104,7 @@ export default function ItemCreate(props: {
 
   return (
     <>
-      <div className="flex flex-row space-between py-1">
+      <div ref={ref} className="flex flex-row space-between py-1">
         <div className="flex flex-row gap-1 items-center">
           <input
             className="text-black w-[150px] rounded-md px-2"
@@ -117,16 +120,20 @@ export default function ItemCreate(props: {
         </div>
         <div className="flex flex-row gap-1">
           <div className="flex flex-col">
-          <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
-            <FaTimesCircle className="w-7 h-7" />
-          </button>
-          <div className="flex justify-center items-center select-none text-[0.7rem]">cancel</div>
+            <button onClick={() => props.setIsAddClicked(!props.isAddClicked)}>
+              <FaTimesCircle className="w-7 h-7" />
+            </button>
+            <div className="flex justify-center items-center select-none text-[0.7rem]">
+              cancel
+            </div>
           </div>
           <div className="flex flex-col">
-          <button onClick={() => createButton(props.type)}>
-            <FaPlusCircle className="w-7 h-7 text-green-500" />
-          </button>
-          <div className="flex justify-center items-center select-none text-[0.7rem]">add</div>
+            <button onClick={() => createButton(props.type)}>
+              <FaPlusCircle className="w-7 h-7 text-green-500" />
+            </button>
+            <div className="flex justify-center items-center select-none text-[0.7rem]">
+              add
+            </div>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import { LangContext } from "../LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
 import { iGear, iTravelData, iUser } from "../Interface";
+import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 
 export default function Item(props: {
   index: number;
@@ -20,6 +21,9 @@ export default function Item(props: {
   setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { ref } = HandleClickOutsideComponent(setIsEditName);
+
   const [change, setChange] = useState<string>("");
   const lang = useContext(LangContext);
 
@@ -36,7 +40,6 @@ export default function Item(props: {
   const [highlight, setHighlight] = useState<"rgb(245 158 11)" | "" | "red">(
     ""
   );
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const MAX_SWIPE_ALLOWED: number = 150;
   const MIN_SWIPE_ALLOWED: number = 10;
@@ -224,7 +227,7 @@ export default function Item(props: {
           //central div container for item name and rx buttons
           {...swipeActions}
           onDoubleClick={changeHighlight}
-          className="flex flex-row shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
+          className="flex flex-row relative shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
           style={{
             transform: `translateX(${deltaX}px)`,
             backgroundColor:
@@ -236,6 +239,41 @@ export default function Item(props: {
                 : "",
           }}
         >
+          {isDeleting && (
+            <div
+              //DELETE OVERLAY, appears absolutely positioned in the center of center div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border text-black border-white rounded-md w-1/3"
+            >
+              <div onClick={handleSwipeDeleteY}>
+                <GiConfirmed />
+              </div>
+              <span>{lang.swipeComponent.delete}</span>
+              <span onClick={handleSwipeDeleteN}>
+                <GiCancel />
+              </span>
+            </div>
+          )}
+          {isEditName && props.setUser && (
+            // EDIT OVERLAY, appears absiolutely positioned
+            <div
+              ref={ref}
+              className="absolute -top-3 -left-3 z-[60] flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700"
+            >
+              <input
+                className="text-white rounded-xl px-2 bg-gray-600"
+                defaultValue={props.item.name}
+                onChange={(e) => setChange(e.target.value)}
+              ></input>
+              <div className="flex px-2 gap-2">
+                <button onClick={() => setIsEditName(!isEditName)}>
+                  <FaTimesCircle />
+                </button>
+                <button onClick={setNameChange}>
+                  <FaPlusCircle className="w-7 h-7" />
+                </button>
+              </div>
+            </div>
+          )}
           <div
             //item name div
             className="flex flex-row"
@@ -302,7 +340,7 @@ export default function Item(props: {
           //highlight div, shirinks and grow on swipe
           style={{
             opacity: opacityRx,
-            width: deltaRx + MAX_SWIPE_ALLOWED,
+            width: deltaRx + MAX_SWIPE_ALLOWED + 25,
             display: deltaRx ? "block" : "none",
             textAlign: "center",
           }}
@@ -311,40 +349,6 @@ export default function Item(props: {
           {lang.swipeComponent.highlight.toUpperCase()}
         </div>
       </div>
-      {isEditName && props.setUser && (
-        // EDIT OVERLAY, appears absiolutely positioned
-        <>
-          <div className="absolute top-auto left-auto z-50 flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
-            <input
-              className="text-white rounded-xl px-2 bg-gray-600"
-              defaultValue={props.item.name}
-              onChange={(e) => setChange(e.target.value)}
-            ></input>
-            <div className="flex px-2 gap-2">
-              <button onClick={() => setIsEditName(!isEditName)}>
-                <FaTimesCircle />
-              </button>
-              <button onClick={setNameChange}>
-                <FaPlusCircle className="w-7 h-7" />
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-      {isDeleting && (
-        <div
-          //DELETE OVERLAY, appears absolutely positioned in the center of center div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border border-white rounded-md w-1/4"
-        >
-          <div onClick={handleSwipeDeleteY}>
-            <GiConfirmed />
-          </div>
-          <span>{lang.swipeComponent.delete}</span>
-          <span onClick={handleSwipeDeleteN}>
-            <GiCancel />
-          </span>
-        </div>
-      )}
     </>
   );
 }

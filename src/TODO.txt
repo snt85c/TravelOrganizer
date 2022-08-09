@@ -1,11 +1,12 @@
-fix UI for Item swiping action, managing HandleClickOutsideComponent, loading screen for Presentation page
+add UI modification
 
-HandleClickOutsideComponent has been moved to HandleClickOutsideComponent.tsx so that it can be exported easily in the future to other components isntead of having to be written and decalred every time
+createNewTravel component won't render now if the user is not logged in: previously this was left unchecked and the component would render even if it wasn't possible to add a new travel when not logged in. now it conditionally render depending on loggedUser
 
-DeleteUserButton and Item(right and lefw swipe overlay for delete/highlight) now use homeworld font
+ItemCreate now closes down when clicking outside the div. the edit div is absolutely positioned to overlap the name div,
 
-highlight swipe has been fixed by having the width of deltaRx + MAX_SWIPE_ALLOWED, this makes it more in line with the delete overlay. the addition of MAX_SWIPE_ALLOWED is to make sure that the writing appears at the same place in the div like delete would do, but being delete on the left it doesn't need adjustment
+fix delete div in Item, it was out of place
 
-presentationPage has been added a simple loading text: the available travel and add travel component are loaded conditionally by the isRenderReady state, which is set as false so by default this wont show the components. an UeEffect hook will listen to travelButtonList array (which is an array of travel buttons) and when is ready it will set isRenderReady as true, showing the components. in the meanwhile that is set as false a loading message is shown. another useEffect with a setInterval will change the state of isFetchingTakingTooLong that will show another message after 5 second (please reload or check internet)
+fix swipe action by adding +25 to width: deltaRx + MAX_SWIPE_ALLOWED, so that the description text is already in the div while swiping instead of coming from the right. when swiping delete, you wont be able to see the div swiping all the way, as it's covered by the name div
 
-fix the issue with UserButton not closing after being clicked by moving the ref up
+travelButtonItem now shows the old name of the item when renaming. previoulsy it would just show an empty input
+

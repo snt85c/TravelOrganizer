@@ -205,7 +205,7 @@ export default function TravelButtonItem(props: {
         </div>
         <div
           //travel information
-          className="flex flex-col justify-between items-center"
+          className="flex flex-col justify-evenly items-center"
         >
           <div className="text-[2.7vw] sm:text-[0.9rem] text-gray-800  select-none font-extrabold font-[homeworld-norm]">
             {props.data?.name.toUpperCase()}
@@ -228,10 +228,10 @@ export default function TravelButtonItem(props: {
             >
               {!isEditing && (
                 <div
-                  className=" text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                  className=" text-[0.7rem] p-2 font-[homeworld-norm] cursor-pointer text-black hover:text-amber-500 duration-300 select-none"
                   onClick={handleEdit}
                 >
-                  Edit
+                  MODIFY
                 </div>
               )}
               {isEditing && (
@@ -239,22 +239,22 @@ export default function TravelButtonItem(props: {
                   <div className="flex flex-col justify-evenly items-center">
                     <div className="flex flex-row p-1 m-1">
                       <div
-                        className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                        className="mx-2 text-[0.7rem] p-2 font-[homeworld-norm] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
                         onClick={() => {
                           setIsDeleting(!isDeleting);
                           setIsRenaming(false);
                         }}
                       >
-                        Delete
+                        DELETE
                       </div>
                       <div
-                        className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                        className="mx-2  text-[0.7rem] p-2 font-[homeworld-norm]  cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
                         onClick={() => {
                           setIsRenaming(!isRenaming);
                           setIsDeleting(false);
                         }}
                       >
-                        Rename
+                        RENAME
                       </div>
                     </div>
                     {isRenaming && (
@@ -266,6 +266,7 @@ export default function TravelButtonItem(props: {
                         <input
                           className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center w-[80%]"
                           onChange={(e) => setNewName(e.target.value)}
+                          defaultValue={props.data?.name.toString()}
                         />
                         <button onClick={handleRename}>ok</button>
                       </div>

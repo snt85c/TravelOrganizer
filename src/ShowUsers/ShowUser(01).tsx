@@ -14,7 +14,7 @@ export default function ShowUser(props: {
   return (
     <>
       {props.user && (
-        <div className="flex flex-col justify-between mx-2 md:mx-20">
+        <div className="flex flex-col justify-between ml-2 mr-0 md:mx-20">
           <div
             onClick={() => setIsShowingStats(!isShowingStats)}
             className="flex flex-row justify-center items-center text-center rounded-md border my-2 bg-gray-500 duration-300"
