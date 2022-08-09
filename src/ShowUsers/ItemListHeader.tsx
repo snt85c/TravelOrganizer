@@ -78,9 +78,9 @@ export default function ItemListHeader(props: {
     <>
       <div className="flex  flex-row justify-between p-2 gap-2 bg-gradient-to-r from-slate-900 to-slade-700">
         <div className="flex flex-col ">
-          <div className="font-[homeworld-bold] text-lg text-amber-500">{headername}</div>
-          <div className="text-xs text-white">{numberAvailable}</div>
-          <div className="text-xs text-white">{numberReady}</div>
+          <div className="font-[homeworld-bold] text-lg text-amber-500 select-none">{headername}</div>
+          <div className="text-xs text-white select-none">{numberAvailable}</div> 
+          <div className="text-xs text-white select-none">{numberReady}</div>
         </div>
         <div>{icon}</div>
       </div>

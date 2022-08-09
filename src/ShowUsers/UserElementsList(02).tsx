@@ -67,7 +67,7 @@ export default function UserElementsList(props: {
         </div>
         {props.user.userInfo && <div
           style={{ writingMode: "vertical-rl" }}
-          className="flex font-[phonk] text-[5rem]  leading-none"
+          className="flex font-[phonk] text-[5rem] leading-none select-none "
         >
            <img
             className="rounded-full m-2 w-14 h-14 "

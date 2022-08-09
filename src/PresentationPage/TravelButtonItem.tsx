@@ -12,21 +12,16 @@ import { useEffect, useRef, useState } from "react";
 import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function TravelButtonItem(props
-  : {
+export default function TravelButtonItem(props: {
   data?: iTravel;
-  usersList:iTravelData[],
   loggedUser: any;
-  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   travelList: [iTravel?];
+  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  setIsWatching:React.Dispatch<React.SetStateAction<boolean>>,
-  watchTravel: Function;
-  joinTravel: Function;
-}
-) {
+  setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -173,10 +168,9 @@ export default function TravelButtonItem(props
     setIsDeleting(false);
   };
 
-
-
   return (
     <div
+      //container
       className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
       style={{
         height: isEditing
@@ -187,11 +181,15 @@ export default function TravelButtonItem(props
         justifyContent: isEditing ? "space-evenly" : "center",
       }}
     >
-      <div className="flex justify-between w-full">
+      <div
+        //2nd container
+        className="flex justify-between w-full"
+      >
         <div
+          //left watch travel button
           onClick={() => {
             handleClickSetTravel();
-            props.setIsWatching(true)
+            props.setIsWatching(true);
           }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
@@ -205,31 +203,100 @@ export default function TravelButtonItem(props
             </>
           }
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <div className="text-[2.7vw] sm:text-[0.9rem] mt-1 text-gray-800  select-none font-extrabold font-[homeworld-norm]"
-          >
+        <div
+          //travel information
+          className="flex flex-col justify-between items-center"
+        >
+          <div className="text-[2.7vw] sm:text-[0.9rem] text-gray-800  select-none font-extrabold font-[homeworld-norm]">
             {props.data?.name.toUpperCase()}
           </div>
-          <div className="text-[0.5rem] -my-1 select-none">
+          <div className="text-[0.7rem] -my-1 select-none">
             created by:{" "}
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
             </span>{" "}
-            id:
+            {/* id:
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {props.data?.id}
-            </span>
+            </span> */}
           </div>
+
+          {isAuthor() && (
+            <div
+              //edit, rename, delete buttons, if the user is also the author
+              className="flex"
+            >
+              {!isEditing && (
+                <div
+                  className=" text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </div>
+              )}
+              {isEditing && (
+                <div ref={ref}>
+                  <div className="flex flex-col justify-evenly items-center">
+                    <div className="flex flex-row p-1 m-1">
+                      <div
+                        className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                        onClick={() => {
+                          setIsDeleting(!isDeleting);
+                          setIsRenaming(false);
+                        }}
+                      >
+                        Delete
+                      </div>
+                      <div
+                        className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                        onClick={() => {
+                          setIsRenaming(!isRenaming);
+                          setIsDeleting(false);
+                        }}
+                      >
+                        Rename
+                      </div>
+                    </div>
+                    {isRenaming && (
+                      <div
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && isRenaming) handleRename();
+                        }}
+                      >
+                        <input
+                          className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center w-[80%]"
+                          onChange={(e) => setNewName(e.target.value)}
+                        />
+                        <button onClick={handleRename}>ok</button>
+                      </div>
+                    )}
+                    {isDeleting && (
+                      <div
+                        className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
+                        onClick={handleDelete}
+                      >
+                        <div>press to delete</div>
+                        <div className="text-[0.5rem] -mt-2">
+                          this will cancel your data permanently
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div
+          //right join travel button
           onClick={() => {
             handleClickSetTravel();
-            props.setIsWatching(false)
-            navigate("/user")
+            props.setIsWatching(false);
+            navigate("/user");
           }}
           className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
         >
-          {props.loggedUser && 
+          {props.loggedUser && (
             <>
               <div>
                 {" "}
@@ -237,71 +304,9 @@ export default function TravelButtonItem(props
               </div>
               <div className="-mt-2">Join</div>
             </>
-          }
+          )}
         </div>
       </div>
-      {isAuthor() && (
-        <div className="flex -mt-1">
-          {!isEditing && (
-            <div
-              className="mx-2 mb-1 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-              onClick={handleEdit}
-            >
-              Edit
-            </div>
-          )}
-          {isEditing && (
-            <div ref={ref}>
-              <div className="flex flex-col justify-evenly items-center">
-                <div className="flex flex-row p-1 m-1">
-                  <div
-                    className="mx-2  text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                    onClick={() => {
-                      setIsDeleting(!isDeleting);
-                      setIsRenaming(false);
-                    }}
-                  >
-                    Delete
-                  </div>
-                  <div
-                    className="mx-2 text-sm cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                    onClick={() => {
-                      setIsRenaming(!isRenaming);
-                      setIsDeleting(false);
-                    }}
-                  >
-                    Rename
-                  </div>
-                </div>
-                {isRenaming && (
-                  <div
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && isRenaming) handleRename();
-                    }}
-                  >
-                    <input
-                      className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center"
-                      onChange={(e) => setNewName(e.target.value)}
-                    />
-                    <button onClick={handleRename}>ok</button>
-                  </div>
-                )}
-                {isDeleting && (
-                  <div
-                    className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
-                    onClick={handleDelete}
-                  >
-                    <div>press to delete</div>
-                    <div className="text-[0.5rem] -mt-2">
-                      this will cancel your data permanently
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

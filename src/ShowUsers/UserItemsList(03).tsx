@@ -18,33 +18,18 @@ export default function UserItemsList(props: {
   let currentArray: iGear[] = [] ;
   switch (props.type) {
     case "headgear":
-      // if (!props.user.headgear) {
-      //   props.user.headgear = [];
-      // }
       currentArray =  props.user && props.user[props.travelId]?.headgear;
       break;
     case "topgear":
-      // if (!props.user.topgear) {
-      //   props.user.topgear = [];
-      // }
       currentArray = props.user && props.user[props.travelId]?.topgear;
       break;
     case "bottomgear":
-      // if (!props.user.bottomgear) {
-      //   props.user.bottomgear = [];
-      // }
       currentArray =  props.user && props.user[props.travelId]?.bottomgear;
       break;
     case "footgear":
-      // if (!props.user.footgear) {
-      //   props.user.footgear = [];
-      // }
       currentArray = props.user &&  props.user[props.travelId]?.footgear;
       break;
     case "extra":
-      // if (!props.user.extra) {
-      //   props.user.extra = [];
-      // }
       currentArray = props.user && props.user[props.travelId]?.extra;
       break;
   }
@@ -52,8 +37,6 @@ export default function UserItemsList(props: {
   const handleAddButton = () => {
     setIsAddClicked(!isAddClicked);
   };
-
-  // console.log(currentArray, " current array in UserItemList(03)")
 
   const list = currentArray?.map((item: iGear, i: number) => {
     return (

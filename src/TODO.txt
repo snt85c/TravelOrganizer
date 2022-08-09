@@ -1,3 +1,11 @@
-fix renaming to be custom, create edit button, css to have responsive TravelButtonItems
+fix UI for Item swiping action, managing HandleClickOutsideComponent, loading screen for Presentation page
 
-TravelButtonItems now has delete and rename under the button "edit", when clicked it expands the size of the div to accomodate the button delete, rename and close edit, when clicking rename, it expands again to add an inout and a button. it will close automatically when clicking somewhere else
+HandleClickOutsideComponent has been moved to HandleClickOutsideComponent.tsx so that it can be exported easily in the future to other components isntead of having to be written and decalred every time
+
+DeleteUserButton and Item(right and lefw swipe overlay for delete/highlight) now use homeworld font
+
+highlight swipe has been fixed by having the width of deltaRx + MAX_SWIPE_ALLOWED, this makes it more in line with the delete overlay. the addition of MAX_SWIPE_ALLOWED is to make sure that the writing appears at the same place in the div like delete would do, but being delete on the left it doesn't need adjustment
+
+presentationPage has been added a simple loading text: the available travel and add travel component are loaded conditionally by the isRenderReady state, which is set as false so by default this wont show the components. an UeEffect hook will listen to travelButtonList array (which is an array of travel buttons) and when is ready it will set isRenderReady as true, showing the components. in the meanwhile that is set as false a loading message is shown. another useEffect with a setInterval will change the state of isFetchingTakingTooLong that will show another message after 5 second (please reload or check internet)
+
+fix the issue with UserButton not closing after being clicked by moving the ref up

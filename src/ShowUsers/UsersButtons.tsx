@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
 import { iTravel, iTravelData } from "../Interface";
+import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 
 export default function UserButton(props: {
   travel: iTravel;
@@ -15,28 +16,7 @@ export default function UserButton(props: {
   const [showOther, setShowOther] = useState<boolean>(false);
   const navigate = useNavigate();
   const lang = useContext(LangContext);
-  const { ref } = HandleClickOutsideComponent(setShowOther);
-
-  function HandleClickOutsideComponent(
-    setShowOther: React.Dispatch<React.SetStateAction<boolean>>
-  ) {
-    const ref = useRef<HTMLDivElement>(null);
-
-    const handleClickOutside = (event: Event) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setShowOther(false);
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener("click", handleClickOutside, true);
-      return () => {
-        document.removeEventListener("click", handleClickOutside, true);
-      };
-    });
-
-    return { ref };
-  }
+  const { ref } = HandleClickOutsideComponent(setShowOther)
 
   useEffect(() => {
     if (props.travel.id !== 0) setShowOther(true);
@@ -76,7 +56,9 @@ export default function UserButton(props: {
   });
   return (
     <>
-      <div className="flex flex-row justify-between mx-2 md:mx-20 select-none">
+      <div 
+        ref={ref}
+      className="flex flex-row justify-between mx-2 md:mx-20 select-none">
         <button
           className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
@@ -98,7 +80,6 @@ export default function UserButton(props: {
       </div>
       {
         <div
-          ref={ref}
           className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col flex-wrap items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 select-none "
           style={{ display: showOther ? "flex" : "none" }}
         >

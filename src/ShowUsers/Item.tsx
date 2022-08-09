@@ -37,7 +37,6 @@ export default function Item(props: {
     ""
   );
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [isSwiping, setIsSwiping] = useState<boolean>(false);
 
   const MAX_SWIPE_ALLOWED: number = 150;
   const MIN_SWIPE_ALLOWED: number = 10;
@@ -67,7 +66,6 @@ export default function Item(props: {
 
   const swipeActions = useSwipeable({
     onSwiping: (e: SwipeEventData) => {
-      setIsSwiping(true);
       if (
         Math.abs(e.deltaX) < MAX_SWIPE_ALLOWED &&
         Math.abs(e.deltaX) > MIN_SWIPE_ALLOWED &&
@@ -87,7 +85,6 @@ export default function Item(props: {
       }
     },
     onSwiped: (e: SwipeEventData) => {
-      setIsSwiping(false);
       if (deltaX && deltaX < -SWIPE_TRIGGER) {
         changeHighlight();
         highlight === "" ? setHighlight("rgb(245 158 11)") : setHighlight("");
@@ -199,7 +196,7 @@ export default function Item(props: {
   return (
     <>
       <div
-        className="flex rounded-l-md rounded-r-md"
+        className="flex justify-center items-center text-center rounded-l-md rounded-r-md"
         style={{
           backgroundColor:
             //main container
@@ -219,9 +216,9 @@ export default function Item(props: {
             display: deltaLx ? "block" : "none",
             textAlign: "center",
           }}
-          className="absolute z-10 left-2 flex py-3 duration-300"
+          className="absolute z-10 left-2 flex  duration-300 text-[0.8rem] font-[homeworld-bold]"
         >
-          {lang.swipeComponent.deleteLx}
+          {lang.swipeComponent.deleteLx.toUpperCase()}
         </div>
         <div
           //central div container for item name and rx buttons
@@ -247,10 +244,10 @@ export default function Item(props: {
               className="flex flex-col"
               onClick={() => setIsEditName(!isEditName)}
             >
-              <div className="text-gray-600 text-[0.7rem] -my-1">
+              <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
                 {lang.itemComponent.name}:
               </div>
-              <div className="text-white select-none cursor-pointer">
+              <div className="text-white select-none cursor-pointer flex justify-start">
                 {props.item?.name ? props.item?.name : "empty"}
               </div>
             </div>
@@ -305,13 +302,13 @@ export default function Item(props: {
           //highlight div, shirinks and grow on swipe
           style={{
             opacity: opacityRx,
-            width: deltaRx + 120,
+            width: deltaRx + MAX_SWIPE_ALLOWED,
             display: deltaRx ? "block" : "none",
             textAlign: "center",
           }}
-          className="absolute z-10 right-2 py-3 flex  duration-300"
+          className="absolute flex  z-10 right-2 py-3  duration-300 text-[0.8rem] font-[homeworld-bold]"
         >
-          {lang.swipeComponent.highlight}
+          {lang.swipeComponent.highlight.toUpperCase()}
         </div>
       </div>
       {isEditName && props.setUser && (
