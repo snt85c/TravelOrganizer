@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
@@ -38,6 +39,7 @@ export default function GoogleLoginButton(props: { toggle: () => void }) {
         </div>
       )}
       {user && (
+        
         <div ref={ref} >
           <div className="flex flex-col" onClick={() => setIsOpeningOverlay(!isOpeningOverlay)}>
             <img
@@ -46,6 +48,7 @@ export default function GoogleLoginButton(props: { toggle: () => void }) {
             />
             {/* <div className="text-[0.5rem]">dashboard</div> */}
           </div>
+       
           <div
             //overlay
             className="absolute z-40 flex flex-col justify-evenly items-center border border-amber-400 text-black rounded shadow-2xl top-14 right-1 md:right-[5rem]  w-[100px] h-[100px] bg-amber-500"
@@ -69,6 +72,7 @@ export default function GoogleLoginButton(props: { toggle: () => void }) {
             </div>
           </div>
         </div>
+
       )}
     </>
   );

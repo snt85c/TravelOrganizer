@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
 import { iTravel, iTravelData } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
+import { motion } from "framer-motion";
 
 export default function UserButton(props: {
   travel: iTravel;
@@ -50,7 +51,7 @@ export default function UserButton(props: {
         <img
           src={user?.userInfo.photoURL}
           className="w-10 h-10 rounded-full select-none"
-        />
+          />
       </div>
     );
   });

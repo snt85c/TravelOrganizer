@@ -13,6 +13,8 @@ import { iTravel, iTravelData } from "../Interface";
 import { db } from "../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../Main";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
 
 export default function TravelButtonItem(props: {
   data?: iTravel;

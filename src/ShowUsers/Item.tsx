@@ -146,10 +146,8 @@ export default function Item(props: {
     props.setUser && props.setUser(currentUser);
   };
 
-  // function ToggleButton() {
   const buttonToggle = () => {
     let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
-    // if (!isSwiping) {
     if (currentGear[props.index].status === "unavailable") {
       currentGear[props.index].status = "available";
     } else if (currentGear[props.index].status === "available") {
@@ -162,8 +160,6 @@ export default function Item(props: {
       [props.travelId]: currentTravel,
     };
     props.setUser && props.setUser(currentUser);
-    // }
-    // };
     return (
       <>
         <div
@@ -198,39 +194,12 @@ export default function Item(props: {
 
   return (
     <>
-      <div
-        className="flex justify-center items-center text-center rounded-l-md rounded-r-md"
-        style={{
-          backgroundColor:
-            //main container
-            deltaX &&
-            (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
-              ? swipeColor
-              : props.currentArray[props.index].highlighted
-              ? "rgb(245 158 11)"
-              : "",
-        }}
-      >
+      {!isEditName && (
         <div
-          //delete div, , shirinks and grow on swipe
+          className="flex justify-center items-center text-center rounded-l-md rounded-r-md"
           style={{
-            opacity: opacityLx,
-            width: deltaLx,
-            display: deltaLx ? "block" : "none",
-            textAlign: "center",
-          }}
-          className="absolute z-10 left-2 flex  duration-300 text-[0.8rem] font-[homeworld-bold]"
-        >
-          {lang.swipeComponent.deleteLx.toUpperCase()}
-        </div>
-        <div
-          //central div container for item name and rx buttons
-          {...swipeActions}
-          onDoubleClick={changeHighlight}
-          className="flex flex-row relative shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
-          style={{
-            transform: `translateX(${deltaX}px)`,
             backgroundColor:
+              //main container
               deltaX &&
               (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
@@ -239,116 +208,151 @@ export default function Item(props: {
                 : "",
           }}
         >
-          {isDeleting && (
-            <div
-              //DELETE OVERLAY, appears absolutely positioned in the center of center div
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border text-black border-white rounded-md w-1/3"
-            >
-              <div onClick={handleSwipeDeleteY}>
-                <GiConfirmed />
-              </div>
-              <span>{lang.swipeComponent.delete}</span>
-              <span onClick={handleSwipeDeleteN}>
-                <GiCancel />
-              </span>
-            </div>
-          )}
-          {isEditName && props.setUser && (
-            // EDIT OVERLAY, appears absiolutely positioned
-            <div
-              ref={ref}
-              className="absolute -top-3 -left-3 z-[60] flex m-4 p-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700"
-            >
-              <input
-                className="text-white rounded-xl px-2 bg-gray-600"
-                defaultValue={props.item.name}
-                onChange={(e) => setChange(e.target.value)}
-              ></input>
-              <div className="flex px-2 gap-2">
-                <button onClick={() => setIsEditName(!isEditName)}>
-                  <FaTimesCircle />
-                </button>
-                <button onClick={setNameChange}>
-                  <FaPlusCircle className="w-7 h-7" />
-                </button>
-              </div>
-            </div>
-          )}
           <div
-            //item name div
-            className="flex flex-row"
+            //delete div, , shirinks and grow on swipe
+            style={{
+              opacity: opacityLx,
+              width: deltaLx,
+              display: deltaLx ? "block" : "none",
+              textAlign: "center",
+            }}
+            className="absolute z-10 left-2 flex  duration-300 text-[0.8rem] font-[homeworld-bold]"
           >
-            <div
-              className="flex flex-col"
-              onClick={() => setIsEditName(!isEditName)}
-            >
-              <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
-                {lang.itemComponent.name}:
-              </div>
-              <div className="text-white select-none cursor-pointer flex justify-start">
-                {props.item?.name ? props.item?.name : "empty"}
-              </div>
-            </div>
+            {lang.swipeComponent.deleteLx.toUpperCase()}
           </div>
           <div
-            /* right buttons container */
-            className="flex flex-row items-center gap-1"
+            //central div container for item name and rx buttons
+            {...swipeActions}
+            onDoubleClick={changeHighlight}
+            className="flex flex-row relative shrink-0 w-full justify-between p-1 px-2 gap-2 odd:bg-gray-800 bg-gray-900 duration-300"
+            style={{
+              transform: `translateX(${deltaX}px)`,
+              backgroundColor:
+                deltaX &&
+                (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+                  ? swipeColor
+                  : props.currentArray[props.index].highlighted
+                  ? "rgb(245 158 11)"
+                  : "",
+            }}
           >
             <div
-              /* unavailable/available/ready toggle button DIV */
-              onClick={buttonToggle}
-              className="flex flex-col cursor-pointer select-none w-12"
+              //item name div
+              className="flex flex-row w-full justify-between items-center "
             >
-              {props.currentArray[props.index].status === "unavailable" && (
-                <div className="flex justify-center items-center text-red-600">
-                  {" "}
-                  <FaExclamationCircle className="w-7 h-7" />
-                </div>
-              )}
-              {props.currentArray[props.index].status === "available" && (
-                <div className="flex justify-center items-center  text-amber-700">
-                  {" "}
-                  <FaExclamationCircle className="w-7 h-7" />
-                </div>
-              )}
-              {props.currentArray[props.index].status === "ready" && (
-                <div className="flex justify-center items-center  text-green-600">
-                  {" "}
-                  <FaCheckCircle className="w-7 h-7 " />
-                </div>
-              )}
-              <div className="text-[0.7rem] select-none flex justify-center items-center">
-                {props.currentArray[props.index].status}
-              </div>
-            </div>
-            {props.setUser && (
               <div
-                //remove button
-                className="flex flex-col justify-center items-center"
+                className="flex flex-col"
+                onClick={() => setIsEditName(!isEditName)}
               >
-                <button onClick={handleDelete}>
-                  <FaTimesCircle className="w-7 h-7 hidden md:block" />
-                </button>
-                <div className="text-[0.7rem] select-none hidden md:block">
-                  remove
+                <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
+                  {lang.itemComponent.name}:
+                </div>
+                <div className="text-white select-none cursor-pointer flex justify-start">
+                  {props.item?.name ? props.item?.name : "empty"}
                 </div>
               </div>
-            )}
+              <div
+                /* right buttons container */
+                className="flex flex-row items-center gap-1"
+              >
+                <div
+                  /* unavailable/available/ready toggle button DIV */
+                  onClick={buttonToggle}
+                  className="flex flex-col cursor-pointer select-none w-12"
+                >
+                  {props.currentArray[props.index].status === "unavailable" && (
+                    <div className="flex justify-center items-center text-red-600">
+                      {" "}
+                      <FaExclamationCircle className="w-7 h-7" />
+                    </div>
+                  )}
+                  {props.currentArray[props.index].status === "available" && (
+                    <div className="flex justify-center items-center  text-amber-700">
+                      {" "}
+                      <FaExclamationCircle className="w-7 h-7" />
+                    </div>
+                  )}
+                  {props.currentArray[props.index].status === "ready" && (
+                    <div className="flex justify-center items-center  text-green-600">
+                      {" "}
+                      <FaCheckCircle className="w-7 h-7 " />
+                    </div>
+                  )}
+                  <div className="text-[0.7rem] select-none flex justify-center items-center">
+                    {props.currentArray[props.index].status}
+                  </div>
+                </div>
+                {props.setUser && (
+                  <div
+                    //remove button
+                    className="flex flex-col justify-center items-center"
+                  >
+                    <button onClick={handleDelete}>
+                      <FaTimesCircle className="w-7 h-7 hidden md:block" />
+                    </button>
+                    <div className="text-[0.7rem] select-none hidden md:block">
+                      remove
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div
+            //highlight div, shirinks and grow on swipe
+            style={{
+              opacity: opacityRx,
+              width: deltaRx + MAX_SWIPE_ALLOWED + 25,
+              display: deltaRx ? "block" : "none",
+              textAlign: "center",
+            }}
+            className="absolute flex  z-10 right-2 py-3  duration-300 text-[0.8rem] font-[homeworld-bold]"
+          >
+            {lang.swipeComponent.highlight.toUpperCase()}
           </div>
         </div>
+      )}
+      {isEditName && props.setUser && (
+        // EDIT appears in place of the normal div
         <div
-          //highlight div, shirinks and grow on swipe
-          style={{
-            opacity: opacityRx,
-            width: deltaRx + MAX_SWIPE_ALLOWED + 25,
-            display: deltaRx ? "block" : "none",
-            textAlign: "center",
-          }}
-          className="absolute flex  z-10 right-2 py-3  duration-300 text-[0.8rem] font-[homeworld-bold]"
+          ref={ref}
+          className=" flex justify-between p-1 px-2 bg-gradient-to-r from-amber-500 to-amber-700 duration-300" //bg-gradient-to-r from-amber-500 to-amber-700
         >
-          {lang.swipeComponent.highlight.toUpperCase()}
+          <div className="flex flex-col">
+            <div className="text-[0.7rem] flex justify-left text-black">modify:</div>
+            <input
+              className="text-white rounded-xl px-2 bg-gray-600"
+              defaultValue={props.item.name}
+              onChange={(e) => setChange(e.target.value)}
+            />
+          </div>
+          <div className="flex px-2 md:px-0 gap-2">
+            {/* <button onClick={() => setIsEditName(!isEditName)}>
+              <FaTimesCircle />
+            </button> */}
+            <div className="flex flex-col justify-center items-center">
+            <button onClick={setNameChange}>
+              <FaPlusCircle className="w-7 h-7" />
+            </button>
+            <div className="text-[0.7rem]"> confirm</div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+      {isDeleting && (
+        <div
+          //DELETE OVERLAY, appears absolutely positioned in the center of center div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border text-black border-white rounded-md w-1/3"
+        >
+          <div onClick={handleSwipeDeleteY}>
+            <GiConfirmed />
+          </div>
+          <span>{lang.swipeComponent.delete}</span>
+          <span onClick={handleSwipeDeleteN}>
+            <GiCancel />
+          </span>
+        </div>
+      )}
     </>
   );
 }

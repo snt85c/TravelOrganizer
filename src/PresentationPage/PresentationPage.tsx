@@ -3,6 +3,7 @@ import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iTravelData, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function PresentationPage(props: {
   user: iUserInfo;
@@ -17,21 +18,23 @@ export default function PresentationPage(props: {
 }) {
   const [isRenderReady, setIsRenderReady] = useState<boolean>(false);
   const [isFetchingTakingTooLong, setIsFetchingTakingTooLong] =
-  useState<boolean>(false);
-  const WAITING_TIME_ERROR_MESSAGE:number = 5000
+    useState<boolean>(false);
+  const WAITING_TIME_ERROR_MESSAGE: number = 5000;
 
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
-        <TravelButtonItem
-          key={i}
-          loggedUser={props.loggedUser}
-          data={currentData}
-          travelList={props.travelList}
-          setTravel={props.setTravel}
-          setTravelList={props.setTravelList}
-          setIsWatching={props.setIsWatching}
-        />
+        <motion.div transition={{ duration: 0.5 }} whileTap={{ scale: 0.8 }}>
+          <TravelButtonItem
+            key={i}
+            loggedUser={props.loggedUser}
+            data={currentData}
+            travelList={props.travelList}
+            setTravel={props.setTravel}
+            setTravelList={props.setTravelList}
+            setIsWatching={props.setIsWatching}
+          />
+        </motion.div>
       );
     }
   );
@@ -49,6 +52,10 @@ export default function PresentationPage(props: {
       setIsFetchingTakingTooLong(true);
     }, WAITING_TIME_ERROR_MESSAGE);
   }, []);
+  const variants = {
+    open: { opacity: 1, x: 0 },
+    closed: { opacity: 0, x: "-100%" },
+  };
 
   return (
     <>
@@ -57,7 +64,9 @@ export default function PresentationPage(props: {
           //if we are loading, and if it*s taking too long, show this
           <>
             <div className="flex flex-col justify-center items-center min-h-[50vh]">
-              <div className=" text-[1.2rem] animate-pulse font-[homeworld-norm]">LOADING</div>
+              <div className=" text-[1.2rem] animate-pulse font-[homeworld-norm]">
+                LOADING
+              </div>
               {isFetchingTakingTooLong && (
                 <div className="font-[helvetica] animation-none m-5 justify-center items-center text-center ">
                   the website is taking too long: consider refresing the page,
@@ -74,20 +83,30 @@ export default function PresentationPage(props: {
               AVAILABLE TRAVELS
             </div>
             <div className="flex z-20 flex-col w-[1/4] p-2 ">
-              <div>{travelButtonsList}</div>
-              {props.loggedUser && <CreateNewTravel
-                loggedUser={props.loggedUser}
-                user={props.user}
-                travelList={props.travelList}
-                setTravelList={props.setTravelList}
-              />}
+              <motion.div
+                style={{ zIndex: "10" }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div>{travelButtonsList}</div>
+              </motion.div>
+              {props.loggedUser && (
+                <CreateNewTravel
+                  loggedUser={props.loggedUser}
+                  user={props.user}
+                  travelList={props.travelList}
+                  setTravelList={props.setTravelList}
+                />
+              )}
             </div>
           </>
         )}
 
         <div
-        //flair text
-        className=" absolute z-10 bottom-7 left-2  font-[phonk] leading-none select-none">
+          //flair text
+          className=" absolute z-10 bottom-7 left-2  font-[phonk] leading-none select-none"
+        >
           <div className="flex text-[20vw] sm:text-[8rem]">Travel</div>
           <div className="text-[10vw] sm:text-[4rem] -mt-[3vh]">
             organizer
@@ -95,7 +114,7 @@ export default function PresentationPage(props: {
           </div>
         </div>
         <img
-        //flair image
+          //flair image
           src={flairImage}
           style={{
             backgroundImage:
