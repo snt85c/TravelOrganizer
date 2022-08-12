@@ -43,7 +43,7 @@ export default function UserButton(props: {
   let usersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex px-4 gap-2 w-[90%] m-1 justify-between bg-slate-400 hover:bg-amber-500 hover:text-black duration-300 items-center cursor-pointer select-none"
+        className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
@@ -63,7 +63,7 @@ export default function UserButton(props: {
         ref={ref}
         className="flex flex-row justify-between mx-2 md:mx-20 select-none">
         <button
-          className="flex z-30 rounded shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+          className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
             setShowOther(!showOther);
           }}

@@ -219,10 +219,10 @@ export default function Main() {
       } else {
         fetch(
           `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text="unknown user is visiting Travel Organizer" `
-        );
+          );
+        }
       }
-    }
-    setTimeout(() => {
+      setTimeout(() => {
       telegramAlert();
     }, 5000)
   }, [loggedUser]);
