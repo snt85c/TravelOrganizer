@@ -14,7 +14,9 @@ export default function ShowUser(props: {
   const [isShowingStats, setIsShowingStats] = useState(false);
   const navigate = useNavigate()
 
-  useEffect(() => { if (!props.user) navigate("/") }, [])
+  useEffect(() => { 
+    //avoid loading a page without data when refreshing on mobile
+    if (!props.user) navigate("/") }, [])
 
   return (
     <>

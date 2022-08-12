@@ -222,7 +222,7 @@ export default function Main() {
         );
       }
     }
-    setInterval(() => {
+    setTimeout(() => {
       telegramAlert();
     }, 5000)
   }, [loggedUser]);
