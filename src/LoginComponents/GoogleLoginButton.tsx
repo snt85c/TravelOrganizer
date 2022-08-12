@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
@@ -39,38 +39,43 @@ export default function GoogleLoginButton(props: { toggle: () => void }) {
         </div>
       )}
       {user && (
-        
+
         <div ref={ref} >
           <div className="flex flex-col" onClick={() => setIsOpeningOverlay(!isOpeningOverlay)}>
             <img
               className="h-10 w-10 rounded-full border "
               src={user.photoURL}
             />
-            {/* <div className="text-[0.5rem]">dashboard</div> */}
           </div>
-       
-          <div
-            //overlay
-            className="absolute z-40 flex flex-col justify-evenly items-center border border-amber-400 text-black rounded shadow-2xl top-14 right-1 md:right-[5rem]  w-[100px] h-[100px] bg-amber-500"
-            style={{ display: isOpeningOverlay ? "flex" : "none" }}
-          >
-            <div className="flex flex-col justify-center items-center">
-              <input
-                type="checkbox"
-                className="toggle"
-                onClick={props.toggle}
-              />
-              <div className="flex text-[0.7rem] -mt-1 justify-center items-center select-none">
-                 language it/en
-              </div>
-            </div>
-            <div
-              className="cursor-pointer select-none text-white font-[homeworld-norm] text-[0.9rem]"
-              onClick={handleGoogleLogout}
-            >
-              LOGOUT
-            </div>
-          </div>
+          <AnimatePresence>
+            {isOpeningOverlay &&
+              <motion.div
+                //overlay
+                className="absolute z-40 flex flex-col justify-evenly items-center border border-amber-400 text-black rounded shadow-2xl top-14 right-1 md:right-[5rem] bg-amber-500"
+                initial={{ width: "0px", height: "0px" }}
+                animate={{ width: "100px", height: "100px" }}
+                exit={{ width: "0px", height: "0px", opacity:0 }}
+              >
+                {isOpeningOverlay && <>
+                  <div className="flex flex-col justify-center items-center">
+                    <input
+                      type="checkbox"
+                      className="toggle"
+                      onClick={props.toggle}
+                    />
+                    <div className="flex text-[0.7rem] -mt-1 justify-center items-center select-none">
+                      language it/en
+                    </div>
+                  </div>
+                  <div
+                    className="cursor-pointer select-none text-white font-[homeworld-norm] text-[0.9rem]"
+                    onClick={handleGoogleLogout}
+                  >
+                    LOGOUT
+                  </div>
+                </>}
+              </motion.div>}
+          </AnimatePresence>
         </div>
 
       )}

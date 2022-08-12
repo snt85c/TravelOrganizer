@@ -1,16 +1,21 @@
 import { iTravelData, iUser } from "../Interface";
 import UserElementsList from "./UserElementsList(02)";
 import Stats from "./Stats";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteUserButton from "./DeleteUserButton";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowUser(props: {
   user: iTravelData;
   travelId: number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>>;
-  handleDeleteUser?:Function;
+  handleDeleteUser?: Function;
 }) {
   const [isShowingStats, setIsShowingStats] = useState(false);
+  const navigate = useNavigate()
+
+  useEffect(() => { if (!props.user) navigate("/") }, [])
+
   return (
     <>
       {props.user && (
@@ -28,14 +33,14 @@ export default function ShowUser(props: {
                 STATS
               </span>
             )}
-            {isShowingStats && <Stats user={props.user[props.travelId]} />}           
+            {isShowingStats && <Stats user={props.user[props.travelId]} />}
           </div>
           <UserElementsList
             user={props.user}
             travelId={props.travelId}
             setUser={props.setUser}
           />
-          {props.setUser && <DeleteUserButton handleDeleteUser={props.handleDeleteUser} user={props.user} travelId={props.travelId} setUser={props.setUser}/>}
+          {props.setUser && <DeleteUserButton handleDeleteUser={props.handleDeleteUser} user={props.user} travelId={props.travelId} setUser={props.setUser} />}
         </div>
       )}
     </>

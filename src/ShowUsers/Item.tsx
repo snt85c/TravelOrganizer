@@ -10,7 +10,6 @@ import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
 import { iGear, iTravelData, iUser } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
-
 export default function Item(props: {
   index: number;
   type: string;
@@ -22,6 +21,7 @@ export default function Item(props: {
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false)
   const { ref } = HandleClickOutsideComponent(setIsEditName);
 
   const [change, setChange] = useState<string>("");
@@ -142,6 +142,7 @@ export default function Item(props: {
   };
 
   const handleDelete = () => {
+    setIsDeleted(true)
     let currentTravel: iUser = { ...props.user[props.travelId] };
     currentGear.splice(props.index, 1);
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
@@ -195,7 +196,7 @@ export default function Item(props: {
   };
 
   return (
-    <>
+    <div>
       {!isEditName && (
         <div
           className="flex justify-center items-center text-center rounded-l-md rounded-r-md"
@@ -211,7 +212,7 @@ export default function Item(props: {
           }}
         >
           <div
-            //delete div, , shirinks and grow on swipe
+            //lx delete div , shirinks and grow on swipe
             style={{
               opacity: opacityLx,
               width: deltaLx,
@@ -357,6 +358,6 @@ export default function Item(props: {
         </div>
       )}
 
-    </>
+    </div>
   );
 }

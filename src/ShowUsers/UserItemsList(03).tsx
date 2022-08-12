@@ -15,7 +15,7 @@ export default function UserItemsList(props: {
 }) {
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
   const lang = useContext(LangContext);
-  let list:JSX.Element[] = []
+  let list: JSX.Element[] = []
 
   let currentArray: iGear[] = [];
   switch (props.type) {
@@ -42,28 +42,27 @@ export default function UserItemsList(props: {
   list = currentArray?.map((item: iGear, i: number) => {
     return (
       <Item
-      travelId={props.travelId}
-      user={props.user}
-      setUser={props.setUser && props.setUser}
-      
-      key={i}
-      index={i}
-      item={item}
-      currentArray={currentArray}
-      type={props.type}
+        travelId={props.travelId}
+        user={props.user}
+        setUser={props.setUser && props.setUser}
+
+        key={i}
+        index={i}
+        item={item}
+        currentArray={currentArray}
+        type={props.type}
       />
-      );
-    });
-    const listHeight:number = list? 52.8 * list.length : 0;
-    
+    );
+  });
+  const listHeight: number = list ? 52.8 * list.length : 0;
+
   return (
     <>
       <div>
         <ItemListHeader currentArray={currentArray} type={props.type} />
         <motion.div
-        initial={{height:"0px"}}
-        // transition={{duration:300}}
-        animate={{height: `${listHeight}px`}}
+          initial={{ height: "0px" }}
+          animate={{ height: `${listHeight}px` }}
         >{list}</motion.div>
         {isAddClicked && (
           <>

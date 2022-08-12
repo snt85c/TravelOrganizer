@@ -3,7 +3,6 @@ import TravelButtonItem from "./TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iTravelData, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function PresentationPage(props: {
   user: iUserInfo;
