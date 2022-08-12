@@ -1,33 +1,35 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { iGear, iTravelData, iUser } from "../Interface";
 import Item from "./Item";
 import ItemCreate from "./ItemCreate";
 import ItemListHeader from "./ItemListHeader";
 import { FaPlusCircle } from "react-icons/fa";
 import { LangContext } from "../LangContextProvider";
+import { motion } from "framer-motion"
 
 export default function UserItemsList(props: {
   user: iTravelData;
-  travelId:number;
+  travelId: number;
   setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
   type: string;
 }) {
   const [isAddClicked, setIsAddClicked] = useState<boolean>(false);
   const lang = useContext(LangContext);
+  let list:JSX.Element[] = []
 
-  let currentArray: iGear[] = [] ;
+  let currentArray: iGear[] = [];
   switch (props.type) {
     case "headgear":
-      currentArray =  props.user && props.user[props.travelId]?.headgear;
+      currentArray = props.user && props.user[props.travelId]?.headgear;
       break;
     case "topgear":
       currentArray = props.user && props.user[props.travelId]?.topgear;
       break;
     case "bottomgear":
-      currentArray =  props.user && props.user[props.travelId]?.bottomgear;
+      currentArray = props.user && props.user[props.travelId]?.bottomgear;
       break;
     case "footgear":
-      currentArray = props.user &&  props.user[props.travelId]?.footgear;
+      currentArray = props.user && props.user[props.travelId]?.footgear;
       break;
     case "extra":
       currentArray = props.user && props.user[props.travelId]?.extra;
@@ -37,27 +39,32 @@ export default function UserItemsList(props: {
   const handleAddButton = () => {
     setIsAddClicked(!isAddClicked);
   };
-
-  const list = currentArray?.map((item: iGear, i: number) => {
+  list = currentArray?.map((item: iGear, i: number) => {
     return (
       <Item
       travelId={props.travelId}
-        user={props.user}
-        setUser={props.setUser && props.setUser}
-        key={i}
-        index={i}
-        item={item}
-        currentArray={currentArray}
-        type={props.type}
+      user={props.user}
+      setUser={props.setUser && props.setUser}
+      
+      key={i}
+      index={i}
+      item={item}
+      currentArray={currentArray}
+      type={props.type}
       />
-    );
-  });
-
+      );
+    });
+    const listHeight:number = list? 52.8 * list.length : 0;
+    
   return (
     <>
-      <div className="">
+      <div>
         <ItemListHeader currentArray={currentArray} type={props.type} />
-        <div>{list}</div>
+        <motion.div
+        initial={{height:"0px"}}
+        // transition={{duration:300}}
+        animate={{height: `${listHeight}px`}}
+        >{list}</motion.div>
         {isAddClicked && (
           <>
             <ItemCreate

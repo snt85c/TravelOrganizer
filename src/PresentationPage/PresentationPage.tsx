@@ -24,7 +24,6 @@ export default function PresentationPage(props: {
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
-        <motion.div transition={{ duration: 0.5 }} whileTap={{ scale: 0.8 }}>
           <TravelButtonItem
             key={i}
             loggedUser={props.loggedUser}
@@ -34,7 +33,6 @@ export default function PresentationPage(props: {
             setTravelList={props.setTravelList}
             setIsWatching={props.setIsWatching}
           />
-      </motion.div> 
       );
     }
   );

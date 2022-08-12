@@ -130,13 +130,15 @@ export default function Item(props: {
   };
 
   const setNameChange = () => {
-    let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
-    currentGear[props.index].name = change
-      ? change
-      : currentGear[props.index].name;
-    const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-    props.setUser && props.setUser(currentUser);
-    setIsEditName(!isEditName);
+    if (props.setUser) {
+      let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
+      currentGear[props.index].name = change
+        ? change
+        : currentGear[props.index].name;
+      const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+      props.setUser && props.setUser(currentUser);
+      setIsEditName(!isEditName);
+    }
   };
 
   const handleDelete = () => {
@@ -201,11 +203,11 @@ export default function Item(props: {
             backgroundColor:
               //main container
               deltaX &&
-              (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+                (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
                 : props.currentArray[props.index].highlighted
-                ? "rgb(245 158 11)"
-                : "",
+                  ? "rgb(245 158 11)"
+                  : "",
           }}
         >
           <div
@@ -229,20 +231,34 @@ export default function Item(props: {
               transform: `translateX(${deltaX}px)`,
               backgroundColor:
                 deltaX &&
-                (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+                  (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                   ? swipeColor
                   : props.currentArray[props.index].highlighted
-                  ? "rgb(245 158 11)"
-                  : "",
+                    ? "rgb(245 158 11)"
+                    : "",
             }}
           >
+            {isDeleting && (
+              <div
+                //DELETE OVERLAY, appears absolutely positioned in the center of center div
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border text-black border-white rounded-md w-1/3"
+              >
+                <div className="cursor-pointer" onClick={handleSwipeDeleteY}>
+                  <GiConfirmed />
+                </div>
+                <span>{lang.swipeComponent.delete}</span>
+                <span className="cursor-pointer" onClick={handleSwipeDeleteN}>
+                  <GiCancel />
+                </span>
+              </div>
+            )}
             <div
               //item name div
               className="flex flex-row w-full justify-between items-center "
             >
               <div
                 className="flex flex-col"
-                onClick={() => setIsEditName(!isEditName)}
+                onClick={() => { if (props.setUser) setIsEditName(!isEditName) }}
               >
                 <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
                   {lang.itemComponent.name}:
@@ -284,7 +300,7 @@ export default function Item(props: {
                 </div>
                 {props.setUser && (
                   <div
-                    //remove button
+                    //rx remove button when breakpoint md 
                     className="flex flex-col justify-center items-center"
                   >
                     <button onClick={handleDelete}>
@@ -310,6 +326,7 @@ export default function Item(props: {
           >
             {lang.swipeComponent.highlight.toUpperCase()}
           </div>
+
         </div>
       )}
       {isEditName && props.setUser && (
@@ -331,28 +348,15 @@ export default function Item(props: {
               <FaTimesCircle />
             </button> */}
             <div className="flex flex-col justify-center items-center">
-            <button onClick={setNameChange}>
-              <FaPlusCircle className="w-7 h-7" />
-            </button>
-            <div className="text-[0.7rem]"> confirm</div>
+              <button onClick={setNameChange}>
+                <FaPlusCircle className="w-7 h-7" />
+              </button>
+              <div className="text-[0.7rem]"> confirm</div>
             </div>
           </div>
         </div>
       )}
-      {isDeleting && (
-        <div
-          //DELETE OVERLAY, appears absolutely positioned in the center of center div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row gap-4 justify-center items-center px-4 text-[0.8rem] bg-amber-500 border text-black border-white rounded-md w-1/3"
-        >
-          <div onClick={handleSwipeDeleteY}>
-            <GiConfirmed />
-          </div>
-          <span>{lang.swipeComponent.delete}</span>
-          <span onClick={handleSwipeDeleteN}>
-            <GiCancel />
-          </span>
-        </div>
-      )}
+
     </>
   );
 }
