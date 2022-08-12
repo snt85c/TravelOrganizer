@@ -75,7 +75,7 @@ export default function UserButton(props: {
             <span className="font-[homeworld-norm] select-none">
               // {props.travel.id}XX
             </span>
-            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[1rem] select-none">
+            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none">
               {props.travel.name.toUpperCase()}
             </span>
           </div>
@@ -86,8 +86,8 @@ export default function UserButton(props: {
           <motion.div
             className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 select-none"
             style={{ display: showOther ? "flex" : "none" }}
-            // initial={{ height: "0px" }}
-            animate={{ height: showOther ? `${userListLenght}px` : 0 }}
+            initial={{ height: "0px", opacity:0 }}
+            animate={{ height: showOther ? `${userListLenght}px` : 0, opacity:1 }}
             exit={{height:"0px", opacity:0}}
           >
             {usersList}
