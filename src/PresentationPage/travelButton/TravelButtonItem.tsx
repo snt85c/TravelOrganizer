@@ -7,14 +7,14 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ImEnter, ImEye } from "react-icons/im";
+import { ImEnter } from "react-icons/im";
 import { useEffect, useRef, useState } from "react";
-import { iTravel, iTravelData } from "../Interface";
-import { db } from "../LoginComponents/firebase";
-import { telegramBotKey, chat_id } from "../Main";
+import { iTravel, iTravelData } from "../../Interface";
+import { db } from "../../LoginComponents/firebase";
+import { telegramBotKey, chat_id } from "../../Main";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-
+import WatchTravelButton from "./WatchTravelButton";
+import JoinTravelButton from "./JoinTravelButton";
 
 export default function TravelButtonItem(props: {
   data?: iTravel;
@@ -187,7 +187,11 @@ export default function TravelButtonItem(props: {
         //2nd container
         className="flex justify-between w-full"
       >
-        <div
+        <WatchTravelButton
+          handleClickSetTravel={handleClickSetTravel}
+          setIsWatching={props.setIsWatching}
+        />
+        {/* <div
           //left watch travel button
           onClick={() => {
             handleClickSetTravel();
@@ -204,7 +208,7 @@ export default function TravelButtonItem(props: {
               <div className="-mt-2">View</div>{" "}
             </>
           }
-        </div>
+        </div> */}
         <div
           //travel information
           className="flex flex-col justify-evenly items-center"
@@ -290,7 +294,12 @@ export default function TravelButtonItem(props: {
             </div>
           )}
         </div>
-        <div
+        <JoinTravelButton
+          loggedUser={props.loggedUser}
+          handleClickSetTravel={handleClickSetTravel}
+          setIsWatching={props.setIsWatching}
+        />
+        {/* <div
           //right join travel button
           onClick={() => {
             handleClickSetTravel();
@@ -308,7 +317,7 @@ export default function TravelButtonItem(props: {
               <div className="-mt-2">Join</div>
             </>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

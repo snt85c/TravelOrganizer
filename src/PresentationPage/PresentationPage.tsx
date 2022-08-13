@@ -1,5 +1,5 @@
 import flairImage from "../img/undraw_travelers_re_y25a.svg";
-import TravelButtonItem from "./TravelButtonItem";
+import TravelButtonItem from "./travelButton/TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iTravelData, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
