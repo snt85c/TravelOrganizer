@@ -217,10 +217,10 @@ export default function TravelButtonItem(props: {
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
             </span>{" "}
-            {/* id:
+            id:
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {props.data?.id}
-            </span> */}
+            </span>
           </div>
 
           {isAuthor() && (

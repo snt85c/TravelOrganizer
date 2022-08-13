@@ -43,7 +43,7 @@ export default function UserButton(props: {
   let usersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
+        className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
         key={i}
         onClick={() => handleClickSelection(user)}
       >
