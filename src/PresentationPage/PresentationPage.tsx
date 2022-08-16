@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { iTriggers } from "../Main";
 
 export default function PresentationPage(props: {
-  uiTriggers:iTriggers
+  uiTriggers: iTriggers;
   user: iUserInfo;
   usersList: iTravelData[];
   loggedUser: any;
@@ -25,16 +25,15 @@ export default function PresentationPage(props: {
   const travelButtonsList = props.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
-          <TravelButtonItem
-            key={i}
-            uiTriggers={props.uiTriggers}
-            loggedUser={props.loggedUser}
-            data={currentData}
-            travelList={props.travelList}
-            setTravel={props.setTravel}
-            setTravelList={props.setTravelList}
-            // setIsWatching={props.setIsWatching}
-          />
+        <TravelButtonItem
+          key={i}
+          uiTriggers={props.uiTriggers}
+          loggedUser={props.loggedUser}
+          data={currentData}
+          travelList={props.travelList}
+          setTravel={props.setTravel}
+          setTravelList={props.setTravelList}
+        />
       );
     }
   );
@@ -83,15 +82,13 @@ export default function PresentationPage(props: {
               AVAILABLE TRAVELS
             </div>
             <div className="flex z-20 flex-col w-[1/4] p-2 ">
-                <div>{travelButtonsList}</div>
-              {props.loggedUser && (
-                <CreateNewTravel
-                  loggedUser={props.loggedUser}
-                  user={props.user}
-                  travelList={props.travelList}
-                  setTravelList={props.setTravelList}
-                />
-              )}
+              <div>{travelButtonsList}</div>
+              <CreateNewTravel
+                loggedUser={props.loggedUser}
+                user={props.user}
+                travelList={props.travelList}
+                setTravelList={props.setTravelList}
+              />
             </div>
           </>
         )}
