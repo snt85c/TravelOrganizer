@@ -231,7 +231,7 @@ export default function TravelButtonItem(props: {
         handleRename={handleRename}
       />
       <div
-        style={{ width: "3rem" }}
+        style={{ width: !isAlreadyJoined?"3rem":0 }}
         //div to contain JoinTravelButton and keep the centered justification when is not rendered
       >
         {!isAlreadyJoined && props.loggedUser && (

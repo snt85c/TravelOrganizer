@@ -75,7 +75,7 @@ export default function PresentationPage(props: {
               initial={{ opacity: 0, y:-50 }}
               animate={{ opacity: 1, y:0 }}
             >
-              <div className="flex justify-center items-center font-[homeworld-norm] select-none">
+              <div className="flex -mt-5 justify-center items-center font-[homeworld-norm] select-none">
                 AVAILABLE TRAVELS
               </div>
               <div className="flex z-20 flex-col w-[1/4] p-2 ">

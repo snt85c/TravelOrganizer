@@ -1,3 +1,4 @@
+import { FaEdit } from "react-icons/fa";
 import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
 import { iEditingPackage } from "../../Interface";
 
@@ -15,14 +16,15 @@ export default function EditButtonItem(props: {
       {props.isAuthor() && (
         <div
           //edit, rename, delete buttons, if the user is also the author
-          className="flex justify-center items w-1/3"
+          className="flex justify-center items-center"
         >
           {!props.editingPackage.isEditing && (
             <div
-              className="text-[0.8rem] font-[homeworld-norm] cursor-pointer text-amber-500 duration-300 select-none "
+              className="flex flex-col items-center justify-center m-2 cursor-pointer text-white duration-300 select-none "
               onClick={(e) => props.handleEdit(e)}
             >
-              MODIFY
+              <FaEdit size={20}/>
+              <span>Edit</span>
             </div>
           )}
           {props.editingPackage.isEditing && (
