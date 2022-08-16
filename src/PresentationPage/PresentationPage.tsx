@@ -71,7 +71,7 @@ export default function PresentationPage(props: {
         )}
           {isRenderReady && (
             //the components are loaded
-            <motion.div
+            <><motion.div
               initial={{ opacity: 0, y:-50 }}
               animate={{ opacity: 1, y:0 }}
             >
@@ -80,20 +80,21 @@ export default function PresentationPage(props: {
               </div>
               <div className="flex z-20 flex-col w-[1/4] p-2 ">
                 <div>{travelButtonsList}</div>
-                <CreateNewTravel
-                  loggedUser={props.loggedUser}
-                  user={props.user}
-                  travelList={props.travelList}
-                  setTravelList={props.setTravelList}
-                />
               </div>
             </motion.div>
+              <CreateNewTravel
+                loggedUser={props.loggedUser}
+                user={props.user}
+                travelList={props.travelList}
+                setTravelList={props.setTravelList}
+              />
+              </>
           )}
 
         <div
           //flair text
-          className=" absolute z-10 bottom-7 left-2  font-[phonk] leading-none select-none"
-        >
+          className=" absolute z-0 bottom-7 left-2  font-[phonk] leading-none select-none"
+        > 
           <div className="flex text-[20vw] sm:text-[8rem]">Travel</div>
           <div className="text-[10vw] sm:text-[4rem] -mt-[3vh]">
             organizer

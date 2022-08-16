@@ -47,7 +47,7 @@ export default function CreateNewTravel(props: {
   return (
     <>
       {props.loggedUser && (
-        <div className="flex mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
+        <div className="flex z-30 mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
           <div className="flex mt-5 text-[3vw] sm:text-[1rem] justify-center items-center font-[homeworld-norm] select-none">
             CREATE YOUR OWN TRAVEL
           </div>

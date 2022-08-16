@@ -68,7 +68,7 @@ export default function EditButtonItem(props: {
                     className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 select-none"
                     onClick={()=>props.handleDelete()}
                   >
-                    <div className="text-center font-bold">press to delete</div>
+                    <div className="text-center font-bold leading-none">press to delete</div>
                     <div className="text-center leading-none text-[0.5rem]">
                       this will cancel your data permanently
                     </div>
