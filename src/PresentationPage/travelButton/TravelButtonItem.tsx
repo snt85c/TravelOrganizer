@@ -7,13 +7,18 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
 import { useEffect, useState } from "react";
-import { iTravel, iTravelData, iTriggers } from "../../Interface";
+import {
+  iEditingPackage,
+  iTravel,
+  iTravelData,
+  iTriggers,
+} from "../../Interface";
 import { db } from "../../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../../Main";
-import WatchTravelButton from "./WatchTravelButton";
 import JoinTravelButton from "./JoinTravelButton";
+import EditButtonItem from "./EditButtonItem";
+import { motion } from "framer-motion";
 
 export default function TravelButtonItem(props: {
   uiTriggers: iTriggers;
@@ -28,11 +33,22 @@ export default function TravelButtonItem(props: {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isAlreadyJoined, setIsAlreadyJoined] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
-  const { ref } = HandleClickOutsideComponent(setIsEditing);
 
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
   }
+
+  let editingPackage: iEditingPackage = {
+    isEditing,
+    setIsEditing,
+    isDeleting,
+    setIsDeleting,
+    isRenaming,
+    setIsRenaming,
+    newName,
+    setNewName,
+    defaultName: props.data?.name ? props.data?.name.toString() : "",
+  };
 
   useEffect(() => {
     async function enableOrDisableJoinButtonIfAlreadyJoined() {
@@ -41,7 +57,8 @@ export default function TravelButtonItem(props: {
       let tempdata: iTravelData = {} as iTravelData;
       querySnapshot.forEach((doc) => {
         tempdata = doc.data() as iTravelData;
-        if (props.loggedUser &&
+        if (
+          props.loggedUser &&
           tempdata[travelId] &&
           tempdata.userInfo.uid === props.loggedUser.uid
         ) {
@@ -158,16 +175,17 @@ export default function TravelButtonItem(props: {
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault()
+    e.preventDefault();
     setIsEditing(!isEditing);
     setIsRenaming(false);
     setIsDeleting(false);
   };
 
   return (
-    <div
+    <motion.div
+      whileTap={{ scale: 0.95 }}
       //container, has information to change size
-      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-white rounded bg-gradient-to-r from-cyan-900 to-cyan-700  duration-300 "
+      className="flex flex-row relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-white rounded bg-gradient-to-r from-cyan-900 to-cyan-700  duration-300 "
       style={{
         height: isEditing
           ? isRenaming || isDeleting
@@ -178,107 +196,53 @@ export default function TravelButtonItem(props: {
       }}
     >
       <div
+        onClick={() => {
+          props.uiTriggers.setIsShowUserButton(true);
+          props.uiTriggers.setTrigger(Date.now());
+          props.uiTriggers.setIsJoining(false);
+          props.uiTriggers.setIsWatching(true);
+          handleClickSetTravel();
+        }}
         //2nd container, flex rules for the children
         className="flex justify-between w-full"
       >
-        <WatchTravelButton
-          handleClickSetTravel={handleClickSetTravel}
-          uiTriggers={props.uiTriggers}
-        />
         <div
           //travel information div, contains the edit button as well
           className="flex flex-col justify-evenly items-center"
         >
-          <div className="text-[2.7vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
-            {props.data?.name.toUpperCase()}
-          </div>
-          <div className="text-[0.8rem] -my-1 select-none">
-            created by:{" "}
-            <span className="text-[0.9rem] text-pink-400 font-bold">
-              {isAuthor() ? "You" : props.data?.userName}
-            </span>{" "}
-          </div>
-          {isAuthor() && (
-            <div
-              //edit, rename, delete buttons, if the user is also the author
-              className="flex"
-            >
-              {!isEditing && (
-                <div
-                  className=" text-[0.7rem] font-[homeworld-norm] cursor-pointer text-amber-500 duration-300 select-none"
-                  onClick={handleEdit}
-                >
-                  CLICK TO MODIFY
-                </div>
-              )}
-              {isEditing && (
-                <div ref={ref}>
-                  <div className="flex flex-col justify-evenly items-center">
-                    <div className="flex flex-row p-1 m-1">
-                      <div
-                        className="mx-2 text-[0.7rem] p-2 font-[homeworld-norm] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                        onClick={() => {
-                          setIsDeleting(!isDeleting);
-                          setIsRenaming(false);
-                        }}
-                      >
-                        DELETE
-                      </div>
-                      <div
-                        className="mx-2  text-[0.7rem] p-2 font-[homeworld-norm]  cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
-                        onClick={() => {
-                          setIsRenaming(!isRenaming);
-                          setIsDeleting(false);
-                        }}
-                      >
-                        RENAME
-                      </div>
-                    </div>
-                    {isRenaming && (
-                      <div
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && isRenaming) handleRename();
-                        }}
-                      >
-                        <input
-                          className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center w-[80%]"
-                          onChange={(e) => setNewName(e.target.value)}
-                          defaultValue={props.data?.name.toString()}
-                        />
-                        <button onClick={handleRename}>ok</button>
-                      </div>
-                    )}
-                    {isDeleting && (
-                      <div
-                        className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 hover:font-bold select-none"
-                        onClick={handleDelete}
-                      >
-                        <div>press to delete</div>
-                        <div className="text-[0.5rem] -mt-2">
-                          this will cancel your data permanently
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+          <div className="ml-5 flex flex-col">
+            <div className="text-[2.7vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
+              {props.data?.name.toUpperCase()}
             </div>
-          )}
-        </div>
-        <div
-        style={{width:"3rem"}}
-        //div to contain JoinTravelButton and keep the centered justification when is not rendered
-        >
-          {!isAlreadyJoined && props.loggedUser && (
-            <JoinTravelButton
-              loggedUser={props.loggedUser}
-              handleClickSetTravel={handleClickSetTravel}
-              uiTriggers={props.uiTriggers}
-              isAlreadyJoined={isAlreadyJoined}
-            />
-          )}
+            <div className="text-[0.8rem] -my-1 select-none">
+              created by:{" "}
+              <span className="text-[0.9rem] text-pink-400 font-bold">
+                {isAuthor() ? "You" : props.data?.userName}
+              </span>{" "}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      <EditButtonItem
+        editingPackage={editingPackage}
+        isAuthor={isAuthor}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleRename={handleRename}
+      />
+      <div
+        style={{ width: "3rem" }}
+        //div to contain JoinTravelButton and keep the centered justification when is not rendered
+      >
+        {!isAlreadyJoined && props.loggedUser && (
+          <JoinTravelButton
+            loggedUser={props.loggedUser}
+            handleClickSetTravel={handleClickSetTravel}
+            uiTriggers={props.uiTriggers}
+            isAlreadyJoined={isAlreadyJoined}
+          />
+        )}
+      </div>
+    </motion.div>
   );
 }
