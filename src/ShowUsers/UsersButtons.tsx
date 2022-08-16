@@ -55,29 +55,35 @@ export default function UserButton(props: {
   return (
     <>
       <motion.div
-        initial={{opacity:0, y:-50}}
-        animate={{opacity:1, y:0}}
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
         ref={ref}
         className="flex flex-row min-h-[2.3rem] justify-between mx-2 md:mx-20 select-none"
       >
-        {props.travel.id !== 0 &&<motion.button
-         initial={{opacity:0, y:-50}}
-         animate={{opacity:1, y:0}}
-          className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
-          onClick={() => {
-            props.uiTriggers.setIsShowUserButton(
-              !props.uiTriggers.isShowUserButton
-            );
-          }}
-        >
-          {"Travellers"}
-        </motion.button>}
+        {props.travel.id !== 0 && (
+          <motion.button
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
+            onClick={() => {
+              props.uiTriggers.setIsShowUserButton(
+                !props.uiTriggers.isShowUserButton
+              );
+            }}
+          >
+            {"Travellers"}
+          </motion.button>
+        )}
         {props.travel.id !== 0 && (
           <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
             <span className="font-[homeworld-norm] select-none">
               // {props.travel.id}XX
             </span>
-            <motion.span initial={{opacity:0}} animate={{opacity:1}} className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none"
+            >
               {props.travel.name.toUpperCase()}
             </motion.span>
           </div>
@@ -99,7 +105,23 @@ export default function UserButton(props: {
             }}
             exit={{ height: "0px", opacity: 0 }}
           >
-            {usersList}
+            {userListLenght > 0 && usersList}
+            {userListLenght === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 0 }}
+                animate={{ opacity: 1, y: +20 }}
+                className="flex flex-col rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] m-1 justify-center font-[homeworld-norm] text-white duration-300 items-start cursor-pointer select-none leading-none"
+              >
+                {" "}
+                <div className="my-2">NO USERS </div>
+                {/* <div
+                  style={{ fontFamily: "helvetica" }}
+                  className="text-[0.8rem] -mt-4"
+                >
+                  click on Join
+                </div> */}
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
