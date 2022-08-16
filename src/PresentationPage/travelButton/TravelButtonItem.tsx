@@ -30,6 +30,10 @@ export default function TravelButtonItem(props: {
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
+  useEffect(() => {
+    console.log(isAlreadyJoined);
+  }, [isAlreadyJoined]);
+
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
   }
@@ -50,7 +54,7 @@ export default function TravelButtonItem(props: {
       });
     }
     enableOrDisableJoinButtonIfAlreadyJoined();
-  }, []);
+  });
 
   function telegramAlertDeleteTravel() {
     const data = `travel: ${props.data?.name} has been deleted by: ${
@@ -196,12 +200,7 @@ export default function TravelButtonItem(props: {
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
             </span>{" "}
-            {/* id:
-            <span className="text-[0.7rem] text-pink-600 font-bold">
-              {props.data?.id}
-            </span> */}
           </div>
-
           {isAuthor() && (
             <div
               //edit, rename, delete buttons, if the user is also the author
@@ -269,12 +268,15 @@ export default function TravelButtonItem(props: {
             </div>
           )}
         </div>
-        <div>
-          {!isAlreadyJoined && (
+        <div
+        //div to contain JoinTravelButton and keep the centered justification when is not rendered
+        >
+          {props.loggedUser && (
             <JoinTravelButton
               loggedUser={props.loggedUser}
               handleClickSetTravel={handleClickSetTravel}
               uiTriggers={props.uiTriggers}
+              isAlreadyJoined={isAlreadyJoined}
             />
           )}
         </div>

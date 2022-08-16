@@ -6,6 +6,7 @@ export default function JoinTravelButton(props: {
   loggedUser: any;
   handleClickSetTravel: Function;
   uiTriggers:iTriggers
+  isAlreadyJoined:boolean
 }) {
   const navigate = useNavigate();
   return (
@@ -22,9 +23,9 @@ export default function JoinTravelButton(props: {
         }}
         className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
       >
-        {props.loggedUser && (
+        {(
           <>
-            <div>
+             <div>
               {" "}
               <ImEnter size={20} />
             </div>
