@@ -24,7 +24,7 @@ export default function EditButtonItem(props: {
               onClick={(e) => props.handleEdit(e)}
             >
               <FaEdit size={20}/>
-              <span>Edit</span>
+              <span className="-mt-1">Edit</span>
             </div>
           )}
           {props.editingPackage.isEditing && (

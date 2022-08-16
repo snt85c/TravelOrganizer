@@ -183,7 +183,7 @@ export default function TravelButtonItem(props: {
 
   return (
     <motion.div
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.90 }}
       //container, has information to change size
       className="flex flex-row relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-white rounded bg-gradient-to-r from-cyan-900 to-cyan-700  duration-300 "
       style={{
@@ -211,7 +211,7 @@ export default function TravelButtonItem(props: {
           className="flex flex-col justify-evenly items-center"
         >
           <div className="ml-5 flex flex-col">
-            <div className="text-[2.7vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
+            <div className="text-[3.5vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
               {props.data?.name.toUpperCase()}
             </div>
             <div className="text-[0.8rem] -my-1 select-none">
@@ -219,6 +219,7 @@ export default function TravelButtonItem(props: {
               <span className="text-[0.9rem] text-pink-400 font-bold">
                 {isAuthor() ? "You" : props.data?.userName}
               </span>{" "}
+              <span></span>
             </div>
           </div>
         </div>
