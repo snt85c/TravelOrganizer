@@ -38,15 +38,15 @@ export default function UserButton(props: {
   let usersList = props.users?.map((user, i) => {
     return (
       <div
-        className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
-        key={i}
-        onClick={() => handleClickSelection(user)}
+      className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
+      key={i}
+      onClick={() => handleClickSelection(user)}
       >
         {user?.userInfo.displayName.toUpperCase()}
         <img
           src={user?.userInfo.photoURL}
           className="w-10 h-10 rounded-full select-none"
-        />
+          />
       </div>
     );
   });
@@ -114,12 +114,6 @@ export default function UserButton(props: {
               >
                 {" "}
                 <div className="my-2">NO USERS </div>
-                {/* <div
-                  style={{ fontFamily: "helvetica" }}
-                  className="text-[0.8rem] -mt-4"
-                >
-                  click on Join
-                </div> */}
               </motion.div>
             )}
           </motion.div>
