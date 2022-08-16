@@ -30,10 +30,6 @@ export default function TravelButtonItem(props: {
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
-  useEffect(() => {
-    console.log(isAlreadyJoined);
-  }, [isAlreadyJoined]);
-
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
   }
@@ -45,7 +41,7 @@ export default function TravelButtonItem(props: {
       let tempdata: iTravelData = {} as iTravelData;
       querySnapshot.forEach((doc) => {
         tempdata = doc.data() as iTravelData;
-        if (
+        if (props.loggedUser &&
           tempdata[travelId] &&
           tempdata.userInfo.uid === props.loggedUser.uid
         ) {
@@ -161,7 +157,8 @@ export default function TravelButtonItem(props: {
     props.setTravel(temp);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault()
     setIsEditing(!isEditing);
     setIsRenaming(false);
     setIsDeleting(false);
@@ -170,7 +167,7 @@ export default function TravelButtonItem(props: {
   return (
     <div
       //container, has information to change size
-      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
+      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-gradient-to-r from-white to-cyan-600  duration-300 "
       style={{
         height: isEditing
           ? isRenaming || isDeleting
@@ -192,7 +189,7 @@ export default function TravelButtonItem(props: {
           //travel information div, contains the edit button as well
           className="flex flex-col justify-evenly items-center"
         >
-          <div className="text-[2.7vw] sm:text-[0.9rem] text-gray-800  select-none font-extrabold font-[homeworld-norm]">
+          <div className="text-[2.7vw] sm:text-[0.9rem] text-black  select-none font-extrabold font-[homeworld-norm]">
             {props.data?.name.toUpperCase()}
           </div>
           <div className="text-[0.7rem] -my-1 select-none">
@@ -208,10 +205,10 @@ export default function TravelButtonItem(props: {
             >
               {!isEditing && (
                 <div
-                  className=" text-[0.7rem] p-2 font-[homeworld-norm] cursor-pointer text-black hover:text-amber-500 duration-300 select-none"
+                  className=" text-[0.7rem] font-[homeworld-norm] cursor-pointer text-black hover:text-amber-500 duration-300 select-none"
                   onClick={handleEdit}
                 >
-                  MODIFY
+                  CLICK TO MODIFY
                 </div>
               )}
               {isEditing && (
@@ -269,6 +266,7 @@ export default function TravelButtonItem(props: {
           )}
         </div>
         <div
+        style={{width:"3rem"}}
         //div to contain JoinTravelButton and keep the centered justification when is not rendered
         >
           {!isAlreadyJoined && props.loggedUser && (

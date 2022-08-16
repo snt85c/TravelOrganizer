@@ -48,7 +48,7 @@ export default function CreateNewTravel(props: {
     <>
       {props.loggedUser && (
         <div className="flex mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
-          <div className="flex mt-5 justify-center items-center font-[homeworld-norm] select-none">
+          <div className="flex mt-5 text-[3vw] sm:text-[1rem] justify-center items-center font-[homeworld-norm] select-none">
             CREATE YOUR OWN TRAVEL
           </div>
           <div className="flex flex-col justify-center items-center m-1 ">
@@ -74,7 +74,7 @@ export default function CreateNewTravel(props: {
       {!props.loggedUser && (
         <>
           <div className="flex mt-10 flex-col m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
-            <div className="flex flex-col m-10 text-center justify-center items-center font-[homeworld-norm] select-none">
+            <div className="flex flex-col  m-10 text-center justify-center items-center font-[homeworld-norm] select-none">
               <div>
                 LOGIN TO <span className="text-white font-[1000]">CREATE</span>{" "}
                 AND <span className="text-white font-[1000]">JOIN</span> TRAVELS

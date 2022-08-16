@@ -3,7 +3,7 @@ import TravelButtonItem from "./travelButton/TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iTravelData, iTriggers, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
-
+import { AnimatePresence, motion } from "framer-motion";
 export default function PresentationPage(props: {
   uiTriggers: iTriggers;
   user: iUserInfo;
@@ -69,23 +69,26 @@ export default function PresentationPage(props: {
             </div>
           </>
         )}
-        {isRenderReady && (
-          //the components are loaded
-          <>
-            <div className="flex justify-center items-center font-[homeworld-norm] select-none">
-              AVAILABLE TRAVELS
-            </div>
-            <div className="flex z-20 flex-col w-[1/4] p-2 ">
-              <div>{travelButtonsList}</div>
-              <CreateNewTravel
-                loggedUser={props.loggedUser}
-                user={props.user}
-                travelList={props.travelList}
-                setTravelList={props.setTravelList}
-              />
-            </div>
-          </>
-        )}
+          {isRenderReady && (
+            //the components are loaded
+            <motion.div
+              initial={{ opacity: 0, y:-50 }}
+              animate={{ opacity: 1, y:0 }}
+            >
+              <div className="flex justify-center items-center font-[homeworld-norm] select-none">
+                AVAILABLE TRAVELS
+              </div>
+              <div className="flex z-20 flex-col w-[1/4] p-2 ">
+                <div>{travelButtonsList}</div>
+                <CreateNewTravel
+                  loggedUser={props.loggedUser}
+                  user={props.user}
+                  travelList={props.travelList}
+                  setTravelList={props.setTravelList}
+                />
+              </div>
+            </motion.div>
+          )}
 
         <div
           //flair text

@@ -54,11 +54,15 @@ export default function UserButton(props: {
   let userListLenght: number = usersList ? usersList?.length * 50 : 0;
   return (
     <>
-      <div
+      <motion.div
+        initial={{opacity:0, y:-50}}
+        animate={{opacity:1, y:0}}
         ref={ref}
-        className="flex flex-row justify-between mx-2 md:mx-20 select-none"
+        className="flex flex-row min-h-[2.3rem] justify-between mx-2 md:mx-20 select-none"
       >
-        <button
+        {props.travel.id !== 0 &&<motion.button
+         initial={{opacity:0, y:-50}}
+         animate={{opacity:1, y:0}}
           className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
             props.uiTriggers.setIsShowUserButton(
@@ -66,8 +70,8 @@ export default function UserButton(props: {
             );
           }}
         >
-          {"travellers"}
-        </button>
+          {"Travellers"}
+        </motion.button>}
         {props.travel.id !== 0 && (
           <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
             <span className="font-[homeworld-norm] select-none">
@@ -78,7 +82,7 @@ export default function UserButton(props: {
             </span>
           </div>
         )}
-      </div>
+      </motion.div>
       <AnimatePresence>
         {props.uiTriggers.isShowUserButton && (
           <motion.div
