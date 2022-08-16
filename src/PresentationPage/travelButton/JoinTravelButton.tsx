@@ -29,7 +29,7 @@ export default function JoinTravelButton(props: {
               {" "}
               <ImEnter size={20} />
             </div>
-            <div className="-mt-2">Join</div>
+            <div className="-mt-1">Join</div>
           </>
         )}
       </div>

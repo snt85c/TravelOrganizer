@@ -167,7 +167,7 @@ export default function TravelButtonItem(props: {
   return (
     <div
       //container, has information to change size
-      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-gradient-to-r from-white to-cyan-600  duration-300 "
+      className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-white rounded bg-gradient-to-r from-cyan-900 to-cyan-700  duration-300 "
       style={{
         height: isEditing
           ? isRenaming || isDeleting
@@ -189,12 +189,12 @@ export default function TravelButtonItem(props: {
           //travel information div, contains the edit button as well
           className="flex flex-col justify-evenly items-center"
         >
-          <div className="text-[2.7vw] sm:text-[0.9rem] text-black  select-none font-extrabold font-[homeworld-norm]">
+          <div className="text-[2.7vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
             {props.data?.name.toUpperCase()}
           </div>
-          <div className="text-[0.7rem] -my-1 select-none">
+          <div className="text-[0.8rem] -my-1 select-none">
             created by:{" "}
-            <span className="text-[0.7rem] text-pink-600 font-bold">
+            <span className="text-[0.9rem] text-pink-400 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
             </span>{" "}
           </div>
@@ -205,7 +205,7 @@ export default function TravelButtonItem(props: {
             >
               {!isEditing && (
                 <div
-                  className=" text-[0.7rem] font-[homeworld-norm] cursor-pointer text-black hover:text-amber-500 duration-300 select-none"
+                  className=" text-[0.7rem] font-[homeworld-norm] cursor-pointer text-amber-500 duration-300 select-none"
                   onClick={handleEdit}
                 >
                   CLICK TO MODIFY

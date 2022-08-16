@@ -24,7 +24,7 @@ export default function WatchTravelButton(props: {
               {" "}
               <ImEye size={20} />
             </div>
-            <div className="-mt-2">View</div>{" "}
+            <div className="-mt-1">View</div>{" "}
           </>
         }
       </div>

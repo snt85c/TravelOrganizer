@@ -77,9 +77,9 @@ export default function UserButton(props: {
             <span className="font-[homeworld-norm] select-none">
               // {props.travel.id}XX
             </span>
-            <span className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none">
+            <motion.span initial={{opacity:0}} animate={{opacity:1}} className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none">
               {props.travel.name.toUpperCase()}
-            </span>
+            </motion.span>
           </div>
         )}
       </motion.div>
