@@ -271,7 +271,7 @@ export default function TravelButtonItem(props: {
         <div
         //div to contain JoinTravelButton and keep the centered justification when is not rendered
         >
-          {props.loggedUser && (
+          {!isAlreadyJoined && props.loggedUser && (
             <JoinTravelButton
               loggedUser={props.loggedUser}
               handleClickSetTravel={handleClickSetTravel}
