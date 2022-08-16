@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { ImEnter } from "react-icons/im";
+import { iTriggers } from "../../Main";
 
 export default function JoinTravelButton(props: {
   loggedUser: any;
   handleClickSetTravel: Function;
-  setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+  uiTriggers:iTriggers
 }) {
   const navigate = useNavigate();
   return (
@@ -13,7 +15,8 @@ export default function JoinTravelButton(props: {
         //right join travel button
         onClick={() => {
           props.handleClickSetTravel();
-          props.setIsWatching(false);
+          props.uiTriggers.setIssShowUserButton(false)
+          // props.setIsWatching(false);
           navigate("/user");
         }}
         className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"

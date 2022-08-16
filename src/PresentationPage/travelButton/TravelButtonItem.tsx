@@ -7,22 +7,22 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ImEnter } from "react-icons/im";
-import { useEffect, useRef, useState } from "react";
+import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
+import { useState } from "react";
 import { iTravel, iTravelData } from "../../Interface";
 import { db } from "../../LoginComponents/firebase";
-import { telegramBotKey, chat_id } from "../../Main";
-import { useNavigate } from "react-router-dom";
+import { telegramBotKey, chat_id, iTriggers } from "../../Main";
 import WatchTravelButton from "./WatchTravelButton";
 import JoinTravelButton from "./JoinTravelButton";
 
 export default function TravelButtonItem(props: {
+  uiTriggers: iTriggers;
   data?: iTravel;
   loggedUser: any;
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -30,33 +30,8 @@ export default function TravelButtonItem(props: {
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
-  const navigate = useNavigate();
-
-  // console.log(props.data)
-
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
-  }
-
-  function HandleClickOutsideComponent(
-    setState: React.Dispatch<React.SetStateAction<boolean>>
-  ) {
-    const ref = useRef<HTMLDivElement>(null);
-
-    const handleClickOutside = (event: Event) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setState(false);
-      }
-    };
-
-    useEffect(() => {
-      document.addEventListener("click", handleClickOutside, true);
-      return () => {
-        document.removeEventListener("click", handleClickOutside, true);
-      };
-    });
-
-    return { ref };
   }
 
   function telegramAlertDeleteTravel() {
@@ -172,7 +147,7 @@ export default function TravelButtonItem(props: {
 
   return (
     <div
-      //container
+      //container, has information to change size
       className="flex flex-col relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-black rounded bg-white border duration-300 "
       style={{
         height: isEditing
@@ -184,33 +159,15 @@ export default function TravelButtonItem(props: {
       }}
     >
       <div
-        //2nd container
+        //2nd container, flex rules for the children
         className="flex justify-between w-full"
       >
         <WatchTravelButton
           handleClickSetTravel={handleClickSetTravel}
-          setIsWatching={props.setIsWatching}
+          uiTriggers={props.uiTriggers}
         />
-        {/* <div
-          //left watch travel button
-          onClick={() => {
-            handleClickSetTravel();
-            props.setIsWatching(true);
-          }}
-          className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
-        >
-          {
-            <>
-              <div>
-                {" "}
-                <ImEye size={20} />
-              </div>
-              <div className="-mt-2">View</div>{" "}
-            </>
-          }
-        </div> */}
         <div
-          //travel information
+          //travel information div, contains the edit button as well
           className="flex flex-col justify-evenly items-center"
         >
           <div className="text-[2.7vw] sm:text-[0.9rem] text-gray-800  select-none font-extrabold font-[homeworld-norm]">
@@ -297,27 +254,8 @@ export default function TravelButtonItem(props: {
         <JoinTravelButton
           loggedUser={props.loggedUser}
           handleClickSetTravel={handleClickSetTravel}
-          setIsWatching={props.setIsWatching}
+          uiTriggers={props.uiTriggers}
         />
-        {/* <div
-          //right join travel button
-          onClick={() => {
-            handleClickSetTravel();
-            props.setIsWatching(false);
-            navigate("/user");
-          }}
-          className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
-        >
-          {props.loggedUser && (
-            <>
-              <div>
-                {" "}
-                <ImEnter size={20} />
-              </div>
-              <div className="-mt-2">Join</div>
-            </>
-          )}
-        </div> */}
       </div>
     </div>
   );

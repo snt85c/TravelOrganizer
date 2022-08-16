@@ -4,27 +4,31 @@ import { LangContext } from "../LangContextProvider";
 import { iTravel, iTravelData } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 import { AnimatePresence, motion } from "framer-motion";
+import { iTriggers } from "../Main";
 
 export default function UserButton(props: {
+  uiTriggers: iTriggers;
   travel: iTravel;
   user?: iTravelData;
   users?: iTravelData[];
   loggedUser: any;
-  isWatching: boolean;
   setUser: React.Dispatch<any>;
   setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }) {
-  const [showOther, setShowOther] = useState<boolean>(false);
   const navigate = useNavigate();
   const lang = useContext(LangContext);
-  const { ref } = HandleClickOutsideComponent(setShowOther)
+  const { ref } = HandleClickOutsideComponent(
+    props.uiTriggers.setIssShowUserButton
+  );
 
-  useEffect(() => {
-    if (props.travel.id !== 0) setShowOther(true);
-  }, [props.travel]);
+  // useEffect(() => {
+  //   if (props.travel.id !== 0)
+  //     // setShowOther(true);
+  //     props.uiTriggers.setIssShowUserButton(true);
+  // }, [props.travel]);
 
   const handleClickSelection = (user: iTravelData) => {
-    if (props.loggedUser && !props.isWatching) {
+    if (props.loggedUser ) { //&& !props.uiTriggers.isShowUserButton
       // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
@@ -37,7 +41,8 @@ export default function UserButton(props: {
       props.setOtherUser(user);
       navigate("/other");
     }
-    setShowOther(false);
+    props.uiTriggers.setIssShowUserButton(false);
+    // setShowOther(false);
   };
 
   let usersList = props.users?.map((user, i) => {
@@ -56,16 +61,17 @@ export default function UserButton(props: {
     );
   });
 
-  let userListLenght: number = usersList ? usersList?.length * 50 : 0
+  let userListLenght: number = usersList ? usersList?.length * 50 : 0;
   return (
     <>
       <div
         ref={ref}
-        className="flex flex-row justify-between mx-2 md:mx-20 select-none">
+        className="flex flex-row justify-between mx-2 md:mx-20 select-none"
+      >
         <button
           className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
-            setShowOther(!showOther);
+            props.uiTriggers.setIssShowUserButton(!props.uiTriggers.isShowUserButton);
           }}
         >
           {"travellers"}
@@ -82,17 +88,24 @@ export default function UserButton(props: {
         )}
       </div>
       <AnimatePresence>
-        {showOther &&
+        {props.uiTriggers.isShowUserButton && (
           <motion.div
             className="absolute top-auto md:left-[4.5rem] z-30 flex flex-col items-center md:justify-start justify-center font-[homeworld-norm] w-2/3 md:w-1/3 select-none"
-            style={{ display: showOther ? "flex" : "none" }}
-            initial={{ height: "0px", opacity:0 }}
-            animate={{ height: showOther ? `${userListLenght}px` : 0, opacity:1 }}
-            exit={{height:"0px", opacity:0}}
+            style={{
+              display: props.uiTriggers.isShowUserButton ? "flex" : "none",
+            }}
+            initial={{ height: "0px", opacity: 0 }}
+            animate={{
+              height: props.uiTriggers.isShowUserButton
+                ? `${userListLenght}px`
+                : 0,
+              opacity: 1,
+            }}
+            exit={{ height: "0px", opacity: 0 }}
           >
             {usersList}
           </motion.div>
-        }
+        )}
       </AnimatePresence>
     </>
   );

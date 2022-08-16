@@ -18,10 +18,12 @@ import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
 import { iTravel, iTravelData, iUser } from "./Interface";
-
+export interface iTriggers {
+  isShowUserButton: boolean;
+  setIssShowUserButton: React.Dispatch<React.SetStateAction<boolean>>;
+}
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
-
 export default function Main() {
   const { user: loggedUser } = useUserAuth();
   const [otherUser, setOtherUser] = useState<any>();
@@ -29,7 +31,18 @@ export default function Main() {
   const [usersList, setUsersList] = useState<iTravelData[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
-  const [isWatching, setIsWatching] = useState<boolean>(false);
+  // const [isWatching, setIsWatching] = useState<boolean>(false);
+  const [isShowUserButton, setIsShowUserButton] = useState<boolean>(false);
+
+  const uiTriggers: iTriggers = {
+    isShowUserButton: isShowUserButton,
+    setIssShowUserButton: setIsShowUserButton,
+  };
+
+  useEffect(() => {
+    console.log(uiTriggers.isShowUserButton);
+  }, [uiTriggers]);
+
   const [selectedTravel, setSelectedTravel] = useState<iTravel>({
     name: "",
     id: 0,
@@ -52,7 +65,7 @@ export default function Main() {
         id: 0,
         createdBy: "",
         userName: "",
-      })
+      });
       // watchTravel();
     } catch (e) {
       console.log(e);
@@ -137,8 +150,6 @@ export default function Main() {
 
   async function watchTravel() {
     setUsersList([]);
-
-    // setUser({});
     const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
     let tempdata: iTravelData = {} as iTravelData;
@@ -164,10 +175,6 @@ export default function Main() {
             if (!tempdata[selectedTravel.id]) {
               let newUserData = userTravelDataFactory("newEmpty");
               setUser(newUserData);
-              // setUsersList([
-              //   ...usersList,
-              //   newUserData as unknown as iTravelData,
-              // ]);
               navigate("/user");
               listTemp.push(newUserData as unknown as iTravelData);
             } else {
@@ -176,7 +183,6 @@ export default function Main() {
                 tempdata
               );
               setUser(newUserData);
-              // setUsersList([...usersList, newUserData as unknown as iTravelData])
               navigate("/user");
               listTemp.push(newUserData as unknown as iTravelData);
             }
@@ -197,18 +203,15 @@ export default function Main() {
     }
   }
 
-
   useEffect(() => {
     //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
-    function selectViewModeOrJoin() {
-      if (isWatching) {
+    function openUSerButtonListOnScreen() {
+      if (isShowUserButton) {
         watchTravel();
-      } else if (selectedTravel.id !== 0) {
-        joinTravel();
       }
     }
-    selectViewModeOrJoin();
-  }, [selectedTravel, isWatching]);
+    openUSerButtonListOnScreen();
+  }, [isShowUserButton]);
 
   useEffect(() => {
     function telegramAlert() {
@@ -219,12 +222,10 @@ export default function Main() {
       } else {
         fetch(
           `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text="unknown user is visiting Travel Organizer" `
-          );
-        }
+        );
       }
-      setTimeout(() => {
-      telegramAlert();
-    }, 5000)
+    }
+    telegramAlert();
   }, [loggedUser]);
 
   useEffect(() => {
@@ -257,7 +258,7 @@ export default function Main() {
       fetch(`https://api.telegram.org/bot${telegramBotKey}/getUpdates`).then(
         (response) => console.log(response.json())
       );
-    // getBotUpdates();
+    // getBotUpdates(); //DISCONNECTED
   }, []);
 
   useEffect(() => {
@@ -301,11 +302,12 @@ export default function Main() {
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
           <UserButton
+            uiTriggers={uiTriggers}
             travel={selectedTravel}
             user={user}
             users={usersList}
             loggedUser={loggedUser}
-            isWatching={isWatching}
+            // isWatching={isWatching}
             setUser={setUser}
             setOtherUser={setOtherUser}
           />
@@ -314,11 +316,12 @@ export default function Main() {
               path="/"
               element={
                 <PresentationPage
+                  uiTriggers={uiTriggers}
                   user={user.userInfo}
                   usersList={usersList}
                   loggedUser={loggedUser}
                   travelList={travelList}
-                  setIsWatching={setIsWatching}
+                  // setIsWatching={setIsWatching}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                   watchTravel={watchTravel}

@@ -3,15 +3,17 @@ import TravelButtonItem from "./travelButton/TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
 import { iTravel, iTravelData, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
+import { iTriggers } from "../Main";
 
 export default function PresentationPage(props: {
+  uiTriggers:iTriggers
   user: iUserInfo;
   usersList: iTravelData[];
   loggedUser: any;
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
   watchTravel: Function;
   joinTravel: Function;
 }) {
@@ -25,12 +27,13 @@ export default function PresentationPage(props: {
       return (
           <TravelButtonItem
             key={i}
+            uiTriggers={props.uiTriggers}
             loggedUser={props.loggedUser}
             data={currentData}
             travelList={props.travelList}
             setTravel={props.setTravel}
             setTravelList={props.setTravelList}
-            setIsWatching={props.setIsWatching}
+            // setIsWatching={props.setIsWatching}
           />
       );
     }
