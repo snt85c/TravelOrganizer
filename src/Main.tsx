@@ -7,7 +7,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { db } from "./LoginComponents/firebase";
 import { useUserAuth } from "./LoginComponents/UserAuth";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -17,11 +17,8 @@ import Footer from "./Footer";
 import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
-import { iTravel, iTravelData, iUser } from "./Interface";
-export interface iTriggers {
-  isShowUserButton: boolean;
-  setIssShowUserButton: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { iTravel, iTravelData, iTriggers } from "./Interface";
+
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
 export default function Main() {
@@ -31,17 +28,21 @@ export default function Main() {
   const [usersList, setUsersList] = useState<iTravelData[]>([]);
   const [travelList, setTravelList] = useState<[iTravel?]>([]);
   const [language, setLanguage] = useState<string>("en");
-  // const [isWatching, setIsWatching] = useState<boolean>(false);
   const [isShowUserButton, setIsShowUserButton] = useState<boolean>(false);
+  const [isWatching, setIsWatching] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+  const [trigger, setTrigger] = useState<number>(0);
 
   const uiTriggers: iTriggers = {
-    isShowUserButton: isShowUserButton,
-    setIssShowUserButton: setIsShowUserButton,
+    isShowUserButton,
+    setIsShowUserButton,
+    isWatching,
+    setIsWatching,
+    isJoining,
+    setIsJoining,
+    trigger,
+    setTrigger,
   };
-
-  useEffect(() => {
-    console.log(uiTriggers.isShowUserButton);
-  }, [uiTriggers]);
 
   const [selectedTravel, setSelectedTravel] = useState<iTravel>({
     name: "",
@@ -205,13 +206,16 @@ export default function Main() {
 
   useEffect(() => {
     //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
-    function openUSerButtonListOnScreen() {
-      if (isShowUserButton) {
+    function openUserButtonListOnScreen() {
+      if (isWatching) {
         watchTravel();
       }
+      else if (isJoining) {
+        joinTravel();
+      }
     }
-    openUSerButtonListOnScreen();
-  }, [isShowUserButton]);
+      openUserButtonListOnScreen();
+  }, [trigger]);
 
   useEffect(() => {
     function telegramAlert() {
@@ -307,7 +311,6 @@ export default function Main() {
             user={user}
             users={usersList}
             loggedUser={loggedUser}
-            // isWatching={isWatching}
             setUser={setUser}
             setOtherUser={setOtherUser}
           />
@@ -321,7 +324,6 @@ export default function Main() {
                   usersList={usersList}
                   loggedUser={loggedUser}
                   travelList={travelList}
-                  // setIsWatching={setIsWatching}
                   setTravel={setSelectedTravel}
                   setTravelList={setTravelList}
                   watchTravel={watchTravel}

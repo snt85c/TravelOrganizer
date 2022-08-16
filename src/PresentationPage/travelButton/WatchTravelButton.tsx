@@ -1,5 +1,5 @@
 import {  ImEye } from "react-icons/im";
-import { iTriggers } from "../../Main";
+import { iTriggers } from "../../Interface";
 
 export default function WatchTravelButton(props: {
   handleClickSetTravel: Function;
@@ -10,8 +10,11 @@ export default function WatchTravelButton(props: {
       <div
         //left watch travel button
         onClick={() => {
+          props.uiTriggers.setIsShowUserButton(true)
+          props.uiTriggers.setTrigger(Date.now())
+          props.uiTriggers.setIsJoining(false)
+          props.uiTriggers.setIsWatching(true)
           props.handleClickSetTravel();
-          props.uiTriggers.setIssShowUserButton(true)
         }}
         className="m-2 flex flex-col items-center justify-center select-none cursor-pointer"
       >

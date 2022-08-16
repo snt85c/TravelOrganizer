@@ -8,10 +8,10 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
-import { useState } from "react";
-import { iTravel, iTravelData } from "../../Interface";
+import { useEffect, useState } from "react";
+import { iTravel, iTravelData, iTriggers } from "../../Interface";
 import { db } from "../../LoginComponents/firebase";
-import { telegramBotKey, chat_id, iTriggers } from "../../Main";
+import { telegramBotKey, chat_id } from "../../Main";
 import WatchTravelButton from "./WatchTravelButton";
 import JoinTravelButton from "./JoinTravelButton";
 
@@ -22,17 +22,35 @@ export default function TravelButtonItem(props: {
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  // setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isAlreadyJoined, setIsAlreadyJoined] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
   const { ref } = HandleClickOutsideComponent(setIsEditing);
 
   function isAuthor() {
     return props.loggedUser?.uid === props.data?.createdBy;
   }
+
+  useEffect(() => {
+    async function enableOrDisableJoinButtonIfAlreadyJoined() {
+      let travelId: number = props.data?.id ? props.data?.id : 0;
+      const querySnapshot = await getDocs(collection(db, "users"));
+      let tempdata: iTravelData = {} as iTravelData;
+      querySnapshot.forEach((doc) => {
+        tempdata = doc.data() as iTravelData;
+        if (
+          tempdata[travelId] &&
+          tempdata.userInfo.uid === props.loggedUser.uid
+        ) {
+          setIsAlreadyJoined(true);
+        }
+      });
+    }
+    enableOrDisableJoinButtonIfAlreadyJoined();
+  }, []);
 
   function telegramAlertDeleteTravel() {
     const data = `travel: ${props.data?.name} has been deleted by: ${
@@ -178,10 +196,10 @@ export default function TravelButtonItem(props: {
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {isAuthor() ? "You" : props.data?.userName}
             </span>{" "}
-            id:
+            {/* id:
             <span className="text-[0.7rem] text-pink-600 font-bold">
               {props.data?.id}
-            </span>
+            </span> */}
           </div>
 
           {isAuthor() && (
@@ -251,11 +269,15 @@ export default function TravelButtonItem(props: {
             </div>
           )}
         </div>
-        <JoinTravelButton
-          loggedUser={props.loggedUser}
-          handleClickSetTravel={handleClickSetTravel}
-          uiTriggers={props.uiTriggers}
-        />
+        <div>
+          {!isAlreadyJoined && (
+            <JoinTravelButton
+              loggedUser={props.loggedUser}
+              handleClickSetTravel={handleClickSetTravel}
+              uiTriggers={props.uiTriggers}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

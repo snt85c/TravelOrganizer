@@ -46,3 +46,14 @@ export interface iTravel {
   userName:string
 }
 
+export interface iTriggers {
+  isShowUserButton: boolean;
+  setIsShowUserButton: React.Dispatch<React.SetStateAction<boolean>>;
+  isJoining: boolean;
+  setIsJoining: React.Dispatch<React.SetStateAction<boolean>>;
+  isWatching: boolean;
+  setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger: number;
+  setTrigger: React.Dispatch<React.SetStateAction<number>>;
+}
+

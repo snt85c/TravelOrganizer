@@ -1,10 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iTravel, iTravelData } from "../Interface";
+import { iTravel, iTravelData, iTriggers } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 import { AnimatePresence, motion } from "framer-motion";
-import { iTriggers } from "../Main";
 
 export default function UserButton(props: {
   uiTriggers: iTriggers;
@@ -18,19 +17,11 @@ export default function UserButton(props: {
   const navigate = useNavigate();
   const lang = useContext(LangContext);
   const { ref } = HandleClickOutsideComponent(
-    props.uiTriggers.setIssShowUserButton
+    props.uiTriggers.setIsShowUserButton
   );
-
-  // useEffect(() => {
-  //   if (props.travel.id !== 0)
-  //     // setShowOther(true);
-  //     props.uiTriggers.setIssShowUserButton(true);
-  // }, [props.travel]);
 
   const handleClickSelection = (user: iTravelData) => {
     if (props.loggedUser) {
-      //&& !props.uiTriggers.isShowUserButton
-      // && props.user
       if (user.userInfo.uid !== props.loggedUser?.uid) {
         props.setOtherUser(user);
         navigate("/other");
@@ -42,8 +33,6 @@ export default function UserButton(props: {
       props.setOtherUser(user);
       navigate("/other");
     }
-    props.uiTriggers.setIssShowUserButton(false);
-    // setShowOther(false);
   };
 
   let usersList = props.users?.map((user, i) => {
@@ -72,7 +61,7 @@ export default function UserButton(props: {
         <button
           className="flex z-30 rounded-md shadow-lg mt-2 px-1 py-0  border hover:border-amber-500 flex-row justify-center items-center gap-2 hover:text-amber-500 duration-300"
           onClick={() => {
-            props.uiTriggers.setIssShowUserButton(
+            props.uiTriggers.setIsShowUserButton(
               !props.uiTriggers.isShowUserButton
             );
           }}

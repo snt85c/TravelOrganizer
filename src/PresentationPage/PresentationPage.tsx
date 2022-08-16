@@ -1,9 +1,8 @@
 import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./travelButton/TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
-import { iTravel, iTravelData, iUserInfo } from "../Interface";
+import { iTravel, iTravelData, iTriggers, iUserInfo } from "../Interface";
 import { useEffect, useState } from "react";
-import { iTriggers } from "../Main";
 
 export default function PresentationPage(props: {
   uiTriggers: iTriggers;
@@ -13,7 +12,6 @@ export default function PresentationPage(props: {
   travelList: [iTravel?];
   setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
   setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  // setIsWatching: React.Dispatch<React.SetStateAction<boolean>>;
   watchTravel: Function;
   joinTravel: Function;
 }) {
@@ -51,10 +49,6 @@ export default function PresentationPage(props: {
       setIsFetchingTakingTooLong(true);
     }, WAITING_TIME_ERROR_MESSAGE);
   }, []);
-  const variants = {
-    open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "-100%" },
-  };
 
   return (
     <>
