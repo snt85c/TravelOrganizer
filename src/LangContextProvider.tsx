@@ -29,11 +29,15 @@ export const lang = {
     },
     itemListArrayComponent: {
       add: "add",
-      toggledescr: "available | packed | remove",
-      toggledescrDISABLED: "available | packed ",
+      unavailable: "unavailable",
+      available: "available",
+      ready:"ready"
     },
     itemComponent: {
       name: "item",
+      modify:"modify",
+      remove: "remove",
+      confirm:"confirm"
     },
     itemListComponent: {
       readonlyMessage: " it's not possible to modify other user's info",
@@ -46,6 +50,10 @@ export const lang = {
       swipeInstructionLx: "swipe >> to delete",
       swipeInstructionRx: "swipe << to highlight",
     },
+    createNewTravelComponent:{
+      createFlairText:"CREATE YOUR OWN TRAVEL",
+      add:"Add "
+    }
   },
   it: {
     header: {
@@ -74,11 +82,15 @@ export const lang = {
     },
     itemListArrayComponent: {
       add: "aggiungi",
-      toggledescr: "disponibile | nello zaino | rimuovi",
-      toggledescrDISABLED: "disponibile | nello zaino",
+      unavailable: "mancante",
+      available: "presente",
+      ready:"pronto"
     },
     itemComponent: {
       name: "nome",
+      modify:"modifica",
+      remove:"rimuovi",
+      confirm:"conferma"
     },
     itemListComponent: {
       readonlyMessage:
@@ -92,6 +104,10 @@ export const lang = {
       swipeInstructionLx: "swipe >> per cancellare",
       swipeInstructionRx: "swipe << per evidenziare",
     },
+    createNewTravelComponent:{
+      createFlairText:"CREA UN NUOVO VIAGGIO",
+      add: "Aggiungi "
+    }
   },
 };
 

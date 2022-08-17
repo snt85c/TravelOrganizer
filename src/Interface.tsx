@@ -36,7 +36,7 @@ export interface iGear {
   name: string;
   ready: boolean;
   highlighted: boolean;
-  status: "unavailable" | "available" | "ready";
+  status: string;
 }
 
 export interface iTravel {
@@ -46,7 +46,7 @@ export interface iTravel {
   userName: string;
 }
 
-export interface iTriggers {
+export interface iTravelButtonPropsPackage {
   isShowUserButton: boolean;
   setIsShowUserButton: React.Dispatch<React.SetStateAction<boolean>>;
   isJoining: boolean;
@@ -57,15 +57,29 @@ export interface iTriggers {
   setTrigger: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export interface iEditingPackage {
+export interface iEditingPropsPackage {
   isEditing: boolean;
   isDeleting: boolean;
   isRenaming: boolean;
-  newName:string,
-  setNewName:React.Dispatch<React.SetStateAction<string>>,
-  setIsEditing:React.Dispatch<React.SetStateAction<boolean>>,
-  setIsDeleting:React.Dispatch<React.SetStateAction<boolean>>
-  setIsRenaming:React.Dispatch<React.SetStateAction<boolean>>
-  defaultName:string
+  newName: string;
+  setNewName: React.Dispatch<React.SetStateAction<string>>;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsRenaming: React.Dispatch<React.SetStateAction<boolean>>;
+  defaultName: string;
+}
 
+export interface iUsersStatePropsPackage {
+  user: iUserInfo;
+  usersList: iTravelData[];
+  loggedUser: any;
+  travelList: [iTravel?];
+  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
+  setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
+  watchTravel: Function;
+  joinTravel: Function;
+  travel: iTravel;
+  users?: iTravelData[];
+  setUser: React.Dispatch<any>;
+  setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
 }

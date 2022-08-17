@@ -1,15 +1,15 @@
 import { FaEdit } from "react-icons/fa";
 import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
-import { iEditingPackage } from "../../Interface";
+import { iEditingPropsPackage } from "../../Interface";
 
 export default function EditButtonItem(props: {
   isAuthor: Function;
   handleEdit: Function;
   handleDelete: Function;
   handleRename: Function;
-  editingPackage:iEditingPackage
+  editingPropsPackage:iEditingPropsPackage
 }) {
-  const { ref } = HandleClickOutsideComponent(props.editingPackage.setIsEditing);
+  const { ref } = HandleClickOutsideComponent(props.editingPropsPackage.setIsEditing);
 
   return (
     <>
@@ -18,7 +18,7 @@ export default function EditButtonItem(props: {
           //edit, rename, delete buttons, if the user is also the author
           className="flex justify-center items-center"
         >
-          {!props.editingPackage.isEditing && (
+          {!props.editingPropsPackage.isEditing && (
             <div
               className="flex flex-col items-center justify-center m-2 cursor-pointer text-white duration-300 select-none "
               onClick={(e) => props.handleEdit(e)}
@@ -27,15 +27,15 @@ export default function EditButtonItem(props: {
               <span className="-mt-1">Edit</span>
             </div>
           )}
-          {props.editingPackage.isEditing && (
+          {props.editingPropsPackage.isEditing && (
             <div ref={ref}>
               <div className="flex flex-col justify-evenly items-center ">
                 <div className="flex flex-col p-1 m-1 gap-1">
                   <div
                     className="mx-2 text-[0.7rem]  font-[homeworld-norm] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
                     onClick={() => {
-                        props.editingPackage.setIsDeleting(!props.editingPackage.isDeleting);
-                        props.editingPackage.setIsRenaming(false);
+                        props.editingPropsPackage.setIsDeleting(!props.editingPropsPackage.isDeleting);
+                        props.editingPropsPackage.setIsRenaming(false);
                     }}
                   >
                     DELETE
@@ -43,31 +43,31 @@ export default function EditButtonItem(props: {
                   <div
                     className="mx-2  text-[0.7rem]  font-[homeworld-norm]  cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
                     onClick={() => {
-                        props.editingPackage.setIsRenaming(!props.editingPackage.isRenaming);
-                        props.editingPackage.setIsDeleting(false);
+                        props.editingPropsPackage.setIsRenaming(!props.editingPropsPackage.isRenaming);
+                        props.editingPropsPackage.setIsDeleting(false);
                     }}
                   >
                     RENAME
                   </div>
                 </div>
-                {props.editingPackage.isRenaming && (
+                {props.editingPropsPackage.isRenaming && (
                   <div
                   className="flex flex-row"
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && props.editingPackage.isRenaming) props.handleRename();
+                      if (e.key === "Enter" && props.editingPropsPackage.isRenaming) props.handleRename();
                     }}
                   >
                     <input
                       className="rounded-xl border-2 border-amber-500 mx-2 px-2 text-center w-[80%] text-black"
-                      onChange={(e) => props.editingPackage.setNewName(e.target.value)}
-                      defaultValue={props.editingPackage.defaultName}
+                      onChange={(e) => props.editingPropsPackage.setNewName(e.target.value)}
+                      defaultValue={props.editingPropsPackage.defaultName}
                     />
                     <button onClick={()=>props.handleRename()}>ok</button>
                   </div>
                 )}
-                {props.editingPackage.isDeleting && (
+                {props.editingPropsPackage.isDeleting && (
                   <div
-                    className=" flex flex-col justify-center items-center mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 select-none"
+                    className=" flex flex-col justify-center items-center  hover:bg-white rounded-xl  p-1 mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 select-none"
                     onClick={()=>props.handleDelete()}
                   >
                     <div className="text-center font-bold leading-none">press to delete</div>

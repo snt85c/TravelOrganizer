@@ -17,7 +17,12 @@ import Footer from "./Footer";
 import UserButton from "./ShowUsers/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
 import PresentationPage from "./PresentationPage/PresentationPage";
-import { iTravel, iTravelData, iTriggers } from "./Interface";
+import {
+  iTravel,
+  iTravelData,
+  iTravelButtonPropsPackage,
+  iUsersStatePropsPackage,
+} from "./Interface";
 
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
@@ -32,8 +37,15 @@ export default function Main() {
   const [isWatching, setIsWatching] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [trigger, setTrigger] = useState<number>(0);
+  const [selectedTravel, setSelectedTravel] = useState<iTravel>({
+    name: "",
+    id: 0,
+    createdBy: "",
+    userName: "",
+  });
+  const navigate = useNavigate();
 
-  const uiTriggers: iTriggers = {
+  const travelButtonPropsPackage: iTravelButtonPropsPackage = {
     isShowUserButton,
     setIsShowUserButton,
     isWatching,
@@ -44,13 +56,19 @@ export default function Main() {
     setTrigger,
   };
 
-  const [selectedTravel, setSelectedTravel] = useState<iTravel>({
-    name: "",
-    id: 0,
-    createdBy: "",
-    userName: "",
-  });
-  const navigate = useNavigate();
+  const usersStatePropsPackage: iUsersStatePropsPackage = {
+    user: user.userInfo,
+    usersList,
+    loggedUser,
+    travelList,
+    travel: selectedTravel,
+    setUser,
+    setOtherUser,
+    setTravel: setSelectedTravel,
+    setTravelList,
+    watchTravel,
+    joinTravel,
+  };
 
   const handleDeleteUser = async (id: number) => {
     const docRef = doc(db, "users", loggedUser.uid);
@@ -67,7 +85,6 @@ export default function Main() {
         createdBy: "",
         userName: "",
       });
-      // watchTravel();
     } catch (e) {
       console.log(e);
     }
@@ -91,7 +108,7 @@ export default function Main() {
 
   function userTravelDataFactory(
     type: "newEmpty" | "collatedLoggedUser" | "collatedOtherUsers",
-    tempdata?: iTravelData
+    tempdata?: iTravelData,
   ) {
     return {
       userInfo: {
@@ -205,16 +222,15 @@ export default function Main() {
   }
 
   useEffect(() => {
-    //this allows for the userButtons to be updated correclty, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
+    //this allows for the userButtons to be updated correctly, otherwise they lag behind with the dom nd wont show the correct travel selected (it will always show the one before if the function watch travel or join travel are simply called inside travelButtonItem, as the dom is not refreshed). travelButtonItems will set the state of the selectedTravel and isWatching, so the hook checks what function to fire when this is changed
     function openUserButtonListOnScreen() {
       if (isWatching) {
         watchTravel();
-      }
-      else if (isJoining) {
+      } else if (isJoining) {
         joinTravel();
       }
     }
-      openUserButtonListOnScreen();
+    openUserButtonListOnScreen();
   }, [trigger]);
 
   useEffect(() => {
@@ -306,28 +322,16 @@ export default function Main() {
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
           <UserButton
-            uiTriggers={uiTriggers}
-            travel={selectedTravel}
-            user={user}
-            users={usersList}
-            loggedUser={loggedUser}
-            setUser={setUser}
-            setOtherUser={setOtherUser}
+            travelButtonPropsPackage={travelButtonPropsPackage}
+            usersStatePropsPackage={usersStatePropsPackage}
           />
           <Routes>
             <Route
               path="/"
               element={
                 <PresentationPage
-                  uiTriggers={uiTriggers}
-                  user={user.userInfo}
-                  usersList={usersList}
-                  loggedUser={loggedUser}
-                  travelList={travelList}
-                  setTravel={setSelectedTravel}
-                  setTravelList={setTravelList}
-                  watchTravel={watchTravel}
-                  joinTravel={joinTravel}
+                  travelButtonPropsPackage={travelButtonPropsPackage}
+                  usersStatePropsPackage={usersStatePropsPackage}
                 />
               }
             />

@@ -21,7 +21,6 @@ export default function Item(props: {
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [isDeleted, setIsDeleted] = useState<boolean>(false)
   const { ref } = HandleClickOutsideComponent(setIsEditName);
 
   const [change, setChange] = useState<string>("");
@@ -135,14 +134,16 @@ export default function Item(props: {
       currentGear[props.index].name = change
         ? change
         : currentGear[props.index].name;
-      const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
+      const currentUser: any = {
+        ...props.user,
+        [props.travelId]: currentTravel,
+      };
       props.setUser && props.setUser(currentUser);
       setIsEditName(!isEditName);
     }
   };
 
   const handleDelete = () => {
-    setIsDeleted(true)
     let currentTravel: iUser = { ...props.user[props.travelId] };
     currentGear.splice(props.index, 1);
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
@@ -163,52 +164,55 @@ export default function Item(props: {
       [props.travelId]: currentTravel,
     };
     props.setUser && props.setUser(currentUser);
-    return (
-      <>
-        <div
+    // return (
+    //   <>
+        {/* <div
           onClick={buttonToggle}
-          className="flex flex-col cursor-pointer select-none w-12"
+          className="flex flex-col cursor-pointer select-none w-12  "
         >
           {props.currentArray[props.index].status === "unavailable" && (
             <div className="flex justify-center items-center text-red-600">
               {" "}
               <FaExclamationCircle className="w-7 h-7" />
+              {lang.itemListArrayComponent.unavailable}
             </div>
           )}
           {props.currentArray[props.index].status === "available" && (
             <div className="flex justify-center items-center  text-amber-700">
               {" "}
               <FaExclamationCircle className="w-7 h-7" />
+              {lang.itemListArrayComponent.available}
             </div>
           )}
           {props.currentArray[props.index].status === "ready" && (
             <div className="flex justify-center items-center  text-green-600">
               {" "}
               <FaCheckCircle className="w-7 h-7 " />
+              {lang.itemListArrayComponent.ready}
             </div>
           )}
           <div className="text-[0.7rem] select-none flex justify-center items-center">
             {props.currentArray[props.index].status}
           </div>
-        </div>
-      </>
-    );
+        </div> */}
+    //   </>
+    // );
   };
 
   return (
     <div>
       {!isEditName && (
         <div
-          className="flex justify-center items-center text-center rounded-l-md rounded-r-md"
+          className="flex justify-center items-center text-center rounded-l-md rounded-r-md "
           style={{
             backgroundColor:
               //main container
               deltaX &&
-                (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+              (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                 ? swipeColor
                 : props.currentArray[props.index].highlighted
-                  ? "rgb(245 158 11)"
-                  : "",
+                ? "rgb(245 158 11)"
+                : "",
           }}
         >
           <div
@@ -232,11 +236,11 @@ export default function Item(props: {
               transform: `translateX(${deltaX}px)`,
               backgroundColor:
                 deltaX &&
-                  (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
+                (deltaX >= SWIPE_CHANGE_COLOR || deltaX <= -SWIPE_CHANGE_COLOR)
                   ? swipeColor
                   : props.currentArray[props.index].highlighted
-                    ? "rgb(245 158 11)"
-                    : "",
+                  ? "rgb(245 158 11)"
+                  : "",
             }}
           >
             {isDeleting && (
@@ -259,7 +263,9 @@ export default function Item(props: {
             >
               <div
                 className="flex flex-col"
-                onClick={() => { if (props.setUser) setIsEditName(!isEditName) }}
+                onClick={() => {
+                  if (props.setUser) setIsEditName(!isEditName);
+                }}
               >
                 <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
                   {lang.itemComponent.name}:
@@ -278,37 +284,46 @@ export default function Item(props: {
                   className="flex flex-col cursor-pointer select-none w-12"
                 >
                   {props.currentArray[props.index].status === "unavailable" && (
-                    <div className="flex justify-center items-center text-red-600">
+                    <div className="flex flex-col justify-center items-center text-red-600">
                       {" "}
                       <FaExclamationCircle className="w-7 h-7" />
+                      <div className="text-[0.7rem] select-none flex justify-center items-center">
+                        {lang.itemListArrayComponent.unavailable}
+                      </div>
                     </div>
                   )}
                   {props.currentArray[props.index].status === "available" && (
-                    <div className="flex justify-center items-center  text-amber-700">
+                    <div className="flex flex-col justify-center items-center  text-amber-700">
                       {" "}
                       <FaExclamationCircle className="w-7 h-7" />
+                      <div className="text-[0.7rem] select-none flex justify-center items-center">
+                        {lang.itemListArrayComponent.available}
+                      </div>
                     </div>
                   )}
                   {props.currentArray[props.index].status === "ready" && (
-                    <div className="flex justify-center items-center  text-green-600">
+                    <div className="flex flex-col justify-center items-center  text-green-600">
                       {" "}
                       <FaCheckCircle className="w-7 h-7 " />
+                      <div className="text-[0.7rem] select-none flex justify-center items-center">
+                        {lang.itemListArrayComponent.ready}
+                      </div>
                     </div>
                   )}
-                  <div className="text-[0.7rem] select-none flex justify-center items-center">
+                  {/* <div className="text-[0.7rem] select-none flex justify-center items-center">
                     {props.currentArray[props.index].status}
-                  </div>
+                  </div> */}
                 </div>
                 {props.setUser && (
                   <div
-                    //rx remove button when breakpoint md 
+                    //rx remove button when breakpoint md
                     className="flex flex-col justify-center items-center"
                   >
                     <button onClick={handleDelete}>
                       <FaTimesCircle className="w-7 h-7 hidden md:block" />
                     </button>
                     <div className="text-[0.7rem] select-none hidden md:block">
-                      remove
+                      {lang.itemComponent.remove}
                     </div>
                   </div>
                 )}
@@ -327,7 +342,6 @@ export default function Item(props: {
           >
             {lang.swipeComponent.highlight.toUpperCase()}
           </div>
-
         </div>
       )}
       {isEditName && props.setUser && (
@@ -337,7 +351,9 @@ export default function Item(props: {
           className=" flex justify-between p-1 px-2 bg-gradient-to-r from-amber-500 to-amber-700 duration-300" //bg-gradient-to-r from-amber-500 to-amber-700
         >
           <div className="flex flex-col">
-            <div className="text-[0.7rem] flex justify-left text-black">modify:</div>
+            <div className="text-[0.7rem] flex justify-left text-black">
+              {lang.itemComponent.modify}:
+            </div>
             <input
               className="text-white rounded-xl px-2 bg-gray-600"
               defaultValue={props.item.name}
@@ -352,12 +368,11 @@ export default function Item(props: {
               <button onClick={setNameChange}>
                 <FaPlusCircle className="w-7 h-7" />
               </button>
-              <div className="text-[0.7rem]"> confirm</div>
+              <div className="text-[0.7rem]"> {lang.itemComponent.confirm}</div>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

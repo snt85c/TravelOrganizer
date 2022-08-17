@@ -1,36 +1,30 @@
 import flairImage from "../img/undraw_travelers_re_y25a.svg";
 import TravelButtonItem from "./travelButton/TravelButtonItem";
 import CreateNewTravel from "./CreateNewTravel";
-import { iTravel, iTravelData, iTriggers, iUserInfo } from "../Interface";
+import {
+  iTravel,
+  iTravelButtonPropsPackage,
+  iUsersStatePropsPackage,
+} from "../Interface";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 export default function PresentationPage(props: {
-  uiTriggers: iTriggers;
-  user: iUserInfo;
-  usersList: iTravelData[];
-  loggedUser: any;
-  travelList: [iTravel?];
-  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
-  setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  watchTravel: Function;
-  joinTravel: Function;
+  travelButtonPropsPackage: iTravelButtonPropsPackage;
+  usersStatePropsPackage: iUsersStatePropsPackage;
 }) {
   const [isRenderReady, setIsRenderReady] = useState<boolean>(false);
   const [isFetchingTakingTooLong, setIsFetchingTakingTooLong] =
     useState<boolean>(false);
   const WAITING_TIME_ERROR_MESSAGE: number = 5000;
 
-  const travelButtonsList = props.travelList.map(
+  const travelButtonsList = props.usersStatePropsPackage.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
         <TravelButtonItem
           key={i}
-          uiTriggers={props.uiTriggers}
-          loggedUser={props.loggedUser}
+          travelButtonPropsPackage={props.travelButtonPropsPackage}
+          usersStatePropsPackage={props.usersStatePropsPackage}
           data={currentData}
-          travelList={props.travelList}
-          setTravel={props.setTravel}
-          setTravelList={props.setTravelList}
         />
       );
     }
@@ -69,11 +63,12 @@ export default function PresentationPage(props: {
             </div>
           </>
         )}
-          {isRenderReady && (
-            //the components are loaded
-            <><motion.div
-              initial={{ opacity: 0, y:-50 }}
-              animate={{ opacity: 1, y:0 }}
+        {isRenderReady && (
+          //the components are loaded
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
             >
               <div className="flex -mt-5 -mb-3 justify-center items-center font-[homeworld-norm] select-none">
                 AVAILABLE TRAVELS
@@ -82,19 +77,16 @@ export default function PresentationPage(props: {
                 <div>{travelButtonsList}</div>
               </div>
             </motion.div>
-              <CreateNewTravel
-                loggedUser={props.loggedUser}
-                user={props.user}
-                travelList={props.travelList}
-                setTravelList={props.setTravelList}
-              />
-              </>
-          )}
+            <CreateNewTravel
+              usersStatePropsPackage={props.usersStatePropsPackage}
+            />
+          </>
+        )}
 
         <div
           //flair text
           className=" absolute z-0 bottom-7 left-2  font-[phonk] leading-none select-none"
-        > 
+        >
           <div className="flex text-[20vw] sm:text-[8rem]">Travel</div>
           <div className="text-[10vw] sm:text-[4rem] -mt-[3vh]">
             organizer

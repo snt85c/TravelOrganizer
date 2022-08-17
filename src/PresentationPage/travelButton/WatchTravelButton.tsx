@@ -1,9 +1,9 @@
 import {  ImEye } from "react-icons/im";
-import { iTriggers } from "../../Interface";
+import { iTravelButtonPropsPackage } from "../../Interface";
 
 export default function WatchTravelButton(props: {
   handleClickSetTravel: Function;
-  uiTriggers:iTriggers
+  uiTriggers:iTravelButtonPropsPackage
 }) {
   return (
     <>

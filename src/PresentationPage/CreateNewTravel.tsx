@@ -1,79 +1,66 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../LoginComponents/firebase";
-import { iTravel, iUserInfo } from "../Interface";
-import { telegramBotKey, chat_id } from "../Main";
+import { iTravel, iUsersStatePropsPackage } from "../Interface";
 import GoogleLoginButton from "../LoginComponents/GoogleLoginButton";
+import { LangContext } from "../LangContextProvider";
 
 export default function CreateNewTravel(props: {
-  user: iUserInfo;
-  loggedUser: any;
-  travelList: [iTravel?];
-  setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
+  usersStatePropsPackage:iUsersStatePropsPackage
 }) {
-  const [newTravel, setNewTravel] = useState<string>("");
+  const [newTravelName, setNewTravelName] = useState<string>("");
+  const lang = useContext(LangContext);
 
-  function telegramAlertCreateTravel(newTravelObject: iTravel) {
-    const data = `new travel: ${
-      newTravelObject.name ? newTravelObject.name : "noName"
-    } created by: ${props.loggedUser.displayName.split(" ")[0]}`;
-    fetch(
-      `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
-    ).then((res) => {
-      // console.log("Request complete! response:", res);
-    });
-  }
 
-  const handleClick = async () => {
-    const tempTravelList: any = [...props.travelList]; //pass by value, not reference, otherwise setTraveliList wont happen, as it will do a shallow equivalence check with the current state and the previous state and find out that the values are the same (as w were working on the reference values of travelList, effectively modifying the values without settign the state), at the moment of settign the state, it woudl find that there is no difference between the current and past state, so it woulndt work. this way, being a copy, there wil be a difference and it will work
+  const handleClickCreateNewTravel = async () => {
+    const tempTravelList: any = [...props.usersStatePropsPackage.travelList]; //pass by value, not reference, otherwise setTraveliList wont happen, as it will do a shallow equivalence check with the current state and the previous state and find out that the values are the same (as w were working on the reference values of travelList, effectively modifying the values without settign the state), at the moment of settign the state, it woudl find that there is no difference between the current and past state, so it woulndt work. this way, being a copy, there wil be a difference and it will work
     const newTravelObject: iTravel = {
-      name: newTravel != "" ? newTravel : "no name",
+      name: newTravelName != "" ? newTravelName : "no name",
       id: Date.now(),
-      createdBy: props.loggedUser.uid,
-      userName: props.loggedUser.displayName.split(" ")[0],
+      createdBy: props.usersStatePropsPackage.loggedUser.uid,
+      userName: props.usersStatePropsPackage.loggedUser.displayName.split(" ")[0],
     };
     tempTravelList.push(newTravelObject);
-    props.setTravelList(tempTravelList);
+    props.usersStatePropsPackage.setTravelList(tempTravelList);
     try {
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: arrayUnion(newTravelObject),
       });
-      telegramAlertCreateTravel(newTravelObject);
-      setNewTravel("");
+      setNewTravelName("");
     } catch (e) {
       console.log(e);
     }
   };
   return (
     <>
-      {props.loggedUser && (
+      {props.usersStatePropsPackage.loggedUser && (
         <div className="flex z-30 mt-10 flex-col relative m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
           <div className="flex mt-5 text-[3vw] sm:text-[1rem] justify-center items-center font-[homeworld-norm] select-none">
-            CREATE YOUR OWN TRAVEL
+            {lang.createNewTravelComponent.createFlairText}
           </div>
           <div className="flex flex-col justify-center items-center m-1 ">
             <form>
               <input
                 className="rounded border-2 mt-1 select-none shadow-md text-black text-center"
-                value={newTravel}
-                onChange={(e) => setNewTravel(e.target.value)}
+                value={newTravelName}
+                onChange={(e) => setNewTravelName(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleClick();
+                  if (e.key === "Enter") handleClickCreateNewTravel();
                 }}
               />
               <div
                 className=" cursor-pointer m-2 hover:text-black duration-300 text-white text-center select-none"
-                onClick={handleClick}
+                onClick={handleClickCreateNewTravel}
               >
-                {!newTravel ? "Add" : "Add " + newTravel}
+                { lang.createNewTravelComponent.add + newTravelName}
               </div>
             </form>
           </div>
         </div>
       )}
-      {!props.loggedUser && (
+      {!props.usersStatePropsPackage.loggedUser && (
         <>
-          <div className="flex mt-10 flex-col m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
+          <div className="flex z-30 mt-10 flex-col m-1 mx-10 md:mx-60 justify-center items-center text-black rounded   duration-300 shadow-2xl bg-amber-500">
             <div className="flex flex-col  m-10 text-center justify-center items-center font-[homeworld-norm] select-none">
               <div>
                 LOGIN TO <span className="text-white font-[1000]">CREATE</span>{" "}

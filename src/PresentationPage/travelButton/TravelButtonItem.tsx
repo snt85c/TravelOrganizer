@@ -9,10 +9,11 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import {
-  iEditingPackage,
+  iEditingPropsPackage,
   iTravel,
   iTravelData,
-  iTriggers,
+  iTravelButtonPropsPackage,
+  iUsersStatePropsPackage,
 } from "../../Interface";
 import { db } from "../../LoginComponents/firebase";
 import { telegramBotKey, chat_id } from "../../Main";
@@ -21,24 +22,16 @@ import EditButtonItem from "./EditButtonItem";
 import { motion } from "framer-motion";
 
 export default function TravelButtonItem(props: {
-  uiTriggers: iTriggers;
+  travelButtonPropsPackage: iTravelButtonPropsPackage;
+  usersStatePropsPackage:iUsersStatePropsPackage;
   data?: iTravel;
-  loggedUser: any;
-  travelList: [iTravel?];
-  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
-  setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isAlreadyJoined, setIsAlreadyJoined] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
-
-  function isAuthor() {
-    return props.loggedUser?.uid === props.data?.createdBy;
-  }
-
-  let editingPackage: iEditingPackage = {
+  const editingPropsPackage: iEditingPropsPackage = {
     isEditing,
     setIsEditing,
     isDeleting,
@@ -50,6 +43,11 @@ export default function TravelButtonItem(props: {
     defaultName: props.data?.name ? props.data?.name.toString() : "",
   };
 
+  function isAuthor() {
+    return props.usersStatePropsPackage.loggedUser?.uid === props.data?.createdBy;
+  }
+
+
   useEffect(() => {
     async function enableOrDisableJoinButtonIfAlreadyJoined() {
       let travelId: number = props.data?.id ? props.data?.id : 0;
@@ -58,9 +56,9 @@ export default function TravelButtonItem(props: {
       querySnapshot.forEach((doc) => {
         tempdata = doc.data() as iTravelData;
         if (
-          props.loggedUser &&
+          props.usersStatePropsPackage.loggedUser &&
           tempdata[travelId] &&
-          tempdata.userInfo.uid === props.loggedUser.uid
+          tempdata.userInfo.uid === props.usersStatePropsPackage.loggedUser.uid
         ) {
           setIsAlreadyJoined(true);
         }
@@ -71,7 +69,7 @@ export default function TravelButtonItem(props: {
 
   function telegramAlertDeleteTravel() {
     const data = `travel: ${props.data?.name} has been deleted by: ${
-      props.loggedUser.displayName.split(" ")[0]
+      props.usersStatePropsPackage.loggedUser.displayName.split(" ")[0]
     }`;
 
     fetch(
@@ -88,11 +86,11 @@ export default function TravelButtonItem(props: {
     }
     try {
       let travelIdToDelete: number = props.data?.id ? props.data?.id : 0;
-      let filteredTravelList: any = props.travelList?.filter((item) => {
+      let filteredTravelList: any = props.usersStatePropsPackage.travelList?.filter((item) => {
         return item?.id !== props.data?.id;
       });
 
-      props.setTravelList(filteredTravelList);
+      props.usersStatePropsPackage.setTravelList(filteredTravelList);
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
@@ -107,7 +105,7 @@ export default function TravelButtonItem(props: {
         }
       });
       telegramAlertDeleteTravel();
-      props.setTravel({ name: "", id: 0, createdBy: "", userName: "" });
+      props.usersStatePropsPackage.setTravel({ name: "", id: 0, createdBy: "", userName: "" });
     } catch (e) {
       console.log(e);
     }
@@ -155,13 +153,13 @@ export default function TravelButtonItem(props: {
       });
 
       //GET AND MODIFY TRAVELLIST STATE
-      let tempArray: [(iTravel | undefined)?] = [...props.travelList];
+      let tempArray: [(iTravel | undefined)?] = [...props.usersStatePropsPackage.travelList];
       tempArray.forEach((item) => {
         if (item?.id === travelIdToRename) {
           item.name = newNameForSelectedTravel;
         }
       });
-      props.setTravelList(tempArray);
+      props.usersStatePropsPackage.setTravelList(tempArray);
     } catch (e) {
       console.log(e);
     }
@@ -171,7 +169,7 @@ export default function TravelButtonItem(props: {
     const temp: iTravel = props.data?.name
       ? props.data
       : { name: "", id: 0, createdBy: "", userName: "" };
-    props.setTravel(temp);
+    props.usersStatePropsPackage.setTravel(temp);
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -197,10 +195,10 @@ export default function TravelButtonItem(props: {
     >
       <div
         onClick={() => {
-          props.uiTriggers.setIsShowUserButton(true);
-          props.uiTriggers.setTrigger(Date.now());
-          props.uiTriggers.setIsJoining(false);
-          props.uiTriggers.setIsWatching(true);
+          props.travelButtonPropsPackage.setIsShowUserButton(true);
+          props.travelButtonPropsPackage.setTrigger(Date.now());
+          props.travelButtonPropsPackage.setIsJoining(false);
+          props.travelButtonPropsPackage.setIsWatching(true);
           handleClickSetTravel();
         }}
         //2nd container, flex rules for the children
@@ -225,7 +223,7 @@ export default function TravelButtonItem(props: {
         </div>
       </div>
       <EditButtonItem
-        editingPackage={editingPackage}
+        editingPropsPackage={editingPropsPackage}
         isAuthor={isAuthor}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
@@ -235,11 +233,11 @@ export default function TravelButtonItem(props: {
         style={{ width: !isAlreadyJoined?"3rem":0 }}
         //div to contain JoinTravelButton and keep the centered justification when is not rendered
       >
-        {!isAlreadyJoined && props.loggedUser && (
+        {!isAlreadyJoined && props.usersStatePropsPackage.loggedUser && (
           <JoinTravelButton
-            loggedUser={props.loggedUser}
+            loggedUser={props.usersStatePropsPackage.loggedUser}
             handleClickSetTravel={handleClickSetTravel}
-            uiTriggers={props.uiTriggers}
+            travelButtonPropsPackage={props.travelButtonPropsPackage}
             isAlreadyJoined={isAlreadyJoined}
           />
         )}
