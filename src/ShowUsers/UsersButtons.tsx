@@ -66,7 +66,7 @@ export default function UserButton(props: {
               );
             }}
           >
-            {"Travellers"}
+            {lang.usersButton.travellers}
           </motion.button>
         )}
         {props.usersStatePropsPackage.travel.id !== 0 && (
@@ -108,7 +108,7 @@ export default function UserButton(props: {
                 className="flex flex-col rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] m-1 justify-center font-[homeworld-norm] text-white duration-300 items-start cursor-pointer select-none leading-none"
               >
                 {" "}
-                <div className="my-2">NO USERS </div>
+                <div className="my-2">{lang.usersButton.nousers}</div>
               </motion.div>
             )}
           </motion.div>

@@ -7,7 +7,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   iEditingPropsPackage,
   iTravel,
@@ -20,6 +20,7 @@ import { telegramBotKey, chat_id } from "../../Main";
 import JoinTravelButton from "./JoinTravelButton";
 import EditButtonItem from "./EditButtonItem";
 import { motion } from "framer-motion";
+import { LangContext } from "../../LangContextProvider";
 
 export default function TravelButtonItem(props: {
   travelButtonPropsPackage: iTravelButtonPropsPackage;
@@ -31,6 +32,8 @@ export default function TravelButtonItem(props: {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isAlreadyJoined, setIsAlreadyJoined] = useState<boolean>(false);
   const [newName, setNewName] = useState<string>("");
+  const lang = useContext(LangContext);
+
   const editingPropsPackage: iEditingPropsPackage = {
     isEditing,
     setIsEditing,
@@ -213,7 +216,7 @@ export default function TravelButtonItem(props: {
               {props.data?.name.toUpperCase()}
             </div>
             <div className="text-[0.8rem] -my-1 select-none">
-              created by:{" "}
+              {lang.travelButtonItem.createdBy}
               <span className="text-[0.9rem] text-pink-400 font-bold">
                 {isAuthor() ? "You" : props.data?.userName}
               </span>{" "}

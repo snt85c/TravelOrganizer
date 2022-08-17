@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { ImEnter } from "react-icons/im";
 import { iTravelButtonPropsPackage } from "../../Interface";
+import { useContext } from "react";
+import { LangContext } from "../../LangContextProvider";
 
 export default function JoinTravelButton(props: {
   loggedUser: any;
@@ -9,6 +11,8 @@ export default function JoinTravelButton(props: {
   isAlreadyJoined:boolean
 }) {
   const navigate = useNavigate();
+  const lang = useContext(LangContext);
+
   return (
     <>
       <div
@@ -29,7 +33,7 @@ export default function JoinTravelButton(props: {
               {" "}
               <ImEnter size={20} />
             </div>
-            <div className="-mt-1">Join</div>
+            <div className="-mt-1">{lang.JoinTravelButton.name}</div>
           </>
         )}
       </div>

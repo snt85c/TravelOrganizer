@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import { FaEdit } from "react-icons/fa";
 import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
 import { iEditingPropsPackage } from "../../Interface";
+import { LangContext } from "../../LangContextProvider";
 
 export default function EditButtonItem(props: {
   isAuthor: Function;
@@ -10,6 +12,8 @@ export default function EditButtonItem(props: {
   editingPropsPackage:iEditingPropsPackage
 }) {
   const { ref } = HandleClickOutsideComponent(props.editingPropsPackage.setIsEditing);
+  const lang = useContext(LangContext);
+
 
   return (
     <>
@@ -24,7 +28,7 @@ export default function EditButtonItem(props: {
               onClick={(e) => props.handleEdit(e)}
             >
               <FaEdit size={20}/>
-              <span className="-mt-1">Edit</span>
+              <span className="-mt-1">{lang.editButtonItem.name}</span>
             </div>
           )}
           {props.editingPropsPackage.isEditing && (
@@ -38,7 +42,7 @@ export default function EditButtonItem(props: {
                         props.editingPropsPackage.setIsRenaming(false);
                     }}
                   >
-                    DELETE
+                    {lang.editButtonItem.delete}
                   </div>
                   <div
                     className="mx-2  text-[0.7rem]  font-[homeworld-norm]  cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
@@ -47,7 +51,7 @@ export default function EditButtonItem(props: {
                         props.editingPropsPackage.setIsDeleting(false);
                     }}
                   >
-                    RENAME
+                    {lang.editButtonItem.rename}
                   </div>
                 </div>
                 {props.editingPropsPackage.isRenaming && (
@@ -70,9 +74,10 @@ export default function EditButtonItem(props: {
                     className=" flex flex-col justify-center items-center  hover:bg-white rounded-xl  p-1 mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 select-none"
                     onClick={()=>props.handleDelete()}
                   >
-                    <div className="text-center font-bold leading-none">press to delete</div>
+                    <div className="text-center font-bold leading-none">{lang.editButtonItem.delete1}</div>
+
                     <div className="text-center leading-none text-[0.5rem]">
-                      this will cancel your data permanently
+                    {lang.editButtonItem.delete2}
                     </div>
                   </div>
                 )}

@@ -31,13 +31,13 @@ export const lang = {
       add: "add",
       unavailable: "unavailable",
       available: "available",
-      ready:"ready"
+      ready: "ready",
     },
     itemComponent: {
       name: "item",
-      modify:"modify",
+      modify: "modify",
       remove: "remove",
-      confirm:"confirm"
+      confirm: "confirm",
     },
     itemListComponent: {
       readonlyMessage: " it's not possible to modify other user's info",
@@ -50,9 +50,32 @@ export const lang = {
       swipeInstructionLx: "swipe >> to delete",
       swipeInstructionRx: "swipe << to highlight",
     },
-    createNewTravelComponent:{
-      createFlairText:"CREATE YOUR OWN TRAVEL",
-      add:"Add "
+    createNewTravelComponent: {
+      createFlairText: "CREATE YOUR OWN TRAVEL",
+      add: "Add ",
+    },
+    presentationPage: {
+      flairText1: "AVAILABLE TRAVELS",
+      loading: "LOADING",
+      fetchingDelayMessage:
+        "the website is taking too long: consider refresing the page,check your internet connection or try later",
+    },
+    travelButtonItem:{
+      createdBy:"created by: "
+    },
+    editButtonItem:{
+      name:"Edit",
+      delete:"DELETE",
+      rename:"RENAME",
+      delete1:"press to delete",
+      delete2:"this will cancel your data permanently"
+    },
+    JoinTravelButton:{
+      name:"Join"
+    },
+    usersButton:{
+      nousers:"NO USERS",
+      travellers:"Travellers"
     }
   },
   it: {
@@ -84,13 +107,13 @@ export const lang = {
       add: "aggiungi",
       unavailable: "mancante",
       available: "presente",
-      ready:"pronto"
+      ready: "pronto",
     },
     itemComponent: {
       name: "nome",
-      modify:"modifica",
-      remove:"rimuovi",
-      confirm:"conferma"
+      modify: "modifica",
+      remove: "rimuovi",
+      confirm: "conferma",
     },
     itemListComponent: {
       readonlyMessage:
@@ -104,10 +127,35 @@ export const lang = {
       swipeInstructionLx: "swipe >> per cancellare",
       swipeInstructionRx: "swipe << per evidenziare",
     },
-    createNewTravelComponent:{
-      createFlairText:"CREA UN NUOVO VIAGGIO",
-      add: "Aggiungi "
+    createNewTravelComponent: {
+      createFlairText: "CREA UN NUOVO VIAGGIO",
+      add: "Aggiungi ",
+    },
+    presentationPage: {
+      flairText1: "VIAGGI DISPONIBILI",
+      loading: "CARICAMENTO",
+      fetchingDelayMessage:
+        "the website is taking too long: consider refresing the page,check your internet connection or try later",
+    },
+    travelButtonItem:{
+      createdBy:"creato da: "
+    },
+    editButtonItem:{
+      name:"Cambia",
+      delete:"CANCELLA",
+      rename:"RINOMINA",
+      delete1:"premi per cancellare",
+      delete2:"elimina i dati permanentemente"
+    },
+    JoinTravelButton:{
+      name:"Entra"
+    },
+    usersButton:{
+      nousers:"NESSUN UTENTE",
+      travellers:"Viaggiatori"
     }
+
+
   },
 };
 

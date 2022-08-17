@@ -6,8 +6,9 @@ import {
   iTravelButtonPropsPackage,
   iUsersStatePropsPackage,
 } from "../Interface";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { LangContext } from "../LangContextProvider";
 export default function PresentationPage(props: {
   travelButtonPropsPackage: iTravelButtonPropsPackage;
   usersStatePropsPackage: iUsersStatePropsPackage;
@@ -15,6 +16,7 @@ export default function PresentationPage(props: {
   const [isRenderReady, setIsRenderReady] = useState<boolean>(false);
   const [isFetchingTakingTooLong, setIsFetchingTakingTooLong] =
     useState<boolean>(false);
+  const lang = useContext(LangContext);
   const WAITING_TIME_ERROR_MESSAGE: number = 5000;
 
   const travelButtonsList = props.usersStatePropsPackage.travelList.map(
@@ -52,12 +54,11 @@ export default function PresentationPage(props: {
           <>
             <div className="flex flex-col justify-center items-center min-h-[50vh]">
               <div className=" text-[1.2rem] animate-pulse font-[homeworld-norm]">
-                LOADING
+                {lang.presentationPage.loading}
               </div>
               {isFetchingTakingTooLong && (
                 <div className="font-[helvetica] animation-none m-5 justify-center items-center text-center ">
-                  the website is taking too long: consider refresing the page,
-                  check your internet connection or try later
+                  {lang.presentationPage.fetchingDelayMessage}
                 </div>
               )}
             </div>
@@ -71,7 +72,7 @@ export default function PresentationPage(props: {
               animate={{ opacity: 1, y: 0 }}
             >
               <div className="flex -mt-5 -mb-3 justify-center items-center font-[homeworld-norm] select-none">
-                AVAILABLE TRAVELS
+                {lang.presentationPage.flairText1}
               </div>
               <div className="flex z-20 flex-col w-[1/4] p-2 ">
                 <div>{travelButtonsList}</div>
