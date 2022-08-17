@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext,useState } from "react";
 import {
   FaTimesCircle,
   FaPlusCircle,
@@ -164,39 +164,7 @@ export default function Item(props: {
       [props.travelId]: currentTravel,
     };
     props.setUser && props.setUser(currentUser);
-    // return (
-    //   <>
-        {/* <div
-          onClick={buttonToggle}
-          className="flex flex-col cursor-pointer select-none w-12  "
-        >
-          {props.currentArray[props.index].status === "unavailable" && (
-            <div className="flex justify-center items-center text-red-600">
-              {" "}
-              <FaExclamationCircle className="w-7 h-7" />
-              {lang.itemListArrayComponent.unavailable}
-            </div>
-          )}
-          {props.currentArray[props.index].status === "available" && (
-            <div className="flex justify-center items-center  text-amber-700">
-              {" "}
-              <FaExclamationCircle className="w-7 h-7" />
-              {lang.itemListArrayComponent.available}
-            </div>
-          )}
-          {props.currentArray[props.index].status === "ready" && (
-            <div className="flex justify-center items-center  text-green-600">
-              {" "}
-              <FaCheckCircle className="w-7 h-7 " />
-              {lang.itemListArrayComponent.ready}
-            </div>
-          )}
-          <div className="text-[0.7rem] select-none flex justify-center items-center">
-            {props.currentArray[props.index].status}
-          </div>
-        </div> */}
-    //   </>
-    // );
+
   };
 
   return (

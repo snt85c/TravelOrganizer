@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LangContext } from "../LangContextProvider";
-import { iTravel, iTravelData, iTravelButtonPropsPackage, iUsersStatePropsPackage } from "../Interface";
+import { iTravelData, iTravelButtonPropsPackage, iUsersStatePropsPackage } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 import { AnimatePresence, motion } from "framer-motion";
 
