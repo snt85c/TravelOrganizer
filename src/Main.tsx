@@ -331,7 +331,7 @@ export default function Main() {
 
   return (
     <>
-      <div className="bg-gray-700 relative pt-[60px] pb-5 min-h-full text-white">
+      <div className="bg-gray-800 relative pt-[60px] pb-5 min-h-full text-white">
         <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
         <LangContext.Provider value={HandleLang()}>
           <UserButton

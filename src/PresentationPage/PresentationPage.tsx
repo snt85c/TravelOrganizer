@@ -53,7 +53,7 @@ export default function PresentationPage(props: {
           //if we are loading, and if it*s taking too long, show this
           <>
             <div className="flex flex-col justify-center items-center min-h-[50vh]">
-              <div className=" text-[1.2rem] animate-pulse font-[homeworld-norm]">
+              <div className=" text-[2rem] animate-pulse font-[homeworld-norm]">
                 {lang.presentationPage.loading}
               </div>
               {isFetchingTakingTooLong && (
