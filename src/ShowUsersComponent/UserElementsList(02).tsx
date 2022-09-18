@@ -1,12 +1,14 @@
 import { useContext } from "react";
-import { LangContext } from "../LangContextProvider";
-import { iTravelData, iUser } from "../Interface";
+import { LangContext } from "../AppComponent/LangContextProvider";
+import { iReducerAction, iTravelData, iUser } from "../Interface";
 import UserItemsList from "./UserItemsList(03)";
 
 export default function UserElementsList(props: {
   user: iTravelData;
   travelId: number;
-  setUser?: React.Dispatch<React.SetStateAction<iUser>>;
+  // setUser?: React.Dispatch<React.SetStateAction<iUser>>;
+  dispatch?: React.Dispatch<iReducerAction>;
+
 }) {
   const lang = useContext(LangContext);
   const SWIPE_INSTRUCTION_LX = lang.swipeComponent.swipeInstructionLx;
@@ -14,13 +16,13 @@ export default function UserElementsList(props: {
   const MD_HIGHLIGHT_INSTRUCTION = lang.itemListComponent.highlightInstruction;
   return (
     <>
-      {!props.setUser && (
+      {!props.dispatch && (
         <div className="text-gray-300 text-[0.70rem]">
           <span className="text-amber-500 select-none">readonly:</span>
           {lang.itemListComponent.readonlyMessage}
         </div>
       )}
-      {props.setUser && (
+      {props.dispatch && (
         <>
           {" "}
           <div className="flex justify-between px-2 text-[0.70rem] text-gray-300 md:hidden select-none">
@@ -37,31 +39,31 @@ export default function UserElementsList(props: {
           <UserItemsList
             user={props.user}
             travelId={props.travelId}
-            setUser={props.setUser}
+            dispatch={props.dispatch}
             type={"headgear"}
           />
           <UserItemsList
             user={props.user}
             travelId={props.travelId}
-            setUser={props.setUser}
+            dispatch={props.dispatch}
             type={"topgear"}
           />
           <UserItemsList
             travelId={props.travelId}
             user={props.user}
-            setUser={props.setUser}
+            dispatch={props.dispatch}
             type={"bottomgear"}
           />
           <UserItemsList
             travelId={props.travelId}
             user={props.user}
-            setUser={props.setUser}
+            dispatch={props.dispatch}
             type={"footgear"}
           />
           <UserItemsList
             user={props.user}
             travelId={props.travelId}
-            setUser={props.setUser}
+            dispatch={props.dispatch}
             type={"extra"}
           />
         </div>

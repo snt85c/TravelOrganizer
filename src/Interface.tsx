@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 
 export interface iUser {
   id: number;
@@ -70,16 +69,29 @@ export interface iEditingPropsPackage {
 }
 
 export interface iUsersStatePropsPackage {
-  user: iUserInfo;
-  usersList: iTravelData[];
   loggedUser: any;
-  travelList: [iTravel?];
-  setTravel: React.Dispatch<React.SetStateAction<iTravel>>;
-  setTravelList: React.Dispatch<React.SetStateAction<[iTravel?]>>;
-  watchTravel: Function;
-  joinTravel: Function;
-  travel: iTravel;
-  users?: iTravelData[];
-  setUser: React.Dispatch<any>;
-  setOtherUser: React.Dispatch<React.SetStateAction<iTravelData>>;
+  data: any;
+  dispatch: React.Dispatch<iReducerAction>;
+}
+
+export interface iReducerState {
+  user: iUser | {};
+  otherUser: iUser | {};
+  usersList: iUser[];
+  travelList: iTravel[];
+  selectedTravel: iTravel;
+  firebaseUsers: iTravelData[]
+}
+
+export interface iReducerAction {
+  type:
+    | "ADD-FIREBASE-TRAVELS"
+    | "ADD-USERS-LIST"
+    | "MODIFY-USER"
+    | "SET-LOGGED-USER"
+    | "SET-OFFLINE-USER"
+    | "DETERMINE-USER"
+    | "SELECT-TRAVEL"
+    | "ADD-FIREBASE-USERS",
+  payload: any;
 }

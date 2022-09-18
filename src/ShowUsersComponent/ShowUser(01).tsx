@@ -1,4 +1,4 @@
-import { iTravelData, iUser } from "../Interface";
+import { iReducerAction, iTravelData, iUser } from "../Interface";
 import UserElementsList from "./UserElementsList(02)";
 import Stats from "./Stats";
 import { useEffect, useState } from "react";
@@ -8,15 +8,17 @@ import { useNavigate } from "react-router-dom";
 export default function ShowUser(props: {
   user: iTravelData;
   travelId: number;
-  setUser?: React.Dispatch<React.SetStateAction<iUser>>;
+  dispatch?: React.Dispatch<iReducerAction>;
+  // setUser?: React.Dispatch<React.SetStateAction<iUser>>;
   handleDeleteUser?: Function;
 }) {
   const [isShowingStats, setIsShowingStats] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  useEffect(() => { 
+  useEffect(() => {
     //avoid loading a page without data when refreshing on mobile
-    if (!props.user) navigate("/") }, [])
+    if (!props.user) navigate("/");
+  }, []);
 
   return (
     <>
@@ -40,9 +42,16 @@ export default function ShowUser(props: {
           <UserElementsList
             user={props.user}
             travelId={props.travelId}
-            setUser={props.setUser}
+            // setUser={props.setUser}
+            dispatch={props.dispatch}
           />
-          {props.setUser && <DeleteUserButton handleDeleteUser={props.handleDeleteUser} user={props.user} travelId={props.travelId} setUser={props.setUser} />}
+          {props.dispatch && (
+            <DeleteUserButton
+              handleDeleteUser={props.handleDeleteUser}
+              user={props.user}
+              travelId={props.travelId}
+            />
+          )}
         </div>
       )}
     </>

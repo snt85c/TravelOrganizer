@@ -1,6 +1,6 @@
 import { UserAuthContextProvider } from "./LoginComponents/UserAuth";
 import "./App.css";
-import Main from "./Main";
+import Main from "./AppComponent/Main";
 import { HashRouter } from "react-router-dom";
 
 const App: React.FC = () => {

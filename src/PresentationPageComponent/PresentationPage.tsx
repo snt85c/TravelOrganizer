@@ -8,18 +8,19 @@ import {
 } from "../Interface";
 import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { LangContext } from "../LangContextProvider";
+import { LangContext } from "../AppComponent/LangContextProvider";
 export default function PresentationPage(props: {
   travelButtonPropsPackage: iTravelButtonPropsPackage;
   usersStatePropsPackage: iUsersStatePropsPackage;
 }) {
   const [isRenderReady, setIsRenderReady] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<number | undefined>()
   const [isFetchingTakingTooLong, setIsFetchingTakingTooLong] =
     useState<boolean>(false);
   const lang = useContext(LangContext);
-  const WAITING_TIME_ERROR_MESSAGE: number = 5000;
+  const WAITING_TIME_ERROR_MESSAGE: number = 9000;
 
-  const travelButtonsList = props.usersStatePropsPackage.travelList.map(
+  const travelButtonsList = props.usersStatePropsPackage.data.travelList.map(
     (currentData?: iTravel, i?: number) => {
       return (
         <TravelButtonItem
@@ -27,6 +28,7 @@ export default function PresentationPage(props: {
           travelButtonPropsPackage={props.travelButtonPropsPackage}
           usersStatePropsPackage={props.usersStatePropsPackage}
           data={currentData}
+          isClicked = {isClicked} setIsClicked={setIsClicked}
         />
       );
     }
@@ -101,7 +103,7 @@ export default function PresentationPage(props: {
             backgroundImage:
               "radial-gradient(ellipse, rgb(100 116 139), transparent 70%)",
           }}
-          className="absolute h-[100px] hidden sm:flex md:h-[200px] bottom-10 right-5 md:right-10 "
+          className="absolute z-0 h-[100px] hidden sm:flex md:h-[200px] bottom-10 right-5 md:right-10 "
         />
       </div>
     </>

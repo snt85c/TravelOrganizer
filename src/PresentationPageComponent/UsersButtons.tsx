@@ -1,6 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { LangContext } from "../LangContextProvider";
+import { LangContext } from "../AppComponent/LangContextProvider";
 import {
   iTravelData,
   iTravelButtonPropsPackage,
@@ -13,26 +12,25 @@ export default function UserButton(props: {
   travelButtonPropsPackage: iTravelButtonPropsPackage;
   usersStatePropsPackage: iUsersStatePropsPackage;
 }) {
-  const navigate = useNavigate();
   const lang = useContext(LangContext);
   const { ref } = HandleClickOutsideComponent(
     props.travelButtonPropsPackage.setIsShowUserButton
   );
 
   //having the usersList, it creates  the usersListButtons. this is generated  either by joinTravel or watchTravel on Main.tsx
-  let usersListButtons = props.usersStatePropsPackage.usersList?.map(
-    (user, i) => {
+  let usersListButtons = props.usersStatePropsPackage.data.usersList?.map(
+    (user:iTravelData, i:number) => {
       return (
         <div
-          className="flex rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
+          className="flex rounded-full bg-gradient-to-r from-amber-700 to-amber-500 pl-[0.06rem] pr-4 py-[0.1rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
           key={i}
           onClick={() => handleClickSelection(user)}
         >
-          {user?.userInfo.displayName.toUpperCase()}
           <img
             src={user?.userInfo.photoURL}
             className="w-10 h-10 rounded-full select-none"
           />
+          {user?.userInfo.displayName.toUpperCase()}
         </div>
       );
     }
@@ -46,18 +44,13 @@ export default function UserButton(props: {
   //when the single usersListButton is clicked it will run the following checks.
   // if im logged and the loggedUser.uid isn't the same as the user i clicked from the usersListButton (or, i clicked on anyone other than me on the list), the setOtherUser and send to /other route, otherwise it will assume user.uid and loggedUser.uid are the same, setUser as user then send to /user route. otherwise im not logged-in and it will set whatever i click as otherUser and send me to /other route
   const handleClickSelection = (user: iTravelData) => {
-    if (props.usersStatePropsPackage.loggedUser) {
-      if (user.userInfo.uid !== props.usersStatePropsPackage.loggedUser?.uid) {
-        props.usersStatePropsPackage.setOtherUser(user);
-        navigate("/other");
-      } else {
-        props.usersStatePropsPackage.setUser(user);
-        navigate("/user");
-      }
-    } else {
-      props.usersStatePropsPackage.setOtherUser(user);
-      navigate("/other");
-    }
+    props.usersStatePropsPackage.dispatch({
+      type: "DETERMINE-USER",
+      payload: {
+        uid: user.userInfo.uid,
+        user: user,
+      },
+    });
   };
 
   return (
@@ -68,7 +61,7 @@ export default function UserButton(props: {
         ref={ref}
         className="flex flex-row min-h-[2.3rem] justify-between mx-2 md:mx-20 select-none"
       >
-        {props.usersStatePropsPackage.travel.id !== 0 && (
+        {props.usersStatePropsPackage.data.selectedTravel.id !== 0 && (
           <motion.button
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -82,17 +75,17 @@ export default function UserButton(props: {
             {lang.usersButton.travellers}
           </motion.button>
         )}
-        {props.usersStatePropsPackage.travel.id !== 0 && (
+        {props.usersStatePropsPackage.data.selectedTravel.id !== 0 && (
           <div className="flex flex-col justify-center items-center  font-[phonk] text-[1.1rem] text-gray-800 z-20 ">
             <span className="font-[homeworld-norm] select-none">
-              // {props.usersStatePropsPackage.travel.id}XX
+              // {props.usersStatePropsPackage.data.selectedTravel.id}XX
             </span>
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="font-[homeworld-bold] -mt-6 text-amber-500 text-[0.8rem] select-none"
             >
-              {props.usersStatePropsPackage.travel.name.toUpperCase()}
+              {props.usersStatePropsPackage.data.selectedTravel.name && props.usersStatePropsPackage.data.selectedTravel.name.toUpperCase()}
             </motion.span>
           </div>
         )}
@@ -120,7 +113,7 @@ export default function UserButton(props: {
               <motion.div
                 initial={{ opacity: 0, y: 0 }}
                 animate={{ opacity: 1, y: +20 }}
-                className="flex flex-col rounded-md bg-gradient-to-r from-amber-700 to-amber-500 px-4 p-[0.10rem] gap-2 w-[90%] m-1 justify-center font-[homeworld-norm] text-white duration-300 items-start cursor-pointer select-none leading-none"
+                className="flex rounded-full bg-gradient-to-r from-amber-700 to-amber-500 px-4 py-[0.1rem] gap-2 w-[90%] mt-1 justify-between font-[homeworld-norm] hover:text-black duration-300 items-center cursor-pointer select-none"
               >
                 {" "}
                 <div className="my-2">{lang.usersButton.nousers}</div>

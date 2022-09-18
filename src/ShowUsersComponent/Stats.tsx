@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { LangContext } from "../LangContextProvider";
+import { LangContext } from "../AppComponent/LangContextProvider";
 import { iTravelData, iUser } from "../Interface";
 
 interface iStats {

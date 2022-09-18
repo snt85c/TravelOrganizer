@@ -16,16 +16,17 @@ import {
   iUsersStatePropsPackage,
 } from "../../Interface";
 import { db } from "../../LoginComponents/firebase";
-import { telegramBotKey, chat_id } from "../../Main";
 import JoinTravelButton from "./JoinTravelButton";
 import EditButtonItem from "./EditButtonItem";
 import { motion } from "framer-motion";
-import { LangContext } from "../../LangContextProvider";
+import { LangContext } from "../../AppComponent/LangContextProvider";
 
 export default function TravelButtonItem(props: {
   travelButtonPropsPackage: iTravelButtonPropsPackage;
-  usersStatePropsPackage:iUsersStatePropsPackage;
+  usersStatePropsPackage: iUsersStatePropsPackage;
   data?: iTravel;
+  isClicked: number | undefined;
+  setIsClicked: React.Dispatch<React.SetStateAction<number | undefined>>;
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -47,9 +48,10 @@ export default function TravelButtonItem(props: {
   };
 
   function isAuthor() {
-    return props.usersStatePropsPackage.loggedUser?.uid === props.data?.createdBy;
+    return (
+      props.usersStatePropsPackage.loggedUser?.uid === props.data?.createdBy
+    );
   }
-
 
   useEffect(() => {
     async function enableOrDisableJoinButtonIfAlreadyJoined() {
@@ -70,15 +72,6 @@ export default function TravelButtonItem(props: {
     enableOrDisableJoinButtonIfAlreadyJoined();
   });
 
-  function telegramAlertDeleteTravel() {
-    const data = `travel: ${props.data?.name} has been deleted by: ${
-      props.usersStatePropsPackage.loggedUser.displayName.split(" ")[0]
-    }`;
-
-    fetch(
-      `https://api.telegram.org/bot${telegramBotKey}/sendMessage?chat_id=${chat_id}&text=${data} `
-    );
-  }
 
   const handleDelete = async () => {
     setIsDeleting(false);
@@ -89,11 +82,13 @@ export default function TravelButtonItem(props: {
     }
     try {
       let travelIdToDelete: number = props.data?.id ? props.data?.id : 0;
-      let filteredTravelList: any = props.usersStatePropsPackage.travelList?.filter((item) => {
-        return item?.id !== props.data?.id;
-      });
+      let filteredTravelList: any =
+        props.usersStatePropsPackage.data.travelList?.filter((item:iTravel) => {
+          return item?.id !== props.data?.id;
+        });
 
-      props.usersStatePropsPackage.setTravelList(filteredTravelList);
+      // props.usersStatePropsPackage.setTravelList(filteredTravelList);
+      props.usersStatePropsPackage.dispatch({type:"ADD-FIREBASE-TRAVELS", payload:filteredTravelList})
       await updateDoc(doc(db, "travels", "NTyNtjKvHwnEcbaOI73f"), {
         travel: filteredTravelList,
       });
@@ -107,8 +102,10 @@ export default function TravelButtonItem(props: {
           handleDeleteOnFirestore(currentUser);
         }
       });
-      telegramAlertDeleteTravel();
-      props.usersStatePropsPackage.setTravel({ name: "", id: 0, createdBy: "", userName: "" });
+      props.usersStatePropsPackage.dispatch({
+        type: "SELECT-TRAVEL",
+        payload: { name: "", id: 0, createdBy: "", userName: "" },
+      });
     } catch (e) {
       console.log(e);
     }
@@ -156,23 +153,29 @@ export default function TravelButtonItem(props: {
       });
 
       //GET AND MODIFY TRAVELLIST STATE
-      let tempArray: [(iTravel | undefined)?] = [...props.usersStatePropsPackage.travelList];
+      let tempArray: any[] = [
+        ...props.usersStatePropsPackage.data.travelList,
+      ];
       tempArray.forEach((item) => {
         if (item?.id === travelIdToRename) {
           item.name = newNameForSelectedTravel;
         }
       });
-      props.usersStatePropsPackage.setTravelList(tempArray);
+      props.usersStatePropsPackage.dispatch({type:"ADD-FIREBASE-TRAVELS", payload:tempArray})
     } catch (e) {
       console.log(e);
     }
   };
 
   const handleClickSetTravel = () => {
+    props.setIsClicked(props.data?.id);
     const temp: iTravel = props.data?.name
       ? props.data
       : { name: "", id: 0, createdBy: "", userName: "" };
-    props.usersStatePropsPackage.setTravel(temp);
+    props.usersStatePropsPackage.dispatch({
+      type: "SELECT-TRAVEL",
+      payload: temp,
+    });
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -184,10 +187,18 @@ export default function TravelButtonItem(props: {
 
   return (
     <motion.div
-      whileTap={{ scale: 0.90 }}
-      //container, has information to change size
-      className="flex flex-row border-l-[8px]   relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center text-white rounded bg-gradient-to-r from-cyan-900 to-cyan-700  duration-300 "
+      data-testid="travelButton"
+      whileTap={{ scale: 0.9 }}
+      //container, has information to change size and colors
+      className="flex flex-row border-r-[8px] relative w-[1/4] m-1 p-1 mx-10 md:mx-40 justify-center items-center  rounded  bg-amber-500
+      duration-300 "
       style={{
+        borderColor:
+          props.isClicked === props.data?.id ? "rgb(245 158 11)" : "white",
+        background:
+          props.isClicked === props.data?.id
+            ? "linear-gradient(to right, #164e63 25%, rgb(17 24 39))"
+            : "linear-gradient(to right, #164e63,  #0e7490)",
         height: isEditing
           ? isRenaming || isDeleting
             ? "130px"
@@ -212,7 +223,7 @@ export default function TravelButtonItem(props: {
           className="flex flex-col justify-evenly items-center"
         >
           <div className="ml-1 flex flex-col">
-            <div className="text-[3.5vw] sm:text-[0.9rem] select-none font-extrabold font-[homeworld-norm]">
+            <div className="text-[3vw] sm:text-[1.2rem] select-none font-extrabold font-[homeworld-norm]">
               {props.data?.name.toUpperCase()}
             </div>
             <div className="text-[0.8rem] -my-1 select-none">
@@ -233,8 +244,6 @@ export default function TravelButtonItem(props: {
         handleRename={handleRename}
       />
       <div
-        style={{ width: !isAlreadyJoined?"3rem":0 }}
-        //div to contain JoinTravelButton and keep the centered justification when is not rendered
       >
         {!isAlreadyJoined && props.usersStatePropsPackage.loggedUser && (
           <JoinTravelButton

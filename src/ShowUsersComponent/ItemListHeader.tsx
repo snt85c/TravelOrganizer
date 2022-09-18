@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { LangContext } from "../LangContextProvider";
+import { LangContext } from "../AppComponent/LangContextProvider";
 import { iGear } from "../Interface";
 import { FaHatCowboySide, FaTshirt } from "react-icons/fa";
 

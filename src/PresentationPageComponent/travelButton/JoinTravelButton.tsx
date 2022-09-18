@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ImEnter } from "react-icons/im";
 import { iTravelButtonPropsPackage } from "../../Interface";
 import { useContext } from "react";
-import { LangContext } from "../../LangContextProvider";
+import { LangContext } from "../../AppComponent/LangContextProvider";
 
 export default function JoinTravelButton(props: {
   loggedUser: any;

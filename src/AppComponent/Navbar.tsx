@@ -1,9 +1,8 @@
-import GoogleLoginButton from "./LoginComponents/GoogleLoginButton";
-import shell from "./img/whiteShell.png";
+import GoogleLoginButton from "../LoginComponents/GoogleLoginButton";
 import { TiHomeOutline } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
-import { iTravel } from "./Interface";
-import { useUserAuth } from "./LoginComponents/UserAuth";
+import { iTravel } from "../Interface";
+import { useUserAuth } from "../LoginComponents/UserAuth";
 export default function Navbar(props: {
   toggle: () => void;
   selectedTravel?: iTravel;

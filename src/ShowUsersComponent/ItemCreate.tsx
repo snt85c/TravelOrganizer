@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { iGear, iTravelData, iUser } from "../Interface";
+import { iGear, iReducerAction, iTravelData, iUser } from "../Interface";
 import {
   FaTimesCircle,
   FaPlusCircle,
@@ -11,7 +11,8 @@ import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 export default function ItemCreate(props: {
   user: iTravelData;
   travelId: number;
-  setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
+  // setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
+  dispatch?: React.Dispatch<iReducerAction>;
   isAddClicked: boolean;
   setIsAddClicked: React.Dispatch<React.SetStateAction<boolean>>;
   type: string;
@@ -46,7 +47,8 @@ export default function ItemCreate(props: {
         break;
     }
     const temp2: any = { ...props.user, [props.travelId]: temp };
-    props.setUser && props.setUser(temp2);
+    // props.setUser && props.setUser(temp2);
+    props.dispatch && props.dispatch({type:"MODIFY-USER",payload:temp2})
     props.setIsAddClicked(!props.isAddClicked);
   };
 

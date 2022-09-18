@@ -8,41 +8,88 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import {
-  iTravel,
   iTravelData,
   iTravelButtonPropsPackage,
   iUsersStatePropsPackage,
-} from "./Interface";
-import { useEffect, useState } from "react";
-import { db } from "./LoginComponents/firebase";
-import { useUserAuth } from "./LoginComponents/UserAuth";
+  iReducerState,
+  iReducerAction,
+} from "../Interface";
+import { useEffect, useReducer, useState } from "react";
+import { db } from "../LoginComponents/firebase";
+import { useUserAuth } from "../LoginComponents/UserAuth";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import ShowUser from "./ShowUsers/ShowUser(01)";
-    //object that will contain the props that needs to be passed down to other components. 
+import ShowUser from "../ShowUsersComponent/ShowUser(01)";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import UserButton from "./ShowUsers/UsersButtons";
+import UserButton from "../PresentationPageComponent/UsersButtons";
 import { lang, LangContext } from "./LangContextProvider";
-import PresentationPage from "./PresentationPage/PresentationPage";
+import PresentationPage from "../PresentationPageComponent/PresentationPage";
 
 export const telegramBotKey = "5531898247:AAG8rxOFIKmlwS6PYBVTuXdTGMqIaSpl5eE";
 export let chat_id = 231233238;
 
 export default function Main() {
+  const navigate = useNavigate();
+
   const { user: loggedUser } = useUserAuth();
   //info from the googleLoginComponent
 
-  const [user, setUser] = useState<any>({});
-  //usersButtons component will compare the user clicked from the list with the data from the loggedUser, if they share the same uid it will set it as the "user", then navigate to /user. Same is done in the JoinTravel Function, which will create a new set of data for the selected travel and user.  this allows to use the same component (ShowUser.tsx) bot for user and otherUser by passing or not passing setUser, making this page an editable page as it will  conditionally render what is needed to set new information
+  const init = {
+    user: {},
+    otherUser: {},
+    usersList: [],
+    travelList: [],
+    selectedTravel: {},
+    firebaseUsers: [],
+  };
 
-  const [otherUser, setOtherUser] = useState<any>();
-  //usersButtons component will compare the user clicked from the list with the data from the loggedUser, if they DONT share the same uid it will set it as the "otherUser", then navigate to /other. this allows to use the same component (ShowUser.tsx) but WITHOUT passing setUser, making this page immutable as it wont conditionally render what is needed to set new information
+  const reducer = (
+    state: iReducerState,
+    action: iReducerAction
+  ) => {
+    switch (action.type) {
+      case "ADD-FIREBASE-TRAVELS":
+        return { ...state, travelList: action.payload };
+      case "ADD-FIREBASE-USERS":
+        return { ...state, firebaseUsers: action.payload };
+      case "ADD-USERS-LIST":
+        return { ...state, usersList: action.payload };
+      case "SET-LOGGED-USER":
+        return { ...state, user: action.payload, otherUser: {} };
+      case "MODIFY-USER":
+        return { ...state, user: action.payload };
+      case "SET-OFFLINE-USER":
+        return { ...state, otherUser: action.payload, user: {} };
+      case "DETERMINE-USER":
+        if (loggedUser) {
+          if (action.payload.uid !== loggedUser?.uid) {
+            return { ...state, otherUser: action.payload.user, user: {} };
+          } else {
+            return { ...state, user: action.payload.user, otherUser: {} };
+          }
+        } else {
+          return { ...state, otherUser: action.payload.user, user: {} };
+        }
+      case "SELECT-TRAVEL":
+        return { ...state, selectedTravel: action.payload };
+      default:
+        return state;
+    }
+  };
 
-  const [usersList, setUsersList] = useState<iTravelData[]>([]);
-  //list of users who joined the seected travel
+  const [data, dispatch] = useReducer(reducer, init);
 
-  const [travelList, setTravelList] = useState<[iTravel?]>([]);
-  //list of travels. this list is populated by an useEffect that will run at first render of the page.
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (data.user && data.user.userInfo) {
+      navigate("/user");
+    } else {
+      navigate("/other");
+    }
+  }, [data.user, data.otherUser]);
 
   const [language, setLanguage] = useState<string>("en");
   //select the language with the HandleLangToggle in the navbar
@@ -51,7 +98,7 @@ export default function Main() {
   //toggle userButtons visualization
 
   const [isWatching, setIsWatching] = useState(false);
-  //triggers watchTravel() when clicking on the travel button and generate a list of users in usersButton 
+  //triggers watchTravel() when clicking on the travel button and generate a list of users in usersButton
 
   const [isJoining, setIsJoining] = useState(false);
   //triggers JoinTravel() when clicking on the join button
@@ -59,17 +106,7 @@ export default function Main() {
   const [trigger, setTrigger] = useState<number>(0);
   //trigger in useEffect to have the joinTravel or watchTravel function. works  by setting Date.now() as value so that it will trigger a re-render even if the user clicks on the same travelItemButton
 
-  const [selectedTravel, setSelectedTravel] = useState<iTravel>({
-    name: "",
-    id: 0,
-    createdBy: "",
-    userName: "",
-  });
-   //set the travel to watch when TravelButtonItem/JoinTravelButton is clicked via handleClickSetTravel Function
-
-  const navigate = useNavigate();
-
-  //object that will contain the props that needs to be passed down to other components. 
+  //object that will contain the props that needs to be passed down to other components.
   const travelButtonPropsPackage: iTravelButtonPropsPackage = {
     isShowUserButton,
     setIsShowUserButton,
@@ -81,75 +118,59 @@ export default function Main() {
     setTrigger,
   };
 
-  //object that will contain the props that needs to be passed down to other components. 
+  //object that will contain the props that needs to be passed down to other components.
   const usersStatePropsPackage: iUsersStatePropsPackage = {
-    user: user.userInfo,
-    usersList,
     loggedUser,
-    travelList,
-    travel: selectedTravel,
-    setUser,
-    setOtherUser,
-    setTravel: setSelectedTravel,
-    setTravelList,
-    watchTravel,
-    joinTravel,
+    data,
+    dispatch,
   };
 
-  //STARTING POINT:get list of  all the travels from firestore. this are sent to Presentation Page which is rendered at the start with the Navbar component and the usersButton component( which will not render at this stage since no travel has been selected). PresentationPage will render the travelList state under the TravelButtonItem.tsx. Depending on clicking area, this will fill the selectedTravel state and  run either watchTravel(), that will populate usersList with users who already joined the selectedTravel to be showed either as /user or /other or joinTravel that will send the user to ShowUser component under /user as well as making a list of others. the user state will be automatically update in the useEffect when the dependency user is modified.
+  //STARTING POINT
   useEffect(() => {
+    navigate("/");
     try {
-      const getTravelsFromFirestore = async () => {
+      const getTravelsAndUsersFromFirestore = async () => {
         const querySnapshotTravels = await getDoc(
           doc(db, "travels", "NTyNtjKvHwnEcbaOI73f")
         );
         let temp2: DocumentData | undefined = querySnapshotTravels.data();
-        setTravelList(temp2?.travel);
+        dispatch({ type: "ADD-FIREBASE-TRAVELS", payload: temp2?.travel });
+        const querySnapshotUsers = await getDocs(collection(db, "users"));
+        let tempdata: iTravelData = {} as iTravelData;
+        let listTemp: iTravelData[] = [];
+        querySnapshotUsers.forEach((doc) => {
+          tempdata = doc.data() as iTravelData;
+          listTemp.push(tempdata as unknown as iTravelData);
+        });
+        dispatch({ type: "ADD-FIREBASE-USERS", payload: listTemp });
       };
-      getTravelsFromFirestore();
+      getTravelsAndUsersFromFirestore();
     } catch (e) {
-      console.log(e, "error in getTravels");
+      console.log(e, "error in getTravelsAndUsers");
     }
   }, []);
 
- 
   async function watchTravel() {
-    //creates a list of all the users that have a selectedTravel.id key on them. this will be used on the usersButton to generate it on screen and determine the way they will be showed. if the clicked user in this list  shares the same uid as the logged user, then is sent to /user otherwise to /other
-    setUsersList([]);
-    const querySnapshot = await getDocs(collection(db, "users"));
     let listTemp: iTravelData[] = [];
-    let tempdata: iTravelData = {} as iTravelData;
-    querySnapshot.forEach((doc) => {
-      tempdata = doc.data() as iTravelData;
-      if (tempdata[selectedTravel.id]) {
-        let newUserData = userTravelDataFactory("isWatching", tempdata);
+    data.firebaseUsers.forEach((userData: iTravelData) => {
+      if (userData[data.selectedTravel.id]) {
+        let newUserData = userTravelDataFactory("isWatching", userData);
         listTemp.push(newUserData as unknown as iTravelData);
       }
     });
-    setUsersList(listTemp);
+    dispatch({ type: "ADD-USERS-LIST", payload: listTemp });
   }
 
   async function joinTravel() {
-    //the join button is conditionally rendered, and it assumes that there is no key for that user. so it will simply create a new travelData with the travelDataFactoryFunction and set the user state (which is automatically updated by the useEffect with user as dependency) while . it will automatically navigate to /user
-    try {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      let listTemp: iTravelData[] = [];
-      let tempdata: iTravelData = {} as iTravelData;
-      querySnapshot.forEach((doc) => {
-        tempdata = doc.data() as iTravelData;
-        if (loggedUser && tempdata.userInfo.uid === loggedUser.uid) {
-          if (!tempdata[selectedTravel.id]) {
-            let newUserData = userTravelDataFactory("isJoining");
-            setUser(newUserData);
-            navigate("/user");
-            listTemp.push(newUserData as unknown as iTravelData);
-          }
+    data.firebaseUsers.forEach((userData: iTravelData) => {
+      if (loggedUser && userData.userInfo.uid === loggedUser.uid) {
+        if (!userData[data.selectedTravel.id]) {
+          let newUserData = userTravelDataFactory("isJoining", userData);
+          dispatch({ type: "SET-LOGGED-USER", payload: newUserData });
         }
-      });
-      setUsersList(listTemp);
-    } catch (e) {
-      console.log(e);
-    }
+      }
+    });
+    navigate("/user");
   }
 
   function userTravelDataFactory(
@@ -161,52 +182,53 @@ export default function Main() {
       userInfo: {
         displayName:
           type === "isWatching"
-            ? tempdata && tempdata[selectedTravel.id].userInfo.displayName
+            ? tempdata && tempdata[data.selectedTravel.id].userInfo.displayName
             : loggedUser.displayName.split(" ")[0],
         photoURL:
           type === "isWatching"
-            ? tempdata && tempdata[selectedTravel.id].userInfo.photoURL
+            ? tempdata && tempdata[data.selectedTravel.id].userInfo.photoURL
             : loggedUser.photoURL,
         uid:
           type === "isWatching"
-            ? tempdata && tempdata[selectedTravel.id].userInfo.uid
+            ? tempdata && tempdata[data.selectedTravel.id].userInfo.uid
             : loggedUser.uid,
       },
-      [selectedTravel.id]: {
-        id: selectedTravel.id,
-        name: selectedTravel.name,
+      [data.selectedTravel.id]: {
+        id: data.selectedTravel.id,
+        name: data.selectedTravel.name,
         headgear:
           type === "isJoining"
             ? []
-            : tempdata && tempdata[selectedTravel.id]?.headgear,
+            : tempdata && tempdata[data.selectedTravel.id]?.headgear,
         topgear:
           type === "isJoining"
             ? []
-            : tempdata && tempdata[selectedTravel.id]?.topgear,
+            : tempdata && tempdata[data.selectedTravel.id]?.topgear,
         bottomgear:
           type === "isJoining"
             ? []
-            : tempdata && tempdata[selectedTravel.id]?.bottomgear,
+            : tempdata && tempdata[data.selectedTravel.id]?.bottomgear,
         footgear:
           type === "isJoining"
             ? []
-            : tempdata && tempdata[selectedTravel.id]?.footgear,
+            : tempdata && tempdata[data.selectedTravel.id]?.footgear,
         extra:
           type === "isJoining"
             ? []
-            : tempdata && tempdata[selectedTravel.id]?.extra,
+            : tempdata && tempdata[data.selectedTravel.id]?.extra,
         userInfo: {
           displayName:
             type === "isWatching"
-              ? tempdata && tempdata[selectedTravel.id].userInfo.displayName
+              ? tempdata &&
+                tempdata[data.selectedTravel.id].userInfo.displayName
               : loggedUser.displayName.split(" ")[0],
           photoURL:
             type === "isWatching"
-              ? tempdata && tempdata[selectedTravel.id].userInfo.photoURL
+              ? tempdata && tempdata[data.selectedTravel.id].userInfo.photoURL
               : loggedUser.photoURL,
           uid:
             type === "isWatching"
-              ? tempdata && tempdata[selectedTravel.id].userInfo.uid
+              ? tempdata && tempdata[data.selectedTravel.id].userInfo.uid
               : loggedUser.uid,
         },
       },
@@ -223,7 +245,7 @@ export default function Main() {
       }
     }
     openUserButtonListOnScreen();
-  }, [trigger]);
+  }, [trigger]); //trigger
 
   useEffect(() => {
     //when logged in, this useEffect will take care to create a new record or update any existent record with the user information. sets a new object with the uid as name, and then creates a key with displayName, photoURL and uid.
@@ -250,22 +272,13 @@ export default function Main() {
   }, [loggedUser]);
 
   useEffect(() => {
-    // //to collect basic usage data from the telegrambot, not in use
-    const getBotUpdates = () =>
-      fetch(`https://api.telegram.org/bot${telegramBotKey}/getUpdates`).then(
-        (response) => console.log(response.json())
-      );
-    // getBotUpdates(); //DISCONNECTED
-  }, []);
-
-  useEffect(() => {
     async function updateUserDataInFirestore() {
       //it will listen to any change of the logged user state, and if there is any change this is sent to firestore to be stored
       if (loggedUser) {
         try {
           await updateDoc(
             doc(db, "users", loggedUser.uid),
-            user as DocumentData
+            data.user as DocumentData
           );
         } catch (err) {
           console.log(err);
@@ -273,7 +286,7 @@ export default function Main() {
       }
     }
     updateUserDataInFirestore();
-  }, [user]); 
+  }, [data.user]);
 
   const HandleLang = () => {
     //for LangContext.Provider sets the reference path on the language object which is split in two branch (it and eng), so that if language state is set to "en", the switch will return the reference pathway in the object as lang.eng to the context provider.
@@ -303,12 +316,7 @@ export default function Main() {
         delete user[id];
       }
       await setDoc(docRef, user);
-      setSelectedTravel({
-        name: "",
-        id: 0,
-        createdBy: "",
-        userName: "",
-      });
+      dispatch({ type: "SELECT-TRAVEL", payload: {} });
     } catch (e) {
       console.log(e);
     }
@@ -332,7 +340,10 @@ export default function Main() {
   return (
     <>
       <div className="bg-gray-800 relative pt-[60px] pb-5 min-h-full text-white">
-        <Navbar toggle={HandleLangToggle} selectedTravel={selectedTravel} />
+        <Navbar
+          toggle={HandleLangToggle}
+          selectedTravel={data.selectedTravel}
+        />
         <LangContext.Provider value={HandleLang()}>
           <UserButton
             travelButtonPropsPackage={travelButtonPropsPackage}
@@ -353,9 +364,10 @@ export default function Main() {
               path="/user"
               element={
                 <ShowUser
-                  user={user}
-                  travelId={selectedTravel.id}
-                  setUser={setUser}
+                  user={data.user}
+                  travelId={data.selectedTravel.id}
+                  dispatch={dispatch}
+                  // setUser={setUser}
                   handleDeleteUser={handleDeleteUserTravel}
                 />
               }
@@ -363,7 +375,10 @@ export default function Main() {
             <Route
               path="/other"
               element={
-                <ShowUser travelId={selectedTravel.id} user={otherUser} />
+                <ShowUser
+                  travelId={data.selectedTravel.id}
+                  user={data.otherUser}
+                />
               }
             />
           </Routes>

@@ -1,14 +1,14 @@
-import { useContext,useState } from "react";
+import { useContext, useState } from "react";
 import {
   FaTimesCircle,
   FaPlusCircle,
   FaCheckCircle,
   FaExclamationCircle,
 } from "react-icons/fa";
-import { LangContext } from "../LangContextProvider";
+import { LangContext } from "../AppComponent/LangContextProvider";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { GiCancel, GiConfirmed } from "react-icons/gi";
-import { iGear, iTravelData, iUser } from "../Interface";
+import { iGear, iReducerAction, iTravelData, iUser } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 export default function Item(props: {
   index: number;
@@ -17,7 +17,8 @@ export default function Item(props: {
   currentArray: iGear[];
   item: iGear;
   user: iTravelData;
-  setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
+  // setUser?: React.Dispatch<React.SetStateAction<iUser>> | undefined;
+  dispatch?: React.Dispatch<iReducerAction>;
 }) {
   const [isEditName, setIsEditName] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -71,7 +72,7 @@ export default function Item(props: {
       if (
         Math.abs(e.deltaX) < MAX_SWIPE_ALLOWED &&
         Math.abs(e.deltaX) > MIN_SWIPE_ALLOWED &&
-        props.setUser
+        props.dispatch
       ) {
         //we restrict the max amount of the swipe, and we allow to set the delta state only if setUser has been passed, meaning that we are in a logged user component and we can perform operations on it. without setting deltaX, other swipe functions wont start
         setDeltaX(e.deltaX);
@@ -125,11 +126,13 @@ export default function Item(props: {
     currentGear[props.index].highlighted =
       !props.currentArray[props.index].highlighted;
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-    props.setUser && props.setUser(currentUser);
+    // props.setUser && props.setUser(currentUser);
+    props.dispatch &&
+      props.dispatch({ type: "MODIFY-USER", payload: currentUser });
   };
 
   const setNameChange = () => {
-    if (props.setUser) {
+    if (props.dispatch) {
       let currentTravel: iUser | undefined = { ...props.user[props.travelId] };
       currentGear[props.index].name = change
         ? change
@@ -138,7 +141,9 @@ export default function Item(props: {
         ...props.user,
         [props.travelId]: currentTravel,
       };
-      props.setUser && props.setUser(currentUser);
+      // props.setUser && props.setUser(currentUser);
+      props.dispatch &&
+        props.dispatch({ type: "MODIFY-USER", payload: currentUser });
       setIsEditName(!isEditName);
     }
   };
@@ -147,7 +152,9 @@ export default function Item(props: {
     let currentTravel: iUser = { ...props.user[props.travelId] };
     currentGear.splice(props.index, 1);
     const currentUser: any = { ...props.user, [props.travelId]: currentTravel };
-    props.setUser && props.setUser(currentUser);
+    // props.setUser && props.setUser(currentUser);
+    props.dispatch && props.dispatch({type:"MODIFY-USER", payload:currentUser})
+
   };
 
   const buttonToggle = () => {
@@ -163,7 +170,8 @@ export default function Item(props: {
       ...props.user,
       [props.travelId]: currentTravel,
     };
-    props.setUser && props.setUser(currentUser);
+    // props.setUser && props.setUser(currentUser);
+    props.dispatch && props.dispatch({type:"MODIFY-USER", payload:currentUser})
 
   };
 
@@ -232,7 +240,7 @@ export default function Item(props: {
               <div
                 className="flex flex-col"
                 onClick={() => {
-                  if (props.setUser) setIsEditName(!isEditName);
+                  if (props.dispatch) setIsEditName(!isEditName);
                 }}
               >
                 <div className="text-gray-600 text-[0.7rem] -my-1 flex justify-start select-none">
@@ -244,7 +252,7 @@ export default function Item(props: {
               </div>
               <div
                 /* right buttons container */
-                className="flex flex-row items-center gap-1"
+                className="flex flex-row items-center gap-2"
               >
                 <div
                   /* unavailable/available/ready toggle button DIV */
@@ -282,7 +290,7 @@ export default function Item(props: {
                     {props.currentArray[props.index].status}
                   </div> */}
                 </div>
-                {props.setUser && (
+                {props.dispatch && (
                   <div
                     //rx remove button when breakpoint md
                     className="flex flex-col justify-center items-center"
@@ -312,7 +320,7 @@ export default function Item(props: {
           </div>
         </div>
       )}
-      {isEditName && props.setUser && (
+      {isEditName && props.dispatch && (
         // EDIT appears in place of the normal div
         <div
           ref={ref}

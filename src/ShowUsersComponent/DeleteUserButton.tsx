@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { iTravelData, iUser } from "../Interface";
+import {  iTravelData } from "../Interface";
 import { HandleClickOutsideComponent } from "../HandleClickOutsideComponent";
 export default function DeleteUserButton(props: {
   user: iTravelData;
   travelId: number;
-  setUser: React.Dispatch<React.SetStateAction<iUser>>;
   handleDeleteUser: Function | undefined;
 }) {
   const navigate = useNavigate();

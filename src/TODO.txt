@@ -1,12 +1,5 @@
-add UI modification
+refactor to for useReducer, modifies join and watch travel
 
-createNewTravel component won't render now if the user is not logged in: previously this was left unchecked and the component would render even if it wasn't possible to add a new travel when not logged in. now it conditionally render depending on loggedUser
+all the basic data (loggedUser, user, otherUser, usersList and travelList) is now collected and elaborated when needed inside the dispatcher, this means that we could diminish the amount of data that was drilled down
 
-ItemCreate now closes down when clicking outside the div. the edit div is absolutely positioned to overlap the name div,
-
-fix delete div in Item, it was out of place
-
-fix swipe action by adding +25 to width: deltaRx + MAX_SWIPE_ALLOWED, so that the description text is already in the div while swiping instead of coming from the right. when swiping delete, you wont be able to see the div swiping all the way, as it's covered by the name div
-
-travelButtonItem now shows the old name of the item when renaming. previoulsy it would just show an empty input
-
+JoinTravel and WatchTravel function have been modified

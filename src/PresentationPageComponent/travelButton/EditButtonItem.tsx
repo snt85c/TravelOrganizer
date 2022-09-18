@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { FaEdit } from "react-icons/fa";
 import { HandleClickOutsideComponent } from "../../HandleClickOutsideComponent";
 import { iEditingPropsPackage } from "../../Interface";
-import { LangContext } from "../../LangContextProvider";
+import { LangContext } from "../../AppComponent/LangContextProvider";
 
 export default function EditButtonItem(props: {
   isAuthor: Function;
@@ -36,7 +36,7 @@ export default function EditButtonItem(props: {
               <div className="flex flex-col justify-evenly items-center ">
                 <div className="flex flex-col p-1 m-1 gap-1">
                   <div
-                    className="mx-2 text-[0.7rem]  font-[homeworld-norm] cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                    className="mx-2 text-[0.8rem]  font-[homeworld-norm] cursor-pointer text-white hover:text-amber-500 duration-300 select-none"
                     onClick={() => {
                         props.editingPropsPackage.setIsDeleting(!props.editingPropsPackage.isDeleting);
                         props.editingPropsPackage.setIsRenaming(false);
@@ -45,7 +45,7 @@ export default function EditButtonItem(props: {
                     {lang.editButtonItem.delete}
                   </div>
                   <div
-                    className="mx-2  text-[0.7rem]  font-[homeworld-norm]  cursor-pointer text-gray-800 hover:text-amber-500 duration-300 select-none"
+                    className="mx-2  text-[0.8rem]  font-[homeworld-norm]  cursor-pointer text-white hover:text-amber-500 duration-300 select-none"
                     onClick={() => {
                         props.editingPropsPackage.setIsRenaming(!props.editingPropsPackage.isRenaming);
                         props.editingPropsPackage.setIsDeleting(false);
@@ -71,7 +71,7 @@ export default function EditButtonItem(props: {
                 )}
                 {props.editingPropsPackage.isDeleting && (
                   <div
-                    className=" flex flex-col justify-center items-center  hover:bg-white rounded-xl  p-1 mx-2  text-sm cursor-pointer text-gray-800 hover:text-red-600 duration-300 select-none"
+                    className=" flex flex-col justify-center items-center  hover:bg-white rounded-xl  p-1 mx-2  text-sm cursor-pointer text-white hover:text-red-600 duration-300 select-none"
                     onClick={()=>props.handleDelete()}
                   >
                     <div className="text-center font-bold leading-none">{lang.editButtonItem.delete1}</div>
